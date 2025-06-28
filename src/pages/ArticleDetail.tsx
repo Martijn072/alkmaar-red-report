@@ -1,8 +1,11 @@
+import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { ArrowLeft, User, Calendar, Tag, Link, Share2, MessageCircle } from "lucide-react";
 import { useArticleDetail } from "@/hooks/useArticleDetail";
 import { ArticlesSkeleton } from "@/components/ArticlesSkeleton";
 import { ErrorMessage } from "@/components/ErrorMessage";
+import { Header } from "@/components/Header";
+import { BottomNavigation } from "@/components/BottomNavigation";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 
@@ -11,6 +14,7 @@ const ArticleDetail = () => {
   const navigate = useNavigate();
   const { data: article, isLoading, error, refetch } = useArticleDetail(id!);
   const { toast } = useToast();
+  const [activeTab, setActiveTab] = useState("news");
 
   const handleCopyLink = async () => {
     try {
@@ -56,9 +60,11 @@ const ArticleDetail = () => {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-premium-gray-50">
+        <Header />
         <div className="px-4 py-6">
           <ArticlesSkeleton />
         </div>
+        <BottomNavigation activeTab={activeTab} onTabChange={setActiveTab} />
       </div>
     );
   }
@@ -66,30 +72,33 @@ const ArticleDetail = () => {
   if (error || !article) {
     return (
       <div className="min-h-screen bg-premium-gray-50">
+        <Header />
         <div className="px-4 py-6">
           <ErrorMessage onRetry={() => refetch()} />
         </div>
+        <BottomNavigation activeTab={activeTab} onTabChange={setActiveTab} />
       </div>
     );
   }
 
   return (
     <div className="min-h-screen bg-premium-gray-50">
-      {/* Header with back button */}
-      <div className="bg-white border-b border-premium-gray-200 sticky top-0 z-10">
+      <Header />
+      
+      {/* Back button section */}
+      <div className="bg-white border-b border-premium-gray-200">
         <div className="px-4 py-4">
           <button
             onClick={() => navigate(-1)}
             className="flex items-center gap-2 text-premium-gray-600 hover:text-az-red transition-colors"
           >
-            <ArrowLeft className="w-5 h-5" />
-            <span>Terug</span>
+            <span>← Terug naar nieuws</span>
           </button>
         </div>
       </div>
 
       {/* Article content */}
-      <article className="max-w-4xl mx-auto px-4 py-6">
+      <article className="max-w-4xl mx-auto px-4 py-6 pb-24">
         {/* Featured image */}
         {article.imageUrl && (
           <div className="relative aspect-[16/9] overflow-hidden rounded-lg mb-6">
@@ -182,6 +191,8 @@ const ArticleDetail = () => {
           </div>
         </div>
       </article>
+
+      <BottomNavigation activeTab={activeTab} onTabChange={setActiveTab} />
     </div>
   );
 };
