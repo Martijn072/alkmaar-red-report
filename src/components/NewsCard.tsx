@@ -30,7 +30,7 @@ export const NewsCard = ({ article }: NewsCardProps) => {
   };
 
   return (
-    <article className="card-premium overflow-hidden animate-slide-up w-full max-w-full">
+    <article className="card-premium dark:bg-gray-800 dark:border-gray-700 overflow-hidden animate-slide-up w-full max-w-full">
       {/* Image */}
       <div className="relative aspect-[16/9] overflow-hidden cursor-pointer w-full" onClick={handleTitleClick}>
         <img 
@@ -51,18 +51,18 @@ export const NewsCard = ({ article }: NewsCardProps) => {
       {/* Content */}
       <div className="p-6 w-full max-w-full">
         <h2 
-          className="headline-premium text-headline-md mb-3 hover:text-az-red transition-colors cursor-pointer break-words"
+          className="headline-premium text-headline-md mb-3 hover:text-az-red transition-colors cursor-pointer break-words text-az-black dark:text-white"
           onClick={handleTitleClick}
         >
           {article.title}
         </h2>
         
-        <p className="body-premium text-body-md text-premium-gray-600 mb-4 line-clamp-2 break-words">
+        <p className="body-premium text-body-md text-premium-gray-600 dark:text-gray-300 mb-4 line-clamp-2 break-words">
           {article.excerpt}
         </p>
 
         {/* Meta info */}
-        <div className="flex items-center justify-between text-sm text-premium-gray-500 flex-wrap gap-2">
+        <div className="flex items-center justify-between text-sm text-premium-gray-500 dark:text-gray-400 flex-wrap gap-2">
           <div className="flex items-center gap-4 flex-wrap">
             <div className="flex items-center gap-1">
               <User className="w-4 h-4 flex-shrink-0" />
@@ -78,7 +78,7 @@ export const NewsCard = ({ article }: NewsCardProps) => {
       
       {/* Interaction strip */}
       <div className="px-6 pb-4 w-full max-w-full">
-        <div className="flex items-center justify-start pt-4 border-t border-premium-gray-100">
+        <div className="flex items-center justify-start pt-4 border-t border-premium-gray-100 dark:border-gray-700">
           <button 
             onClick={handleReadMore}
             className="flex items-center gap-2 bg-az-red hover:bg-red-700 text-white px-6 py-2 rounded-lg font-medium transition-all duration-200 hover:shadow-md hover:scale-105 group"

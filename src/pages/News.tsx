@@ -67,17 +67,17 @@ const News = () => {
   };
 
   return (
-    <div className="min-h-screen bg-premium-gray-50 overflow-x-hidden">
+    <div className="min-h-screen bg-premium-gray-50 dark:bg-gray-900 overflow-x-hidden">
       <Header />
       
       <div className="px-4 pb-20 max-w-full">
         {/* Hero Section */}
         <div className="pt-8 pb-8">
           <div className="max-w-4xl">
-            <h1 className="headline-premium text-headline-xl mb-4 text-az-black leading-tight">
+            <h1 className="headline-premium text-headline-xl mb-4 text-az-black dark:text-white leading-tight">
               AZ Nieuws
             </h1>
-            <p className="body-premium text-body-lg text-premium-gray-600 max-w-2xl leading-relaxed">
+            <p className="body-premium text-body-lg text-premium-gray-600 dark:text-gray-300 max-w-2xl leading-relaxed">
               Blijf op de hoogte van het laatste nieuws over AZ Alkmaar. Van wedstrijdverslagen tot transfernieuws en behind-the-scenes verhalen.
             </p>
           </div>
@@ -108,16 +108,16 @@ const News = () => {
             </div>
 
             {articles.length === 0 && (
-              <div className="card-premium p-12 text-center max-w-full">
+              <div className="card-premium dark:bg-gray-800 p-12 text-center max-w-full">
                 <div className="max-w-md mx-auto">
-                  <p className="body-premium text-body-lg text-premium-gray-600 mb-2">
+                  <p className="body-premium text-body-lg text-premium-gray-600 dark:text-gray-300 mb-2">
                     {searchQuery || selectedCategory !== 'Alle' 
                       ? 'Geen artikelen gevonden voor de huidige filters.'
                       : 'Geen artikelen beschikbaar.'
                     }
                   </p>
                   {(searchQuery || selectedCategory !== 'Alle') && (
-                    <p className="body-premium text-body-sm text-premium-gray-500">
+                    <p className="body-premium text-body-sm text-premium-gray-500 dark:text-gray-400">
                       Probeer andere zoektermen of wijzig de filters.
                     </p>
                   )}
