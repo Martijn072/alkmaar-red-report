@@ -15,6 +15,7 @@ const News = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("Alle");
   const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [availableCategories, setAvailableCategories] = useState<string[]>(["Alle"]);
   
   // Debounce search query
   useEffect(() => {
@@ -36,8 +37,14 @@ const News = () => {
   const articles = data?.articles || [];
   const pagination = data?.pagination;
 
-  // Get unique categories from articles for filter
-  const categories = ['Alle', ...Array.from(new Set(articles.map(article => article.category)))];
+  // Update available categories when articles change
+  useEffect(() => {
+    if (articles.length > 0) {
+      const uniqueCategories = Array.from(new Set(articles.map(article => article.category)));
+      const sortedCategories = ["Alle", ...uniqueCategories.sort()];
+      setAvailableCategories(sortedCategories);
+    }
+  }, [articles]);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -77,7 +84,7 @@ const News = () => {
         <SearchAndFilter
           searchQuery={searchQuery}
           selectedCategory={selectedCategory}
-          categories={categories}
+          categories={availableCategories}
           onSearchChange={handleSearchChange}
           onCategoryChange={handleCategoryChange}
           onClearFilters={handleClearFilters}

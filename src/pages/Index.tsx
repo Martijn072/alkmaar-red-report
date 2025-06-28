@@ -13,15 +13,12 @@ const Index = () => {
   const [activeTab, setActiveTab] = useState("news");
   const [selectedCategory, setSelectedCategory] = useState("Alles");
   
-  const { data: articles, isLoading, error, refetch } = useArticles();
+  const { data, isLoading, error, refetch } = useArticles(1, 20, '', selectedCategory === 'Alles' ? '' : selectedCategory);
 
   const categories = ["Alles", "Wedstrijdverslag", "Transfer", "Jeugd", "Interviews", "Nieuws"];
 
-  const filteredArticles = articles?.filter(article => 
-    selectedCategory === "Alles" || article.category === selectedCategory
-  ) || [];
-
-  const breakingNews = articles?.filter(article => article.isBreaking) || [];
+  const articles = data?.articles || [];
+  const breakingNews = articles.filter(article => article.isBreaking);
 
   return (
     <div className="min-h-screen bg-premium-gray-50">
@@ -55,16 +52,16 @@ const Index = () => {
         
         {error && <ErrorMessage onRetry={() => refetch()} />}
         
-        {articles && !isLoading && !error && (
+        {data && !isLoading && !error && (
           <>
             {/* News Feed */}
             <div className="space-y-6">
-              {filteredArticles.map((article) => (
+              {articles.map((article) => (
                 <NewsCard key={article.id} article={article} />
               ))}
             </div>
 
-            {filteredArticles.length === 0 && (
+            {articles.length === 0 && (
               <div className="card-premium p-8 text-center">
                 <p className="body-premium text-premium-gray-600">
                   Geen artikelen gevonden voor de categorie "{selectedCategory}".
@@ -73,7 +70,7 @@ const Index = () => {
             )}
 
             {/* Load More */}
-            {filteredArticles.length > 0 && (
+            {articles.length > 0 && (
               <div className="mt-8 text-center">
                 <button 
                   className="btn-secondary"

@@ -1,3 +1,4 @@
+
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 
 const corsHeaders = {
@@ -20,6 +21,12 @@ interface WordPressPost {
     'wp:featuredmedia'?: Array<{ source_url: string }>;
     'wp:term'?: Array<Array<{ name: string; taxonomy: string }>>;
   };
+}
+
+interface WordPressCategory {
+  id: number;
+  name: string;
+  slug: string;
 }
 
 const transformPost = (post: WordPressPost) => {
@@ -77,6 +84,56 @@ const transformPost = (post: WordPressPost) => {
     isBreaking: isBreaking,
     readTime: `${Math.ceil(post.content.rendered.split(' ').length / 200)} min`
   };
+};
+
+const fetchWordPressCategories = async (): Promise<WordPressCategory[]> => {
+  try {
+    const response = await fetch('https://azfanpage.nl/wp-json/wp/v2/categories?per_page=100', {
+      headers: { 'User-Agent': 'AZFanpage-App/1.0' }
+    });
+    
+    if (!response.ok) {
+      console.error('Failed to fetch categories:', response.status);
+      return [];
+    }
+    
+    const categories: WordPressCategory[] = await response.json();
+    console.log(`Fetched ${categories.length} categories from WordPress`);
+    return categories;
+  } catch (error) {
+    console.error('Error fetching categories:', error);
+    return [];
+  }
+};
+
+const getCategoryIdByName = (categories: WordPressCategory[], categoryName: string): number | null => {
+  // Create mapping for common category variations
+  const categoryMappings: { [key: string]: string[] } = {
+    'Wedstrijdverslag': ['Wedstrijdverslag', 'Wedstrijden', 'Match Report'],
+    'Transfer': ['Transfer', 'Transfers'],
+    'Jeugd': ['Jeugd', 'Youth', 'Jeugdteams'],
+    'Interviews': ['Interviews', 'Interview'],
+    'Nieuws': ['Nieuws', 'News', 'Algemeen']
+  };
+
+  // First try exact match
+  let category = categories.find(cat => 
+    cat.name.toLowerCase() === categoryName.toLowerCase()
+  );
+
+  // If no exact match, try mapped variations
+  if (!category) {
+    const variations = categoryMappings[categoryName] || [categoryName];
+    for (const variation of variations) {
+      category = categories.find(cat => 
+        cat.name.toLowerCase().includes(variation.toLowerCase()) ||
+        cat.slug.toLowerCase().includes(variation.toLowerCase())
+      );
+      if (category) break;
+    }
+  }
+
+  return category?.id || null;
 };
 
 serve(async (req) => {
@@ -138,13 +195,23 @@ serve(async (req) => {
     // Add search parameter if provided
     if (search) {
       queryParams.append('search', search);
+      console.log(`Search query: ${search}`);
     }
 
-    // Add category filter if provided
-    if (category && category !== 'Alle') {
-      // Note: This would require fetching categories first to get the ID
-      // For now, we'll skip category filtering in the API call
+    // Handle category filtering with proper WordPress API integration
+    if (category && category !== 'Alle' && category !== '') {
       console.log(`Category filter requested: ${category}`);
+      
+      // Fetch categories to get the correct ID
+      const categories = await fetchWordPressCategories();
+      const categoryId = getCategoryIdByName(categories, category);
+      
+      if (categoryId) {
+        queryParams.append('categories', categoryId.toString());
+        console.log(`Using category ID ${categoryId} for category "${category}"`);
+      } else {
+        console.log(`Category "${category}" not found in WordPress, proceeding without category filter`);
+      }
     }
 
     const response = await fetch(
