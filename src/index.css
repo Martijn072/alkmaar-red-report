@@ -3,11 +3,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Import premium fonts */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&display=swap');
-
-/* Definition of the premium design system inspired by The Athletic */
+/* Definition of the premium design system with improved Dutch readability */
 
 @layer base {
   :root {
@@ -97,21 +93,25 @@
   }
 
   body {
-    @apply bg-background text-foreground font-sans;
+    @apply bg-background text-foreground font-body;
     font-feature-settings: "rlig" 1, "calt" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
-  /* Premium typography classes */
+  /* Premium typography classes optimized for Dutch readability */
   .headline-premium {
     @apply font-headline font-bold tracking-tight text-az-black;
     font-feature-settings: "ss01" 1;
+    letter-spacing: -0.02em;
   }
 
   .body-premium {
     @apply font-body text-premium-gray-700 leading-relaxed;
+    font-feature-settings: "kern" 1;
   }
 
-  /* Athletic-inspired reading experience */
+  /* Improved reading experience for Dutch content */
   .article-content {
     @apply prose prose-lg max-w-none;
   }
@@ -149,11 +149,11 @@
 /* Premium button styles */
 @layer components {
   .btn-primary {
-    @apply bg-az-red hover:bg-red-700 text-white font-medium px-6 py-3 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md;
+    @apply bg-az-red hover:bg-red-700 text-white font-medium px-6 py-3 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md font-body;
   }
 
   .btn-secondary {
-    @apply bg-white hover:bg-premium-gray-50 text-az-black font-medium px-6 py-3 rounded-lg border border-premium-gray-200 transition-all duration-200 shadow-sm hover:shadow-md;
+    @apply bg-white hover:bg-premium-gray-50 text-az-black font-medium px-6 py-3 rounded-lg border border-premium-gray-200 transition-all duration-200 shadow-sm hover:shadow-md font-body;
   }
 
   /* Premium card styles */
@@ -163,6 +163,6 @@
 
   /* Breaking news indicator */
   .breaking-news {
-    @apply bg-az-red text-white px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide;
+    @apply bg-az-red text-white px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide font-body;
   }
 }

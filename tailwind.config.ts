@@ -84,18 +84,18 @@ export default {
 				}
 			},
 			fontFamily: {
-				'headline': ['Inter', 'system-ui', 'sans-serif'],
-				'body': ['Georgia', 'Times New Roman', 'serif'],
-				'sans': ['Inter', 'system-ui', 'sans-serif'],
+				'headline': ['Playfair Display', 'serif'],
+				'body': ['Source Sans Pro', 'system-ui', 'sans-serif'],
+				'sans': ['Source Sans Pro', 'system-ui', 'sans-serif'],
 			},
 			fontSize: {
-				'headline-xl': ['2.5rem', { lineHeight: '1.2', fontWeight: '800' }],
-				'headline-lg': ['2rem', { lineHeight: '1.25', fontWeight: '700' }],
-				'headline-md': ['1.5rem', { lineHeight: '1.3', fontWeight: '600' }],
-				'headline-sm': ['1.25rem', { lineHeight: '1.35', fontWeight: '600' }],
-				'body-lg': ['1.125rem', { lineHeight: '1.7' }],
-				'body-md': ['1rem', { lineHeight: '1.6' }],
-				'body-sm': ['0.875rem', { lineHeight: '1.5' }],
+				'headline-xl': ['2.5rem', { lineHeight: '1.25', fontWeight: '700' }],
+				'headline-lg': ['2rem', { lineHeight: '1.3', fontWeight: '700' }],
+				'headline-md': ['1.5rem', { lineHeight: '1.35', fontWeight: '600' }],
+				'headline-sm': ['1.25rem', { lineHeight: '1.4', fontWeight: '600' }],
+				'body-lg': ['1.125rem', { lineHeight: '1.75' }],
+				'body-md': ['1rem', { lineHeight: '1.65' }],
+				'body-sm': ['0.875rem', { lineHeight: '1.6' }],
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
