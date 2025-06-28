@@ -78,23 +78,14 @@ export const NewsCard = ({ article }: NewsCardProps) => {
       
       {/* Interaction strip */}
       <div className="px-6 pb-4">
-        <div className="flex items-center justify-between pt-4 border-t border-premium-gray-100">
+        <div className="flex items-center justify-center pt-4 border-t border-premium-gray-100">
           <button 
             onClick={handleReadMore}
-            className="flex items-center gap-2 bg-az-red hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 hover:shadow-md hover:scale-105 group whitespace-nowrap"
+            className="flex items-center gap-2 bg-az-red hover:bg-red-700 text-white px-6 py-2 rounded-lg font-medium transition-all duration-200 hover:shadow-md hover:scale-105 group"
           >
             <span className="text-sm">Lees meer</span>
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />
           </button>
-          
-          <div className="flex items-center gap-4 text-premium-gray-500">
-            <button className="hover:text-az-red transition-colors">
-              💬 12
-            </button>
-            <button className="hover:text-az-red transition-colors">
-              🔗 Delen
-            </button>
-          </div>
         </div>
       </div>
     </article>
