@@ -32,7 +32,7 @@ export const NewsCard = ({ article }: NewsCardProps) => {
   return (
     <article className="card-premium overflow-hidden animate-slide-up">
       {/* Image */}
-      <div className="relative aspect-[16/9] overflow-hidden cursor-pointer" onClick={handleTitleClick}>
+      <div className="relative aspect-[4/3] overflow-hidden cursor-pointer" onClick={handleTitleClick}>
         <img 
           src={article.imageUrl} 
           alt={article.title}

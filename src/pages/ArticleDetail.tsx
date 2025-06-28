@@ -49,7 +49,7 @@ const ArticleDetail = () => {
       <article className="max-w-4xl mx-auto px-4 py-6">
         {/* Featured image */}
         {article.imageUrl && (
-          <div className="relative aspect-[16/9] overflow-hidden rounded-lg mb-6">
+          <div className="relative aspect-[4/3] overflow-hidden rounded-lg mb-6">
             <img 
               src={article.imageUrl} 
               alt={article.title}
@@ -69,9 +69,6 @@ const ArticleDetail = () => {
             <span className="bg-az-red text-white px-3 py-1 rounded-full text-sm font-medium">
               {article.category}
             </span>
-            {article.isBreaking && (
-              <span className="breaking-news text-sm">Breaking</span>
-            )}
           </div>
 
           <h1 className="headline-premium text-headline-xl mb-4">
