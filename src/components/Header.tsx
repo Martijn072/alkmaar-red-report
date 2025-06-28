@@ -1,7 +1,14 @@
 
 import { Bell, Search, Menu } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export const Header = () => {
+  const navigate = useNavigate();
+
+  const handleLogoClick = () => {
+    navigate("/");
+  };
+
   return (
     <header className="bg-white border-b border-premium-gray-100 sticky top-0 z-50 shadow-sm">
       <div className="px-4 py-4">
@@ -11,7 +18,8 @@ export const Header = () => {
             <img 
               src="/lovable-uploads/02689d46-9781-412f-9093-feef3e99cfe2.png" 
               alt="AZ Fanpage Logo" 
-              className="h-10 w-auto"
+              className="h-10 w-auto cursor-pointer hover:opacity-80 transition-opacity"
+              onClick={handleLogoClick}
             />
           </div>
 
