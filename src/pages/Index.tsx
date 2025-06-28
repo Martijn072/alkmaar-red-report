@@ -55,7 +55,7 @@ const Index = () => {
       {/* Live Score Widget */}
       <LiveScore />
       
-      <div className="px-4 pb-20">
+      <div className="px-4 pb-20 pt-6">
         {/* Category Filter */}
         <CategoryFilter 
           categories={categories}
