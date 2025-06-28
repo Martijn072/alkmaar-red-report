@@ -1,4 +1,3 @@
-
 import { useParams, useNavigate } from "react-router-dom";
 import { ArrowLeft, User, Calendar, Tag } from "lucide-react";
 import { useArticleDetail } from "@/hooks/useArticleDetail";
@@ -49,7 +48,7 @@ const ArticleDetail = () => {
       <article className="max-w-4xl mx-auto px-4 py-6">
         {/* Featured image */}
         {article.imageUrl && (
-          <div className="relative aspect-[4/3] overflow-hidden rounded-lg mb-6">
+          <div className="relative aspect-[16/9] overflow-hidden rounded-lg mb-6">
             <img 
               src={article.imageUrl} 
               alt={article.title}
