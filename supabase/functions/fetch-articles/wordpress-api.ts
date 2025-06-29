@@ -1,5 +1,4 @@
-
-import { WordPressPost, WordPressCategory, Article } from './types.ts';
+import { WordPressPost, WordPressCategory, Article, AuthorInfo } from './types.ts';
 import { formatPublishedDate, cleanHtmlContent, getExcludedCategoryIds } from './utils.ts';
 
 export const fetchWordPressCategories = async (): Promise<WordPressCategory[]> => {
@@ -22,8 +21,26 @@ export const fetchWordPressCategories = async (): Promise<WordPressCategory[]> =
   }
 };
 
+const transformAuthorInfo = (authorData: any): AuthorInfo | undefined => {
+  if (!authorData) return undefined;
+
+  return {
+    id: authorData.id,
+    name: authorData.name,
+    description: cleanHtmlContent(authorData.description || ''),
+    avatar: authorData.avatar_urls?.[96] || authorData.avatar_urls?.[48] || '',
+    socialLinks: {
+      twitter: authorData.meta?.twitter || undefined,
+      instagram: authorData.meta?.instagram || undefined,
+      facebook: authorData.meta?.facebook || undefined,
+    }
+  };
+};
+
 export const transformPost = (post: WordPressPost): Article => {
   const author = post._embedded?.author?.[0]?.name || 'AZFanpage Redactie';
+  const authorInfo = post._embedded?.author?.[0] ? transformAuthorInfo(post._embedded.author[0]) : undefined;
+  
   const featuredImage = post._embedded?.['wp:featuredmedia']?.[0]?.source_url || 
     'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&h=600&fit=crop';
   
@@ -54,12 +71,13 @@ export const transformPost = (post: WordPressPost): Article => {
     excerpt: excerpt,
     content: post.content.rendered, // Full content for article detail
     author: author,
+    authorInfo: authorInfo,
     publishedAt: publishedAt,
     imageUrl: featuredImage,
     category: category,
     isBreaking: isBreaking,
     readTime: `${Math.ceil(post.content.rendered.split(' ').length / 200)} min`,
-    slug: post.slug // Add WordPress slug for Disqus identifier
+    slug: post.slug
   };
 };
 
@@ -69,7 +87,6 @@ export const fetchWordPressArticles = async (
   search: string,
   categoryId?: number
 ) => {
-  // Build query parameters
   const queryParams = new URLSearchParams({
     '_embed': 'true',
     'per_page': perPage.toString(),
@@ -78,19 +95,16 @@ export const fetchWordPressArticles = async (
     'order': 'desc'
   });
 
-  // Add search parameter if provided
   if (search) {
     queryParams.append('search', search);
     console.log(`Search query: ${search}`);
   }
 
-  // Add category filter if provided
   if (categoryId) {
     queryParams.append('categories', categoryId.toString());
     console.log(`Using category ID ${categoryId}`);
   }
 
-  // Always exclude the "Ingezonden" category (ID 2477)
   const excludedIds = getExcludedCategoryIds();
   if (excludedIds.length > 0) {
     queryParams.append('categories_exclude', excludedIds.join(','));
@@ -111,7 +125,6 @@ export const fetchWordPressArticles = async (
     throw new Error(`WordPress API returned ${response.status}`);
   }
 
-  // Get total count from headers
   const totalPosts = parseInt(response.headers.get('X-WP-Total') || '0');
   const totalPages = parseInt(response.headers.get('X-WP-TotalPages') || '1');
 

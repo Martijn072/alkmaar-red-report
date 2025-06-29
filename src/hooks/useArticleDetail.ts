@@ -2,18 +2,31 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 
+interface AuthorInfo {
+  id: number;
+  name: string;
+  description: string;
+  avatar: string;
+  socialLinks?: {
+    twitter?: string;
+    instagram?: string;
+    facebook?: string;
+  };
+}
+
 interface ArticleDetail {
   id: number;
   title: string;
   excerpt: string;
   content: string;
   author: string;
+  authorInfo?: AuthorInfo;
   publishedAt: string;
   imageUrl: string;
   category: string;
   isBreaking: boolean;
   readTime: string;
-  slug: string; // Add slug for Disqus
+  slug: string;
 }
 
 export const useArticleDetail = (id: string) => {
