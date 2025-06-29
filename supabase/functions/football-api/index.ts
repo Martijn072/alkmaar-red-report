@@ -17,11 +17,19 @@ serve(async (req) => {
   }
 
   try {
+    console.log('🔧 Environment check:')
+    console.log('- RAPIDAPI_KEY exists:', !!RAPIDAPI_KEY)
+    console.log('- RAPIDAPI_KEY length:', RAPIDAPI_KEY?.length || 0)
+    console.log('- RAPIDAPI_HOST:', RAPIDAPI_HOST)
+
     if (!RAPIDAPI_KEY) {
-      throw new Error('RAPIDAPI_KEY not configured')
+      console.error('❌ RAPIDAPI_KEY not found in environment variables')
+      console.log('Available env vars:', Object.keys(Deno.env.toObject()))
+      throw new Error('RAPIDAPI_KEY not configured in Supabase secrets')
     }
 
     const { endpoint, params = {} }: FootballApiRequest = await req.json()
+    console.log('📋 Request details:', { endpoint, params })
     
     // Build URL with parameters
     const url = new URL(`https://${RAPIDAPI_HOST}${endpoint}`)
@@ -29,7 +37,8 @@ serve(async (req) => {
       url.searchParams.append(key, value)
     })
 
-    console.log('Making API call to:', url.toString())
+    console.log('🌐 Making API call to:', url.toString())
+    console.log('🔑 Using API key ending with:', RAPIDAPI_KEY.slice(-4))
 
     const response = await fetch(url.toString(), {
       method: 'GET',
@@ -39,12 +48,18 @@ serve(async (req) => {
       }
     })
 
+    console.log('📊 API Response status:', response.status)
+    console.log('📊 API Response headers:', Object.fromEntries(response.headers.entries()))
+
     if (!response.ok) {
-      throw new Error(`API call failed: ${response.status}`)
+      const errorText = await response.text()
+      console.error('❌ API Error Response:', errorText)
+      throw new Error(`API call failed: ${response.status} - ${errorText}`)
     }
 
     const data = await response.json()
-    console.log('API Response:', data)
+    console.log('✅ API Response successful, data keys:', Object.keys(data))
+    console.log('📈 Results count:', data.results || 0)
 
     return new Response(
       JSON.stringify(data),
@@ -57,11 +72,15 @@ serve(async (req) => {
     )
 
   } catch (error) {
-    console.error('Football API Error:', error)
+    console.error('💥 Football API Error:', error)
+    console.error('📍 Error stack:', error.stack)
+    
     return new Response(
       JSON.stringify({ 
         error: error.message,
-        success: false 
+        success: false,
+        timestamp: new Date().toISOString(),
+        details: 'Check Edge Function logs for more information'
       }),
       {
         status: 500,

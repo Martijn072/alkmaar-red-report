@@ -3,14 +3,22 @@ import { useState } from 'react';
 import { useAZTeamId, useAZFixtures, useNextAZFixture } from '@/hooks/useFootballApi';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Loader2 } from 'lucide-react';
+import { Loader2, RefreshCw } from 'lucide-react';
 
 export const FootballApiTest = () => {
   const [showTest, setShowTest] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
   
-  const { data: teamId, isLoading: teamLoading, error: teamError } = useAZTeamId();
-  const { data: fixtures, isLoading: fixturesLoading, error: fixturesError } = useAZFixtures(teamId, 5);
-  const { data: nextFixture, isLoading: nextLoading, error: nextError } = useNextAZFixture(teamId);
+  const { data: teamId, isLoading: teamLoading, error: teamError, refetch: refetchTeam } = useAZTeamId();
+  const { data: fixtures, isLoading: fixturesLoading, error: fixturesError, refetch: refetchFixtures } = useAZFixtures(teamId, 5);
+  const { data: nextFixture, isLoading: nextLoading, error: nextError, refetch: refetchNext } = useNextAZFixture(teamId);
+
+  const handleRefreshAll = () => {
+    setRefreshKey(prev => prev + 1);
+    refetchTeam();
+    refetchFixtures();
+    refetchNext();
+  };
 
   if (!showTest) {
     return (
@@ -29,13 +37,39 @@ export const FootballApiTest = () => {
     <div className="p-4 space-y-4 max-w-4xl mx-auto">
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold">API-Football Test Resultaten</h2>
-        <Button 
-          onClick={() => setShowTest(false)}
-          variant="outline"
-        >
-          Verberg Test
-        </Button>
+        <div className="flex gap-2">
+          <Button 
+            onClick={handleRefreshAll}
+            variant="outline"
+            size="sm"
+          >
+            <RefreshCw className="w-4 h-4 mr-2" />
+            Vernieuw
+          </Button>
+          <Button 
+            onClick={() => setShowTest(false)}
+            variant="outline"
+          >
+            Verberg Test
+          </Button>
+        </div>
       </div>
+
+      {/* Debug Info */}
+      <Card>
+        <CardHeader>
+          <CardTitle>🔧 Debug Informatie</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-2 text-sm">
+            <div><strong>Refresh Key:</strong> {refreshKey}</div>
+            <div><strong>Timestamp:</strong> {new Date().toLocaleString('nl-NL')}</div>
+            <div className="text-xs text-gray-600">
+              Open Developer Tools (F12) → Console voor gedetailleerde logs
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Team ID Test */}
       <Card>
@@ -50,8 +84,16 @@ export const FootballApiTest = () => {
             </div>
           )}
           {teamError && (
-            <div className="text-red-600">
-              <strong>Error:</strong> {teamError.message}
+            <div className="space-y-2">
+              <div className="text-red-600">
+                <strong>❌ Error:</strong> {teamError.message}
+              </div>
+              <details className="text-xs">
+                <summary className="cursor-pointer text-gray-600">Volledige error details</summary>
+                <pre className="mt-2 p-2 bg-gray-100 rounded overflow-auto">
+                  {JSON.stringify(teamError, null, 2)}
+                </pre>
+              </details>
             </div>
           )}
           {teamId && (
@@ -75,8 +117,16 @@ export const FootballApiTest = () => {
             </div>
           )}
           {fixturesError && (
-            <div className="text-red-600">
-              <strong>Error:</strong> {fixturesError.message}
+            <div className="space-y-2">
+              <div className="text-red-600">
+                <strong>❌ Error:</strong> {fixturesError.message}
+              </div>
+              <details className="text-xs">
+                <summary className="cursor-pointer text-gray-600">Volledige error details</summary>
+                <pre className="mt-2 p-2 bg-gray-100 rounded overflow-auto">
+                  {JSON.stringify(fixturesError, null, 2)}
+                </pre>
+              </details>
             </div>
           )}
           {fixtures && fixtures.length > 0 && (
@@ -97,14 +147,6 @@ export const FootballApiTest = () => {
                   </div>
                 </div>
               ))}
-              <details className="mt-4">
-                <summary className="cursor-pointer text-blue-600 hover:underline">
-                  Bekijk volledige API response
-                </summary>
-                <pre className="mt-2 p-4 bg-gray-100 rounded overflow-auto text-xs">
-                  {JSON.stringify(fixtures[0], null, 2)}
-                </pre>
-              </details>
             </div>
           )}
         </CardContent>
@@ -123,8 +165,16 @@ export const FootballApiTest = () => {
             </div>
           )}
           {nextError && (
-            <div className="text-red-600">
-              <strong>Error:</strong> {nextError.message}
+            <div className="space-y-2">
+              <div className="text-red-600">
+                <strong>❌ Error:</strong> {nextError.message}
+              </div>
+              <details className="text-xs">
+                <summary className="cursor-pointer text-gray-600">Volledige error details</summary>
+                <pre className="mt-2 p-2 bg-gray-100 rounded overflow-auto">
+                  {JSON.stringify(nextError, null, 2)}
+                </pre>
+              </details>
             </div>
           )}
           {nextFixture && (
@@ -147,29 +197,8 @@ export const FootballApiTest = () => {
                   {nextFixture.league.name}
                 </div>
               </div>
-              <details className="mt-4">
-                <summary className="cursor-pointer text-blue-600 hover:underline">
-                  Bekijk volledige API response
-                </summary>
-                <pre className="mt-2 p-4 bg-gray-100 rounded overflow-auto text-xs">
-                  {JSON.stringify(nextFixture, null, 2)}
-                </pre>
-              </details>
             </div>
           )}
-        </CardContent>
-      </Card>
-
-      {/* Console Logs Info */}
-      <Card>
-        <CardHeader>
-          <CardTitle>4. Console Logs</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-sm text-gray-600">
-            Open de Developer Tools (F12) en bekijk het Console tabblad voor gedetailleerde API call logs.
-            Alle API requests en responses worden daar gelogd voor debugging.
-          </p>
         </CardContent>
       </Card>
     </div>
