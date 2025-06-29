@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { ArrowLeft, User, Calendar, Tag, Link, Share2, MessageCircle, Facebook, X } from "lucide-react";
@@ -89,8 +88,8 @@ const ArticleDetail = () => {
     <div className="min-h-screen bg-premium-gray-50 dark:bg-gray-900">
       <Header />
       
-      {/* Sticky Share Bar */}
-      <div className="sticky top-0 z-40 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm border-b border-premium-gray-200 dark:border-gray-700">
+      {/* Sticky Share Bar - positioned below Header */}
+      <div className="sticky top-[72px] z-40 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm border-b border-premium-gray-200 dark:border-gray-700">
         <div className="max-w-4xl mx-auto px-4 py-2">
           <div className="flex items-center justify-between">
             <button
