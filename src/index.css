@@ -181,43 +181,74 @@
     @apply bg-az-red;
   }
 
-  /* Enhanced Disqus Dark Mode Styling */
-  .disqus-dark-mode iframe,
-  .disqus-dark-theme iframe {
+  /* ENHANCED DISQUS DARK MODE STYLING WITH FILTER APPROACH */
+  
+  /* Primary approach: CSS filter inversion for dark mode */
+  .dark .disqus-inverted iframe {
+    filter: invert(1) hue-rotate(180deg) !important;
+    background-color: #1f2937 !important;
+  }
+  
+  /* Secondary approach: Direct styling attempts */
+  .dark .disqus-dark-mode iframe,
+  .dark .disqus-dark-theme iframe {
     background-color: #1a171b !important;
     color: #ffffff !important;
   }
 
-  /* Force dark mode styling on Disqus elements */
+  /* Force dark mode styling on Disqus container */
   .dark .disqus-dark-mode,
   .dark .disqus-dark-theme {
     background-color: #1f2937 !important;
     color: #ffffff !important;
   }
 
-  /* Target Disqus content when possible */
+  /* Enhanced targeting for Disqus content */
   .dark #disqus_thread {
     background-color: #1f2937 !important;
     color: #ffffff !important;
   }
 
-  /* Fallback styling for Disqus elements */
-  .dark #disqus_thread * {
-    color: #ffffff !important;
+  /* Attempt to style iframe content (limited by CORS) */
+  .dark #disqus_thread iframe {
+    background-color: #1f2937 !important;
   }
 
-  /* Override any light mode text in dark mode */
-  .dark #disqus_thread a {
-    color: #dc2626 !important;
+  /* Filter-based approach for the entire Disqus container in dark mode */
+  .dark .disqus-inverted {
+    filter: invert(0.9) hue-rotate(180deg);
+    background-color: #1f2937 !important;
   }
 
-  /* Make sure buttons and interactive elements are visible */
+  /* Preserve certain elements from being inverted */
+  .dark .disqus-inverted img,
+  .dark .disqus-inverted video,
+  .dark .disqus-inverted [data-preserve-color] {
+    filter: invert(1) hue-rotate(180deg);
+  }
+
+  /* Alternative: Brightness and contrast adjustments */
+  .dark .disqus-dark-mode iframe {
+    filter: brightness(0.8) contrast(1.2) !important;
+  }
+
+  /* Ensure buttons and interactive elements remain functional */
   .dark #disqus_thread button,
   .dark #disqus_thread input,
   .dark #disqus_thread textarea {
     background-color: #374151 !important;
     color: #ffffff !important;
     border-color: #4b5563 !important;
+  }
+
+  /* Links should remain visible and functional */
+  .dark #disqus_thread a {
+    color: #dc2626 !important;
+  }
+
+  /* Fallback for when filter approach affects readability */
+  .dark .disqus-inverted * {
+    text-shadow: none !important;
   }
 }
 
