@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { X, Trash2, CheckCheck, Bell, Goal, Newspaper, Trophy, AlertTriangle } from 'lucide-react';
+import { X, Trash2, CheckCheck, Bell, Goal, Newspaper, Trophy, AlertTriangle, Instagram, Twitter } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
@@ -27,6 +27,9 @@ const Notifications = () => {
     // Navigate to related content
     if (notification.type === 'article' && notification.article_id) {
       navigate(`/artikel/${notification.article_id}`);
+    } else if ((notification.type === 'instagram' || notification.type === 'twitter') && notification.social_media_url) {
+      // Open social media post in new tab
+      window.open(notification.social_media_url, '_blank');
     }
   };
 
@@ -41,6 +44,8 @@ const Notifications = () => {
       case 'goal': return <Goal className="w-5 h-5 text-az-red flex-shrink-0" />;
       case 'match': return <Trophy className="w-5 h-5 text-az-red flex-shrink-0" />;
       case 'breaking': return <AlertTriangle className="w-5 h-5 text-az-red flex-shrink-0" />;
+      case 'instagram': return <Instagram className="w-5 h-5 text-pink-500 flex-shrink-0" />;
+      case 'twitter': return <Twitter className="w-5 h-5 text-gray-800 dark:text-white flex-shrink-0" />;
       default: return <Bell className="w-5 h-5 text-az-red flex-shrink-0" />;
     }
   };
@@ -51,7 +56,20 @@ const Notifications = () => {
       case 'goal': return 'Goal';
       case 'match': return 'Wedstrijd';
       case 'breaking': return 'Breaking';
+      case 'instagram': return 'Instagram';
+      case 'twitter': return 'Tweet';
       default: return 'Notificatie';
+    }
+  };
+
+  const getBadgeStyle = (type: string) => {
+    switch (type) {
+      case 'instagram': 
+        return 'bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600';
+      case 'twitter':
+        return 'bg-gray-800 text-white hover:bg-gray-900 dark:bg-white dark:text-gray-800 dark:hover:bg-gray-100';
+      default:
+        return 'bg-az-red text-white hover:bg-az-red/90';
     }
   };
 
@@ -123,9 +141,23 @@ const Notifications = () => {
                 >
                   <div className="p-4 sm:p-6">
                     <div className="flex items-start gap-3 sm:gap-4">
-                      <div className="flex-shrink-0 mt-1">
-                        {getTypeIcon(notification.type)}
-                      </div>
+                      {/* Thumbnail for Instagram posts */}
+                      {notification.type === 'instagram' && notification.thumbnail_url && (
+                        <div className="flex-shrink-0">
+                          <img 
+                            src={notification.thumbnail_url} 
+                            alt="Instagram post"
+                            className="w-12 h-12 sm:w-16 sm:h-16 rounded-lg object-cover"
+                          />
+                        </div>
+                      )}
+                      
+                      {/* Icon for non-Instagram posts or Instagram without thumbnail */}
+                      {(notification.type !== 'instagram' || !notification.thumbnail_url) && (
+                        <div className="flex-shrink-0 mt-1">
+                          {getTypeIcon(notification.type)}
+                        </div>
+                      )}
                       
                       <div className="flex-1 min-w-0">
                         <div className="flex items-start justify-between gap-2">
@@ -150,7 +182,7 @@ const Notifications = () => {
                             
                             <div className="flex items-center justify-between flex-wrap gap-2">
                               <div className="flex items-center gap-3 flex-wrap">
-                                <Badge className="bg-az-red text-white hover:bg-az-red/90 text-xs font-semibold">
+                                <Badge className={`text-xs font-semibold ${getBadgeStyle(notification.type)}`}>
                                   {getTypeBadge(notification.type)}
                                 </Badge>
                                 

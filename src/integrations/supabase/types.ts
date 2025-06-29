@@ -18,6 +18,8 @@ export type Database = {
           id: string
           match_id: string | null
           read: boolean
+          social_media_url: string | null
+          thumbnail_url: string | null
           title: string
           type: string
           user_id: string | null
@@ -30,6 +32,8 @@ export type Database = {
           id?: string
           match_id?: string | null
           read?: boolean
+          social_media_url?: string | null
+          thumbnail_url?: string | null
           title: string
           type: string
           user_id?: string | null
@@ -42,6 +46,8 @@ export type Database = {
           id?: string
           match_id?: string | null
           read?: boolean
+          social_media_url?: string | null
+          thumbnail_url?: string | null
           title?: string
           type?: string
           user_id?: string | null

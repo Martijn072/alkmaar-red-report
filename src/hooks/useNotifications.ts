@@ -6,13 +6,15 @@ import { useToast } from '@/hooks/use-toast';
 export interface Notification {
   id: string;
   user_id: string | null;
-  type: 'article' | 'goal' | 'match' | 'breaking';
+  type: 'article' | 'goal' | 'match' | 'breaking' | 'instagram' | 'twitter';
   title: string;
   description: string | null;
   icon: string;
   read: boolean;
   article_id: string | null;
   match_id: string | null;
+  social_media_url: string | null;
+  thumbnail_url: string | null;
   created_at: string;
 }
 
@@ -99,6 +101,7 @@ export const useClearAllNotifications = () => {
       toast({
         title: "Voltooid",
         description: "Alle notificaties gemarkeerd als gelezen",
+        className: "bg-white dark:bg-gray-800 border border-premium-gray-200 dark:border-gray-700 text-premium-gray-900 dark:text-white",
       });
     },
     onError: (error) => {
