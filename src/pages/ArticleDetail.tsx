@@ -6,6 +6,7 @@ import { ArticlesSkeleton } from "@/components/ArticlesSkeleton";
 import { ErrorMessage } from "@/components/ErrorMessage";
 import { Header } from "@/components/Header";
 import { BottomNavigation } from "@/components/BottomNavigation";
+import { DisqusComments } from "@/components/DisqusComments";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 
@@ -249,6 +250,13 @@ const ArticleDetail = () => {
             </Button>
           </div>
         </div>
+
+        {/* Disqus Comments Section */}
+        <DisqusComments
+          url={window.location.href}
+          identifier={`article-${article.id}`}
+          title={article.title}
+        />
       </article>
 
       <BottomNavigation activeTab={activeTab} onTabChange={setActiveTab} />
