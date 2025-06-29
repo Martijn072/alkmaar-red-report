@@ -9,6 +9,7 @@ import { ArticlesSkeleton } from "@/components/ArticlesSkeleton";
 import { LoadMoreSkeleton } from "@/components/LoadMoreSkeleton";
 import { ErrorMessage } from "@/components/ErrorMessage";
 import { SocialMediaPromo } from "@/components/SocialMediaPromo";
+import { PopularArticles } from "@/components/PopularArticles";
 import { useInfiniteArticles } from "@/hooks/useInfiniteArticles";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
@@ -94,6 +95,9 @@ const Index = () => {
                 </p>
               </div>
             )}
+
+            {/* Popular Articles Section */}
+            {allArticles.length > 0 && <PopularArticles />}
 
             {/* Load More Button */}
             {hasNextPage && allArticles.length > 0 && !isFetchingNextPage && (
