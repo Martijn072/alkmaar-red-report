@@ -131,8 +131,12 @@ export const NextMatchWidget = () => {
                   alt={opponentTeam.name}
                   className="w-8 h-8 object-contain"
                   onError={(e) => {
-                    e.currentTarget.style.display = 'none';
-                    e.currentTarget.nextElementSibling!.style.display = 'flex';
+                    const target = e.currentTarget as HTMLImageElement;
+                    const fallback = target.nextElementSibling as HTMLSpanElement;
+                    target.style.display = 'none';
+                    if (fallback) {
+                      fallback.style.display = 'flex';
+                    }
                   }}
                 />
                 <span className="text-gray-600 font-bold text-xs hidden">
