@@ -6,9 +6,10 @@ import { MessageCircle, Loader2 } from 'lucide-react';
 interface DisqusCommentsProps {
   slug: string;
   title: string;
+  articleId: string; // Add articleId prop
 }
 
-export const DisqusComments = ({ slug, title }: DisqusCommentsProps) => {
+export const DisqusComments = ({ slug, title, articleId }: DisqusCommentsProps) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -50,7 +51,7 @@ export const DisqusComments = ({ slug, title }: DisqusCommentsProps) => {
     const wordpressUrl = `https://www.azfanpage.nl/${slug}/`;
     
     console.log('Disqus Configuration:', {
-      identifier: slug,
+      identifier: articleId, // Use articleId as identifier instead of slug
       url: wordpressUrl,
       title: title
     });
@@ -76,7 +77,7 @@ export const DisqusComments = ({ slug, title }: DisqusCommentsProps) => {
         reload: true,
         config: function () {
           this.page.url = wordpressUrl;
-          this.page.identifier = slug;
+          this.page.identifier = articleId; // Use articleId as identifier
           this.page.title = title;
         }
       });
@@ -88,7 +89,7 @@ export const DisqusComments = ({ slug, title }: DisqusCommentsProps) => {
     // Configure Disqus with WordPress-compatible settings
     window.disqus_config = function () {
       this.page.url = wordpressUrl;
-      this.page.identifier = slug; // Use WordPress slug as identifier
+      this.page.identifier = articleId; // Use articleId as identifier instead of slug
       this.page.title = title;
     };
 

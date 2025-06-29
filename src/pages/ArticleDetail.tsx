@@ -251,10 +251,11 @@ const ArticleDetail = () => {
           </div>
         </div>
 
-        {/* Disqus Comments Section - Updated to use slug */}
+        {/* Disqus Comments Section - Updated to pass articleId */}
         <DisqusComments
           slug={article.slug}
           title={article.title}
+          articleId={id!} // Pass the article ID from URL params
         />
       </article>
 
