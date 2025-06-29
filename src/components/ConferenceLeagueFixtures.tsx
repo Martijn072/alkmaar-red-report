@@ -164,7 +164,7 @@ export const ConferenceLeagueFixtures = ({ teamId, isLoadingTeamId }: Conference
             {fixtures.map((fixture) => (
               <div 
                 key={fixture.fixture.id}
-                className="border border-premium-gray-200 dark:border-gray-600 rounded-lg p-4 bg-az-red/5 border-az-red/20"
+                className="border border-premium-gray-200 dark:border-gray-600 rounded-lg p-4 bg-white dark:bg-gray-800"
               >
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-2 text-sm text-premium-gray-600 dark:text-gray-300">
