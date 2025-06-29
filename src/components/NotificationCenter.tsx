@@ -66,9 +66,9 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({ isOpen, 
   return (
     <div className="fixed inset-0 z-50 bg-white dark:bg-gray-900">
       {/* Header */}
-      <div className="bg-white dark:bg-gray-900 border-b border-premium-gray-200 dark:border-gray-700 px-4 py-4 shadow-sm">
+      <div className="bg-white dark:bg-gray-900 border-b border-premium-gray-200 dark:border-gray-700 px-6 py-5 shadow-sm">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4">
             <Button
               variant="ghost"
               size="icon"
@@ -77,11 +77,11 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({ isOpen, 
             >
               <X className="w-5 h-5 text-premium-gray-600 dark:text-gray-300" />
             </Button>
-            <h1 className="headline-premium text-headline-lg text-az-black dark:text-white">
+            <h1 className="headline-premium text-headline-lg text-az-black dark:text-white font-bold">
               Notificaties
             </h1>
             {unreadCount > 0 && (
-              <Badge className="bg-az-red text-white hover:bg-az-red/90 font-semibold">
+              <Badge className="bg-az-red text-white hover:bg-az-red/90 px-3 py-1 text-sm font-bold">
                 {unreadCount} nieuw
               </Badge>
             )}
@@ -89,13 +89,11 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({ isOpen, 
           
           {notifications.length > 0 && (
             <Button
-              variant="outline"
-              size="sm"
               onClick={() => clearAll.mutate()}
               disabled={clearAll.isPending}
-              className="flex items-center gap-2 text-premium-gray-700 dark:text-gray-300 border-premium-gray-200 dark:border-gray-700 hover:bg-premium-gray-50 dark:hover:bg-gray-800 transition-colors"
+              className="bg-yellow-400 hover:bg-yellow-500 text-black px-4 py-2 text-sm font-semibold transition-colors rounded-lg"
             >
-              <CheckCheck className="w-4 h-4" />
+              <CheckCheck className="w-4 h-4 mr-2" />
               <span className="hidden sm:inline">Alles gelezen</span>
               <span className="sm:hidden">Alles</span>
             </Button>
@@ -104,7 +102,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({ isOpen, 
       </div>
 
       {/* Content */}
-      <ScrollArea className="h-[calc(100vh-80px)]">
+      <ScrollArea className="h-[calc(100vh-88px)]">
         {isLoading ? (
           <div className="p-8 text-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-az-red mx-auto"></div>
