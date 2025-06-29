@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { X, Trash2, CheckCheck, Bell, Goal, Newspaper, football, AlertTriangle } from 'lucide-react';
+import { X, Trash2, CheckCheck, Bell, Goal, Newspaper, Trophy, AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
@@ -45,7 +44,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({ isOpen, 
     switch (type) {
       case 'article': return <Newspaper className="w-6 h-6 text-az-red" />;
       case 'goal': return <Goal className="w-6 h-6 text-az-red" />;
-      case 'match': return <football className="w-6 h-6 text-az-red" />;
+      case 'match': return <Trophy className="w-6 h-6 text-az-red" />;
       case 'breaking': return <AlertTriangle className="w-6 h-6 text-az-red" />;
       default: return <Bell className="w-6 h-6 text-az-red" />;
     }
