@@ -54,6 +54,30 @@ export type Database = {
         }
         Relationships: []
       }
+      processed_articles: {
+        Row: {
+          article_id: number
+          article_title: string
+          article_url: string | null
+          id: string
+          processed_at: string
+        }
+        Insert: {
+          article_id: number
+          article_title: string
+          article_url?: string | null
+          id?: string
+          processed_at?: string
+        }
+        Update: {
+          article_id?: number
+          article_title?: string
+          article_url?: string | null
+          id?: string
+          processed_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
