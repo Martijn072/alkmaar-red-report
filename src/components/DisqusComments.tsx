@@ -47,12 +47,12 @@ export const DisqusComments = ({ slug, title, articleId }: DisqusCommentsProps) 
     setIsLoading(true);
     setError(null);
 
-    // WordPress URL format for consistency with existing comments
-    const wordpressUrl = `https://www.azfanpage.nl/${slug}/`;
+    // Use current browser URL instead of hardcoded WordPress URL
+    const currentUrl = window.location.href;
     
     console.log('Disqus Configuration:', {
-      identifier: articleId, // Use articleId as identifier instead of slug
-      url: wordpressUrl,
+      identifier: articleId, // Use articleId as identifier
+      url: currentUrl, // Use current browser URL
       title: title
     });
 
@@ -76,7 +76,7 @@ export const DisqusComments = ({ slug, title, articleId }: DisqusCommentsProps) 
       window.DISQUS.reset({
         reload: true,
         config: function () {
-          this.page.url = wordpressUrl;
+          this.page.url = currentUrl; // Use current browser URL
           this.page.identifier = articleId; // Use articleId as identifier
           this.page.title = title;
         }
@@ -86,10 +86,10 @@ export const DisqusComments = ({ slug, title, articleId }: DisqusCommentsProps) 
       return;
     }
 
-    // Configure Disqus with WordPress-compatible settings
+    // Configure Disqus with current URL
     window.disqus_config = function () {
-      this.page.url = wordpressUrl;
-      this.page.identifier = articleId; // Use articleId as identifier instead of slug
+      this.page.url = currentUrl; // Use current browser URL
+      this.page.identifier = articleId; // Use articleId as identifier
       this.page.title = title;
     };
 
