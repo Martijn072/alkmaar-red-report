@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { MessageCircle, Loader2 } from 'lucide-react';
@@ -163,22 +162,18 @@ export const DisqusComments = ({ slug, title, articleId }: DisqusCommentsProps) 
           </div>
         )}
 
-        {isLoading && (
-          <div className="text-center py-12">
-            <Loader2 className="w-8 h-8 animate-spin text-az-red mx-auto mb-4" />
-            <p className="body-premium text-body-sm text-premium-gray-600 dark:text-gray-300">
-              Reacties worden geladen...
-            </p>
-            {/* Show the thread container during loading so it exists when Disqus tries to use it */}
-            <div className="bg-white dark:bg-gray-800 rounded-lg border border-premium-gray-100 dark:border-gray-700 overflow-hidden mt-4">
-              <div id="disqus_thread" className="p-4 min-h-[100px]"></div>
-            </div>
-          </div>
-        )}
-
-        {isLoaded && (
+        {/* Single fixed Disqus container - always present once loading starts */}
+        {(isLoading || isLoaded) && (
           <div className="bg-white dark:bg-gray-800 rounded-lg border border-premium-gray-100 dark:border-gray-700 overflow-hidden">
-            <div id="disqus_thread" className="p-4"></div>
+            {isLoading && (
+              <div className="text-center py-8">
+                <Loader2 className="w-8 h-8 animate-spin text-az-red mx-auto mb-4" />
+                <p className="body-premium text-body-sm text-premium-gray-600 dark:text-gray-300">
+                  Reacties worden geladen...
+                </p>
+              </div>
+            )}
+            <div id="disqus_thread" className="p-4 min-h-[200px]"></div>
           </div>
         )}
 
