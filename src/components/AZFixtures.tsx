@@ -119,6 +119,28 @@ export const AZFixtures = ({ teamId, isLoadingTeamId }: AZFixturesProps) => {
     }
   };
 
+  const translateRound = (round: string) => {
+    // Handle common round terminology
+    if (round.toLowerCase().includes('regular season')) return 'Competitie';
+    if (round.toLowerCase().includes('semi-final')) return 'Halve finale';
+    if (round.toLowerCase().includes('final') && !round.toLowerCase().includes('semi')) return 'Finale';
+    if (round.toLowerCase().includes('quarter-final')) return 'Kwartfinale';
+    if (round.toLowerCase().includes('round of 16')) return 'Achtste finale';
+    if (round.toLowerCase().includes('round of 32')) return '1/16e finale';
+    if (round.toLowerCase().includes('play-off')) return 'Play-offs';
+    
+    // Handle numbered rounds (e.g., "Regular Season - 15")
+    const roundMatch = round.match(/Regular Season - (\d+)/i);
+    if (roundMatch) return `Speelronde ${roundMatch[1]}`;
+    
+    // Handle "Matchday X" format
+    const matchdayMatch = round.match(/Matchday (\d+)/i);
+    if (matchdayMatch) return `Speeldag ${matchdayMatch[1]}`;
+    
+    // Return original if no translation found
+    return round;
+  };
+
   const getCompetitionName = (leagueId: number, leagueName: string) => {
     switch (leagueId) {
       case 88: return 'Eredivisie';
@@ -208,7 +230,7 @@ export const AZFixtures = ({ teamId, isLoadingTeamId }: AZFixturesProps) => {
               variant={filter === 'all' ? 'default' : 'outline'}
               size="sm"
               onClick={() => setFilter('all')}
-              className={filter === 'all' ? 'bg-az-red hover:bg-az-red/90 text-white border-az-red' : 'border-premium-gray-300 hover:bg-premium-gray-50 dark:border-gray-600 dark:hover:bg-gray-700'}
+              className={filter === 'all' ? 'bg-az-red hover:bg-az-red/90 text-white border-az-red' : 'bg-white dark:bg-gray-800 border-premium-gray-300 hover:bg-premium-gray-50 dark:border-gray-600 dark:hover:bg-gray-700 text-premium-gray-600 dark:text-gray-300'}
             >
               Alles
             </Button>
@@ -216,7 +238,7 @@ export const AZFixtures = ({ teamId, isLoadingTeamId }: AZFixturesProps) => {
               variant={filter === 'eredivisie' ? 'default' : 'outline'}
               size="sm"
               onClick={() => setFilter('eredivisie')}
-              className={filter === 'eredivisie' ? 'bg-az-red hover:bg-az-red/90 text-white border-az-red' : 'border-premium-gray-300 hover:bg-premium-gray-50 dark:border-gray-600 dark:hover:bg-gray-700'}
+              className={filter === 'eredivisie' ? 'bg-az-red hover:bg-az-red/90 text-white border-az-red' : 'bg-white dark:bg-gray-800 border-premium-gray-300 hover:bg-premium-gray-50 dark:border-gray-600 dark:hover:bg-gray-700 text-premium-gray-600 dark:text-gray-300'}
             >
               Eredivisie
             </Button>
@@ -224,7 +246,7 @@ export const AZFixtures = ({ teamId, isLoadingTeamId }: AZFixturesProps) => {
               variant={filter === 'europa' ? 'default' : 'outline'}
               size="sm"
               onClick={() => setFilter('europa')}
-              className={filter === 'europa' ? 'bg-az-red hover:bg-az-red/90 text-white border-az-red' : 'border-premium-gray-300 hover:bg-premium-gray-50 dark:border-gray-600 dark:hover:bg-gray-700'}
+              className={filter === 'europa' ? 'bg-az-red hover:bg-az-red/90 text-white border-az-red' : 'bg-white dark:bg-gray-800 border-premium-gray-300 hover:bg-premium-gray-50 dark:border-gray-600 dark:hover:bg-gray-700 text-premium-gray-600 dark:text-gray-300'}
             >
               Europa
             </Button>
@@ -318,7 +340,7 @@ export const AZFixtures = ({ teamId, isLoadingTeamId }: AZFixturesProps) => {
                     variant="outline" 
                     className="text-xs bg-premium-gray-50 dark:bg-gray-700 border-premium-gray-200 dark:border-gray-600 text-premium-gray-700 dark:text-gray-300"
                   >
-                    {fixture.league.round}
+                    {translateRound(fixture.league.round)}
                   </Badge>
                 </div>
               </div>
