@@ -283,25 +283,26 @@ const WedstrijdDetail = () => {
               </Badge>
             </div>
             
-            {/* Teams and score - Fixed alignment */}
-            <div className="grid grid-cols-5 items-center gap-4 my-6">
+            {/* Teams and score - Mobile-first layout like AZFixtures */}
+            <div className="flex items-center justify-center gap-4 sm:gap-8 my-6">
               {/* Home team */}
-              <div className="col-span-2 flex flex-col items-center gap-2">
+              <div className="flex flex-col items-center gap-2">
                 <img 
                   src={fixtureData.teams.home.logo} 
                   alt={fixtureData.teams.home.name}
-                  className="w-16 h-16 object-contain"
+                  className="w-12 h-12 sm:w-16 sm:h-16 object-contain"
                 />
-                <span className={`font-semibold text-center text-sm ${isAZHome ? 'text-az-red' : 'text-az-black dark:text-white'}`}>
+                {/* Show team name only on larger screens */}
+                <span className={`hidden sm:block font-semibold text-center text-sm ${isAZHome ? 'text-az-red' : 'text-az-black dark:text-white'}`}>
                   {fixtureData.teams.home.name}
                 </span>
               </div>
 
-              {/* Score */}
-              <div className="col-span-1 text-center">
+              {/* Score or VS */}
+              <div className="flex flex-col items-center justify-center">
                 {fixtureData.goals.home !== null && fixtureData.goals.away !== null ? (
                   <>
-                    <div className="text-4xl font-bold text-az-red mb-2">
+                    <div className="text-3xl sm:text-4xl font-bold text-az-red mb-2">
                       {fixtureData.goals.home} - {fixtureData.goals.away}
                     </div>
                     {fixtureData.score.halftime.home !== null && (
@@ -323,16 +324,27 @@ const WedstrijdDetail = () => {
               </div>
 
               {/* Away team */}
-              <div className="col-span-2 flex flex-col items-center gap-2">
+              <div className="flex flex-col items-center gap-2">
                 <img 
                   src={fixtureData.teams.away.logo} 
                   alt={fixtureData.teams.away.name}
-                  className="w-16 h-16 object-contain"
+                  className="w-12 h-12 sm:w-16 sm:h-16 object-contain"
                 />
-                <span className={`font-semibold text-center text-sm ${isAZAway ? 'text-az-red' : 'text-az-black dark:text-white'}`}>
+                {/* Show team name only on larger screens */}
+                <span className={`hidden sm:block font-semibold text-center text-sm ${isAZAway ? 'text-az-red' : 'text-az-black dark:text-white'}`}>
                   {fixtureData.teams.away.name}
                 </span>
               </div>
+            </div>
+
+            {/* Team names for mobile */}
+            <div className="flex items-center justify-between sm:hidden text-xs text-premium-gray-600 dark:text-gray-400 mb-4">
+              <span className={`font-medium ${isAZHome ? 'text-az-red' : 'text-az-black dark:text-white'}`}>
+                {fixtureData.teams.home.name}
+              </span>
+              <span className={`font-medium ${isAZAway ? 'text-az-red' : 'text-az-black dark:text-white'}`}>
+                {fixtureData.teams.away.name}
+              </span>
             </div>
 
             {/* Match info */}
