@@ -7,8 +7,8 @@ interface FootballApiRequest {
   params?: Record<string, string>;
 }
 
-const RAPIDAPI_KEY = Deno.env.get('RAPIDAPI_KEY')
-const RAPIDAPI_HOST = 'api-football-v1.p.rapidapi.com'
+const API_FOOTBALL_KEY = Deno.env.get('RAPIDAPI_KEY') // Keep existing secret name for now
+const API_FOOTBALL_HOST = 'v3.football.api-sports.io'
 
 serve(async (req) => {
   // Handle CORS
@@ -18,33 +18,33 @@ serve(async (req) => {
 
   try {
     console.log('🔧 Environment check:')
-    console.log('- RAPIDAPI_KEY exists:', !!RAPIDAPI_KEY)
-    console.log('- RAPIDAPI_KEY length:', RAPIDAPI_KEY?.length || 0)
-    console.log('- RAPIDAPI_HOST:', RAPIDAPI_HOST)
+    console.log('- API_FOOTBALL_KEY exists:', !!API_FOOTBALL_KEY)
+    console.log('- API_FOOTBALL_KEY length:', API_FOOTBALL_KEY?.length || 0)
+    console.log('- API_FOOTBALL_HOST:', API_FOOTBALL_HOST)
 
-    if (!RAPIDAPI_KEY) {
-      console.error('❌ RAPIDAPI_KEY not found in environment variables')
+    if (!API_FOOTBALL_KEY) {
+      console.error('❌ API_FOOTBALL_KEY not found in environment variables')
       console.log('Available env vars:', Object.keys(Deno.env.toObject()))
-      throw new Error('RAPIDAPI_KEY not configured in Supabase secrets')
+      throw new Error('API_FOOTBALL_KEY not configured in Supabase secrets')
     }
 
     const { endpoint, params = {} }: FootballApiRequest = await req.json()
     console.log('📋 Request details:', { endpoint, params })
     
     // Build URL with parameters
-    const url = new URL(`https://${RAPIDAPI_HOST}${endpoint}`)
+    const url = new URL(`https://${API_FOOTBALL_HOST}${endpoint}`)
     Object.entries(params).forEach(([key, value]) => {
       url.searchParams.append(key, value)
     })
 
     console.log('🌐 Making API call to:', url.toString())
-    console.log('🔑 Using API key ending with:', RAPIDAPI_KEY.slice(-4))
+    console.log('🔑 Using API key ending with:', API_FOOTBALL_KEY.slice(-4))
 
     const response = await fetch(url.toString(), {
       method: 'GET',
       headers: {
-        'X-RapidAPI-Key': RAPIDAPI_KEY,
-        'X-RapidAPI-Host': RAPIDAPI_HOST
+        'X-API-Key': API_FOOTBALL_KEY,
+        'Accept': 'application/json'
       }
     })
 
