@@ -95,8 +95,7 @@ const Index = () => {
               <div className="mt-8 text-center">
                 <Button 
                   onClick={handleLoadMore}
-                  variant="secondary"
-                  className="dark:bg-gray-800 dark:text-gray-100 dark:border-gray-600 dark:hover:bg-gray-700 hover:scale-105 transition-all duration-200"
+                  className="bg-white hover:bg-premium-gray-50 text-az-black border border-premium-gray-200 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-600 dark:hover:bg-gray-700 hover:scale-105 transition-all duration-200 shadow-sm hover:shadow-md"
                 >
                   Laad meer artikelen
                 </Button>
