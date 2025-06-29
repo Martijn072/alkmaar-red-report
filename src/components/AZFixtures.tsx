@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -236,11 +237,11 @@ export const AZFixtures = ({ teamId, isLoadingTeamId }: AZFixturesProps) => {
             {sortedFixtures.map((fixture) => (
               <div 
                 key={fixture.fixture.id}
-                className="bg-white dark:bg-gray-800 border border-premium-gray-200 dark:border-gray-600 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow"
+                className="bg-white dark:bg-gray-800 border border-premium-gray-200 dark:border-gray-600 rounded-lg p-3 sm:p-4 shadow-sm hover:shadow-md transition-shadow"
               >
                 <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-2 text-sm text-premium-gray-600 dark:text-gray-300">
-                    <Calendar className="w-4 h-4" />
+                  <div className="flex items-center gap-2 text-xs sm:text-sm text-premium-gray-600 dark:text-gray-300">
+                    <Calendar className="w-3 h-3 sm:w-4 sm:h-4" />
                     <span className="font-medium">{formatDate(fixture.fixture.date)}</span>
                   </div>
                   <Badge 
@@ -257,50 +258,53 @@ export const AZFixtures = ({ teamId, isLoadingTeamId }: AZFixturesProps) => {
                   </Badge>
                 </div>
 
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3 flex-1">
-                    <div className="flex items-center gap-3">
-                      <img 
-                        src={fixture.teams.home.logo} 
-                        alt={fixture.teams.home.name}
-                        className="w-8 h-8 object-contain"
-                      />
-                      <span className="font-semibold text-az-black dark:text-white">
-                        {fixture.teams.home.name}
-                      </span>
-                    </div>
+                {/* Mobile-first layout: centered logos with score */}
+                <div className="flex items-center justify-center gap-4 sm:gap-8">
+                  {/* Home team */}
+                  <div className="flex flex-col items-center gap-2">
+                    <img 
+                      src={fixture.teams.home.logo} 
+                      alt={fixture.teams.home.name}
+                      className="w-10 h-10 sm:w-12 sm:h-12 object-contain"
+                    />
+                    {/* Show team name only on larger screens */}
+                    <span className="hidden sm:block font-semibold text-az-black dark:text-white text-center text-sm">
+                      {fixture.teams.home.name}
+                    </span>
                   </div>
 
-                  <div className="flex items-center gap-4 px-6">
+                  {/* Score or VS */}
+                  <div className="flex flex-col items-center justify-center">
                     {fixture.goals.home !== null && fixture.goals.away !== null ? (
-                      <div className="text-xl font-bold text-az-red">
+                      <div className="text-2xl sm:text-3xl font-bold text-az-red">
                         {fixture.goals.home} - {fixture.goals.away}
                       </div>
                     ) : (
-                      <div className="text-premium-gray-400 dark:text-gray-500 font-medium">
+                      <div className="text-premium-gray-400 dark:text-gray-500 font-medium text-lg">
                         vs
                       </div>
                     )}
                   </div>
 
-                  <div className="flex items-center gap-3 flex-1 justify-end">
-                    <div className="flex items-center gap-3">
-                      <span className="font-semibold text-az-black dark:text-white">
-                        {fixture.teams.away.name}
-                      </span>
-                      <img 
-                        src={fixture.teams.away.logo} 
-                        alt={fixture.teams.away.name}
-                        className="w-8 h-8 object-contain"
-                      />
-                    </div>
+                  {/* Away team */}
+                  <div className="flex flex-col items-center gap-2">
+                    <img 
+                      src={fixture.teams.away.logo} 
+                      alt={fixture.teams.away.name}
+                      className="w-10 h-10 sm:w-12 sm:h-12 object-contain"
+                    />
+                    {/* Show team name only on larger screens */}
+                    <span className="hidden sm:block font-semibold text-az-black dark:text-white text-center text-sm">
+                      {fixture.teams.away.name}
+                    </span>
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between mt-3 text-sm">
-                  <div className="flex items-center gap-2 text-premium-gray-600 dark:text-gray-300">
+                {/* Venue and Round info */}
+                <div className="flex items-center justify-between mt-3 text-xs sm:text-sm">
+                  <div className="flex items-center gap-1 text-premium-gray-600 dark:text-gray-300">
                     <MapPin className="w-3 h-3" />
-                    <span>{fixture.fixture.venue.name}</span>
+                    <span className="truncate">{fixture.fixture.venue.name}</span>
                   </div>
                   <Badge 
                     variant="outline" 
