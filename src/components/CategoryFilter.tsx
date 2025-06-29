@@ -5,11 +5,25 @@ interface CategoryFilterProps {
   onCategoryChange: (category: string) => void;
 }
 
-export const CategoryFilter = ({ categories, selectedCategory, onCategoryChange }: CategoryFilterProps) => {
+// Fixed categories in the specified order
+const FIXED_CATEGORIES = [
+  "Alles",
+  "Elftal en Technische staf",
+  "Wedstrijden", 
+  "Transfergeruchten",
+  "Europees Voetbal",
+  "AZ Jeugd",
+  "Fotoreportages",
+  "Columns",
+  "Memory Lane",
+  "Overig nieuws"
+];
+
+export const CategoryFilter = ({ selectedCategory, onCategoryChange }: CategoryFilterProps) => {
   return (
     <div className="mb-8">
       <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
-        {categories.map((category) => (
+        {FIXED_CATEGORIES.map((category) => (
           <button
             key={category}
             onClick={() => onCategoryChange(category)}

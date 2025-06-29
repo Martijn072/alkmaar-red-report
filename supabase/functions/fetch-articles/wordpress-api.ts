@@ -1,5 +1,6 @@
+
 import { WordPressPost, WordPressCategory, Article } from './types.ts';
-import { formatPublishedDate, cleanHtmlContent } from './utils.ts';
+import { formatPublishedDate, cleanHtmlContent, getExcludedCategoryIds } from './utils.ts';
 
 export const fetchWordPressCategories = async (): Promise<WordPressCategory[]> => {
   try {
@@ -87,6 +88,13 @@ export const fetchWordPressArticles = async (
   if (categoryId) {
     queryParams.append('categories', categoryId.toString());
     console.log(`Using category ID ${categoryId}`);
+  }
+
+  // Always exclude the "Ingezonden" category (ID 2477)
+  const excludedIds = getExcludedCategoryIds();
+  if (excludedIds.length > 0) {
+    queryParams.append('categories_exclude', excludedIds.join(','));
+    console.log(`Excluding category IDs: ${excludedIds.join(',')}`);
   }
 
   const response = await fetch(

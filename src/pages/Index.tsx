@@ -28,8 +28,6 @@ const Index = () => {
     refetch 
   } = useInfiniteArticles(8, '', selectedCategory === 'Alles' ? '' : selectedCategory);
 
-  const categories = ["Alles", "Wedstrijdverslag", "Transfer", "Jeugd", "Interviews", "Nieuws"];
-
   // Flatten all articles from all pages
   const allArticles = data?.pages.flatMap(page => page.articles) || [];
   const breakingNews = allArticles.filter(article => article.isBreaking);
@@ -50,7 +48,7 @@ const Index = () => {
       <div className="px-4 pb-20 pt-6">
         {/* Category Filter */}
         <CategoryFilter 
-          categories={categories}
+          categories={[]} // No longer needed as we use fixed categories
           selectedCategory={selectedCategory}
           onCategoryChange={setSelectedCategory}
         />

@@ -9,13 +9,26 @@ import { SearchAndFilter } from "@/components/SearchAndFilter";
 import { ArticlePagination } from "@/components/ArticlePagination";
 import { useArticles } from "@/hooks/useArticles";
 
+// Fixed categories in the specified order
+const FIXED_CATEGORIES = [
+  "Alle",
+  "Elftal en Technische staf",
+  "Wedstrijden", 
+  "Transfergeruchten",
+  "Europees Voetbal",
+  "AZ Jeugd",
+  "Fotoreportages",
+  "Columns",
+  "Memory Lane",
+  "Overig nieuws"
+];
+
 const News = () => {
   const [activeTab, setActiveTab] = useState("news");
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("Alle");
   const [debouncedSearch, setDebouncedSearch] = useState("");
-  const [availableCategories, setAvailableCategories] = useState<string[]>(["Alle"]);
   
   // Debounce search query
   useEffect(() => {
@@ -36,15 +49,6 @@ const News = () => {
 
   const articles = data?.articles || [];
   const pagination = data?.pagination;
-
-  // Update available categories when articles change
-  useEffect(() => {
-    if (articles.length > 0) {
-      const uniqueCategories = Array.from(new Set(articles.map(article => article.category)));
-      const sortedCategories = ["Alle", ...uniqueCategories.sort()];
-      setAvailableCategories(sortedCategories);
-    }
-  }, [articles]);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -87,7 +91,7 @@ const News = () => {
         <SearchAndFilter
           searchQuery={searchQuery}
           selectedCategory={selectedCategory}
-          categories={availableCategories}
+          categories={FIXED_CATEGORIES}
           onSearchChange={handleSearchChange}
           onCategoryChange={handleCategoryChange}
           onClearFilters={handleClearFilters}

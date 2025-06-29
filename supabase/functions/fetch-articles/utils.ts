@@ -1,32 +1,34 @@
 
 export const getCategoryIdByName = (categories: any[], categoryName: string): number | null => {
-  // Create mapping for common category variations
-  const categoryMappings: { [key: string]: string[] } = {
-    'Wedstrijdverslag': ['Wedstrijdverslag', 'Wedstrijden', 'Match Report'],
-    'Transfer': ['Transfer', 'Transfers'],
-    'Jeugd': ['Jeugd', 'Youth', 'Jeugdteams'],
-    'Interviews': ['Interviews', 'Interview'],
-    'Nieuws': ['Nieuws', 'News', 'Algemeen']
+  // Category mapping with WordPress slugs
+  const categoryMappings: { [key: string]: string } = {
+    'Elftal en Technische staf': 'elftal-technisch',
+    'Wedstrijden': 'wedstrijden',
+    'Transfergeruchten': 'transfergeruchten',
+    'Europees Voetbal': 'europees-voetbal',
+    'AZ Jeugd': 'azjeugd',
+    'Fotoreportages': 'fotoreportages',
+    'Columns': 'columns',
+    'Memory Lane': 'memory-lane',
+    'Overig nieuws': 'overig-nieuws'
   };
 
-  // First try exact match
-  let category = categories.find(cat => 
-    cat.name.toLowerCase() === categoryName.toLowerCase()
-  );
-
-  // If no exact match, try mapped variations
-  if (!category) {
-    const variations = categoryMappings[categoryName] || [categoryName];
-    for (const variation of variations) {
-      category = categories.find(cat => 
-        cat.name.toLowerCase().includes(variation.toLowerCase()) ||
-        cat.slug.toLowerCase().includes(variation.toLowerCase())
-      );
-      if (category) break;
-    }
+  // Get the slug for the category
+  const targetSlug = categoryMappings[categoryName];
+  
+  if (!targetSlug) {
+    return null;
   }
 
+  // Find category by slug
+  const category = categories.find(cat => cat.slug === targetSlug);
+  
   return category?.id || null;
+};
+
+// Get excluded category IDs (categories that should be hidden)
+export const getExcludedCategoryIds = (): number[] => {
+  return [2477]; // Ingezonden category ID
 };
 
 export const formatPublishedDate = (dateString: string): string => {
