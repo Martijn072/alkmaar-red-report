@@ -32,7 +32,7 @@ export const PopularArticles = () => {
   return (
     <div className="my-12">
       <div className="text-center mb-6">
-        <h2 className="headline-premium text-headline-lg text-az-red mb-2">
+        <h2 className="headline-premium text-headline-lg text-az-black dark:text-white mb-2">
           Meest gelezen
         </h2>
         <p className="body-premium text-premium-gray-600 dark:text-gray-300 text-body-md">
