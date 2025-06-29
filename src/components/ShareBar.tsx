@@ -1,5 +1,5 @@
 
-import { Link, Share2, MessageCircle, Facebook, X } from "lucide-react";
+import { Link, Share2, MessageCircle, Facebook, X, ArrowLeft } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface ShareBarProps {
@@ -62,21 +62,20 @@ export const ShareBar = ({ article, showBackButton = false, onBack, className = 
               onClick={onBack}
               className="flex items-center gap-2 text-premium-gray-600 dark:text-gray-300 hover:text-az-red dark:hover:text-az-red transition-colors text-sm"
             >
-              <Share2 className="w-4 h-4" />
+              <ArrowLeft className="w-4 h-4" />
               <span>Terug</span>
             </button>
           )}
           
           {!showBackButton && (
             <div className="flex items-center gap-2">
-              <Share2 className="w-4 h-4 text-premium-gray-500 dark:text-gray-400" />
               <span className="text-sm text-premium-gray-600 dark:text-gray-300">Deel dit artikel:</span>
             </div>
           )}
           
           <div className="flex items-center gap-2">
-            {!showBackButton && (
-              <span className="text-xs text-premium-gray-500 dark:text-gray-400 mr-2">Delen:</span>
+            {showBackButton && (
+              <Share2 className="w-4 h-4 text-premium-gray-500 dark:text-gray-400" />
             )}
             <button
               onClick={handleWhatsAppShare}
