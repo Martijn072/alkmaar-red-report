@@ -1,6 +1,7 @@
+
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, User, Calendar, Tag, Link, Share2, MessageCircle, Facebook, Instagram, X } from "lucide-react";
+import { ArrowLeft, User, Calendar, Tag, Link, Share2, MessageCircle, Facebook, X } from "lucide-react";
 import { useArticleDetail } from "@/hooks/useArticleDetail";
 import { ArticlesSkeleton } from "@/components/ArticlesSkeleton";
 import { ErrorMessage } from "@/components/ErrorMessage";
@@ -47,31 +48,17 @@ const ArticleDetail = () => {
     window.open(whatsappUrl, '_blank');
   };
 
-  const handleGenericShare = async () => {
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: article?.title,
-          text: article?.excerpt,
-          url: window.location.href,
-        });
-      } catch (err) {
-        console.error('Error sharing:', err);
-      }
-    } else {
-      handleCopyLink();
-    }
+  const handleTwitterShare = () => {
+    const url = window.location.href;
+    const text = `${article?.title}`;
+    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
+    window.open(twitterUrl, '_blank');
   };
 
-  const handleSocialMediaClick = (platform: string) => {
-    // Replace these URLs with your actual social media URLs
-    const socialUrls = {
-      facebook: 'https://facebook.com/your-page',
-      instagram: 'https://instagram.com/your-account',
-      x: 'https://x.com/your-account'
-    };
-    
-    window.open(socialUrls[platform as keyof typeof socialUrls], '_blank');
+  const handleFacebookShare = () => {
+    const url = window.location.href;
+    const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+    window.open(facebookUrl, '_blank');
   };
 
   if (isLoading) {
@@ -102,15 +89,50 @@ const ArticleDetail = () => {
     <div className="min-h-screen bg-premium-gray-50 dark:bg-gray-900">
       <Header />
       
-      {/* Back button section */}
-      <div className="bg-white dark:bg-gray-800 border-b border-premium-gray-200 dark:border-gray-700">
-        <div className="px-4 py-4">
-          <button
-            onClick={() => navigate('/nieuws')}
-            className="flex items-center gap-2 text-premium-gray-600 dark:text-gray-300 hover:text-az-red dark:hover:text-az-red transition-colors"
-          >
-            <span>← Terug naar nieuws</span>
-          </button>
+      {/* Sticky Share Bar */}
+      <div className="sticky top-0 z-40 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm border-b border-premium-gray-200 dark:border-gray-700">
+        <div className="max-w-4xl mx-auto px-4 py-2">
+          <div className="flex items-center justify-between">
+            <button
+              onClick={() => navigate('/nieuws')}
+              className="flex items-center gap-2 text-premium-gray-600 dark:text-gray-300 hover:text-az-red dark:hover:text-az-red transition-colors text-sm"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span>Terug</span>
+            </button>
+            
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-premium-gray-500 dark:text-gray-400 mr-2">Delen:</span>
+              <button
+                onClick={handleWhatsAppShare}
+                className="p-2 rounded-full bg-green-500 hover:bg-green-600 text-white transition-colors"
+                title="Delen via WhatsApp"
+              >
+                <MessageCircle className="w-4 h-4" />
+              </button>
+              <button
+                onClick={handleTwitterShare}
+                className="p-2 rounded-full bg-black hover:bg-gray-800 text-white transition-colors"
+                title="Delen via Twitter"
+              >
+                <X className="w-4 h-4" />
+              </button>
+              <button
+                onClick={handleFacebookShare}
+                className="p-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white transition-colors"
+                title="Delen via Facebook"
+              >
+                <Facebook className="w-4 h-4" />
+              </button>
+              <button
+                onClick={handleCopyLink}
+                className="p-2 rounded-full bg-az-red hover:bg-red-700 text-white transition-colors"
+                title="Link kopiëren"
+              >
+                <Link className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -168,94 +190,11 @@ const ArticleDetail = () => {
           />
         </div>
 
-        {/* Social Media Follow Section */}
-        <div className="mt-8 pt-6 border-t border-premium-gray-200 dark:border-gray-700">
-          <div className="bg-gradient-to-r from-premium-gray-50 to-white dark:from-gray-800 dark:to-gray-750 rounded-lg p-6 border border-premium-gray-100 dark:border-gray-700">
-            <div className="text-center mb-4">
-              <h3 className="headline-premium text-headline-sm mb-2 text-az-black dark:text-white">
-                Volg ons op social media
-              </h3>
-              <p className="body-premium text-body-sm text-premium-gray-600 dark:text-gray-400">
-                Blijf op de hoogte van het laatste nieuws en updates
-              </p>
-            </div>
-            
-            <div className="flex items-center justify-center gap-4">
-              <button
-                onClick={() => handleSocialMediaClick('facebook')}
-                className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all duration-200 hover:scale-105 group"
-                aria-label="Volg ons op Facebook"
-              >
-                <Facebook className="w-5 h-5 transition-transform group-hover:scale-110" />
-                <span className="font-medium text-sm">Facebook</span>
-              </button>
-              
-              <button
-                onClick={() => handleSocialMediaClick('instagram')}
-                className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-lg transition-all duration-200 hover:scale-105 group"
-                aria-label="Volg ons op Instagram"
-              >
-                <Instagram className="w-5 h-5 transition-transform group-hover:scale-110" />
-                <span className="font-medium text-sm">Instagram</span>
-              </button>
-              
-              <button
-                onClick={() => handleSocialMediaClick('x')}
-                className="flex items-center gap-2 px-4 py-2 bg-black hover:bg-gray-800 text-white rounded-lg transition-all duration-200 hover:scale-105 group"
-                aria-label="Volg ons op X"
-              >
-                <X className="w-5 h-5 transition-transform group-hover:scale-110" />
-                <span className="font-medium text-sm">X</span>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Enhanced social sharing section */}
-        <div className="mt-6 pt-6 border-t border-premium-gray-200 dark:border-gray-700">
-          <div className="text-center mb-6">
-            <h3 className="headline-premium text-headline-sm mb-2 text-az-black dark:text-white">
-              Deel dit artikel
-            </h3>
-            <p className="body-premium text-body-md text-premium-gray-600 dark:text-gray-300">
-              Vond je dit artikel interessant? Deel het met anderen!
-            </p>
-          </div>
-          
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button
-              onClick={handleCopyLink}
-              variant="outline"
-              className="flex items-center gap-2 px-6 py-3 bg-white dark:bg-gray-800 border-2 border-premium-gray-200 dark:border-gray-600 hover:border-az-red hover:bg-az-red hover:text-white transition-all duration-200 group min-w-[160px] text-gray-900 dark:text-gray-100"
-            >
-              <Link className="w-5 h-5 transition-transform group-hover:scale-110" />
-              <span className="font-medium">Link kopiëren</span>
-            </Button>
-            
-            <Button
-              onClick={handleWhatsAppShare}
-              className="flex items-center gap-2 px-6 py-3 bg-green-600 hover:bg-green-700 text-white transition-all duration-200 hover:shadow-lg hover:scale-105 group min-w-[160px]"
-            >
-              <MessageCircle className="w-5 h-5 transition-transform group-hover:scale-110" />
-              <span className="font-medium">WhatsApp</span>
-            </Button>
-            
-            <Button
-              onClick={handleGenericShare}
-              variant="outline"
-              className="flex items-center gap-2 px-6 py-3 bg-white dark:bg-gray-800 border-2 border-premium-gray-200 dark:border-gray-600 hover:border-az-red hover:bg-premium-gray-50 dark:hover:bg-gray-700 transition-all duration-200 group min-w-[160px] text-gray-900 dark:text-gray-100"
-            >
-              <Share2 className="w-5 h-5 transition-transform group-hover:scale-110" />
-              <span className="font-medium">Delen</span>
-            </Button>
-          </div>
-        </div>
-
-        {/* Disqus Comments Section - Updated to pass articleId */}
+        {/* Disqus Comments Section - Now directly after article content */}
         <DisqusComments
           slug={article.slug}
           title={article.title}
-          articleId={id!} // Pass the article ID from URL params
+          articleId={id!}
         />
       </article>
 
