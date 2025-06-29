@@ -15,7 +15,7 @@ const ConferenceLeague = () => {
     return (
       <div className="min-h-screen bg-white dark:bg-gray-900">
         <Header />
-        <div className="px-4 pt-6 pb-20">
+        <div className="px-4 pt-6 pb-20 bg-white dark:bg-gray-900">
           <ErrorMessage onRetry={() => refetchTeamId()} />
         </div>
         <BottomNavigation activeTab={activeTab} onTabChange={setActiveTab} />
@@ -27,9 +27,9 @@ const ConferenceLeague = () => {
     <div className="min-h-screen bg-white dark:bg-gray-900">
       <Header />
       
-      <div className="px-4 pb-20 pt-6 bg-white dark:bg-gray-900">
+      <main className="px-4 pb-20 pt-6 bg-white dark:bg-gray-900 min-h-screen">
         {/* Hero Section */}
-        <div className="mb-8">
+        <div className="mb-8 bg-white dark:bg-gray-900">
           <div className="max-w-4xl">
             <h1 className="headline-premium text-headline-xl mb-4 text-az-black dark:text-white leading-tight">
               Conference League
@@ -41,15 +41,15 @@ const ConferenceLeague = () => {
         </div>
 
         {/* Conference League Standings */}
-        <div className="mb-8">
+        <div className="mb-8 bg-white dark:bg-gray-900">
           <ConferenceLeagueStandings />
         </div>
 
         {/* Conference League Fixtures */}
-        <div>
+        <div className="bg-white dark:bg-gray-900">
           <ConferenceLeagueFixtures teamId={teamId} isLoadingTeamId={teamIdLoading} />
         </div>
-      </div>
+      </main>
 
       <BottomNavigation activeTab={activeTab} onTabChange={setActiveTab} />
     </div>
