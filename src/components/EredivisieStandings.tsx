@@ -79,7 +79,8 @@ export const EredivisieStandings = () => {
                             alt={standing.team.name}
                             className="w-6 h-6 object-contain"
                           />
-                          <span className={`font-medium ${isAZ ? 'text-az-red font-bold' : 'text-az-black dark:text-white'}`}>
+                          {/* Hide team name on mobile, show on larger screens */}
+                          <span className={`hidden sm:block font-medium ${isAZ ? 'text-az-red font-bold' : 'text-az-black dark:text-white'}`}>
                             {standing.team.name}
                           </span>
                         </div>
