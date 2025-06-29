@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from '@tanstack/react-query';
@@ -188,11 +187,11 @@ const WedstrijdDetail = () => {
       'Goalkeeper Saves': 'Reddingen keeper',
       'Total passes': 'Totaal passes',
       'Passes accurate': 'Passes juist',
-      'Passes %': 'Pass percentage',
+      'Passes %': 'Pasnauwkeurigheid',
       'Expected Goals': 'Verwachte doelpunten',
       'expected_goals': 'Verwachte doelpunten',
       'goals_prevented': 'Voorkomen doelpunten',
-      'Pass percentage': 'Pass percentage'
+      'Pass percentage': 'Pasnauwkeurigheid'
     };
     return translations[type] || type;
   };
@@ -275,7 +274,7 @@ const WedstrijdDetail = () => {
         <Card className="mb-6 bg-white dark:bg-gray-800 border border-premium-gray-200 dark:border-gray-700">
           <CardHeader className="text-center">
             <div className="flex items-center justify-center gap-2 mb-2">
-              <Badge variant="outline" className="text-xs">
+              <Badge className="text-xs bg-premium-gray-100 text-premium-gray-700 dark:bg-gray-700 dark:text-gray-300 border-none">
                 {fixtureData.league.name}
               </Badge>
               {fixtureData.fixture.status.short === 'LIVE' && (
@@ -297,10 +296,6 @@ const WedstrijdDetail = () => {
                   alt={fixtureData.teams.home.name}
                   className="w-12 h-12 sm:w-16 sm:h-16 object-contain"
                 />
-                {/* Show team name only on larger screens */}
-                <span className={`hidden sm:block font-semibold text-center text-sm ${isAZHome ? 'text-az-red' : 'text-az-black dark:text-white'}`}>
-                  {fixtureData.teams.home.name}
-                </span>
               </div>
 
               {/* Score or VS */}
@@ -335,21 +330,7 @@ const WedstrijdDetail = () => {
                   alt={fixtureData.teams.away.name}
                   className="w-12 h-12 sm:w-16 sm:h-16 object-contain"
                 />
-                {/* Show team name only on larger screens */}
-                <span className={`hidden sm:block font-semibold text-center text-sm ${isAZAway ? 'text-az-red' : 'text-az-black dark:text-white'}`}>
-                  {fixtureData.teams.away.name}
-                </span>
               </div>
-            </div>
-
-            {/* Team names for mobile */}
-            <div className="flex items-center justify-between sm:hidden text-xs text-premium-gray-600 dark:text-gray-400 mb-4">
-              <span className={`font-medium ${isAZHome ? 'text-az-red' : 'text-az-black dark:text-white'}`}>
-                {fixtureData.teams.home.name}
-              </span>
-              <span className={`font-medium ${isAZAway ? 'text-az-red' : 'text-az-black dark:text-white'}`}>
-                {fixtureData.teams.away.name}
-              </span>
             </div>
 
             {/* Match info */}
