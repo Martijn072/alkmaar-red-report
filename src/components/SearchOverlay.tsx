@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import { X, Search, Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useSearchArticles } from "@/hooks/useSearchArticles";
-import { formatDistanceToNow } from "date-fns";
 
 interface SearchOverlayProps {
   isOpen: boolean;
@@ -71,10 +70,10 @@ export const SearchOverlay = ({ isOpen, onClose }: SearchOverlayProps) => {
 
   return (
     <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm animate-fade-in">
-      <div className="flex items-start justify-center min-h-screen p-4 pt-20">
+      <div className="flex items-start justify-center min-h-screen p-4 pt-20 bg-transparent">
         <div className="w-full max-w-2xl bg-white dark:bg-gray-900 rounded-xl shadow-2xl animate-scale-in">
           {/* Header */}
-          <div className="flex items-center gap-4 p-6 border-b border-gray-200 dark:border-gray-700">
+          <div className="flex items-center gap-4 p-6 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
             <Search className="w-6 h-6 text-gray-400" />
             <input
               id="search-input"
@@ -93,16 +92,16 @@ export const SearchOverlay = ({ isOpen, onClose }: SearchOverlayProps) => {
           </div>
 
           {/* Results */}
-          <div className="max-h-96 overflow-y-auto">
+          <div className="max-h-96 overflow-y-auto bg-white dark:bg-gray-900">
             {isLoading && debouncedQuery && (
-              <div className="flex items-center justify-center py-8">
+              <div className="flex items-center justify-center py-8 bg-white dark:bg-gray-900">
                 <Loader2 className="w-6 h-6 animate-spin text-az-red" />
                 <span className="ml-2 text-gray-600 dark:text-gray-400">Zoeken...</span>
               </div>
             )}
 
             {!isLoading && debouncedQuery && searchResults?.length === 0 && (
-              <div className="py-8 text-center">
+              <div className="py-8 text-center bg-white dark:bg-gray-900">
                 <p className="text-gray-600 dark:text-gray-400">
                   Geen artikelen gevonden voor "{debouncedQuery}"
                 </p>
@@ -110,7 +109,7 @@ export const SearchOverlay = ({ isOpen, onClose }: SearchOverlayProps) => {
             )}
 
             {!debouncedQuery && (
-              <div className="py-8 text-center">
+              <div className="py-8 text-center bg-white dark:bg-gray-900">
                 <p className="text-gray-600 dark:text-gray-400">
                   Begin met typen om te zoeken in alle AZ nieuws
                 </p>
@@ -118,12 +117,12 @@ export const SearchOverlay = ({ isOpen, onClose }: SearchOverlayProps) => {
             )}
 
             {searchResults && searchResults.length > 0 && (
-              <div className="divide-y divide-gray-200 dark:divide-gray-700">
+              <div className="divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-900">
                 {searchResults.map((article) => (
                   <button
                     key={article.id}
                     onClick={() => handleArticleClick(article.id)}
-                    className="w-full p-4 text-left hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                    className="w-full p-4 text-left hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors bg-white dark:bg-gray-900"
                   >
                     <div className="flex gap-4">
                       {article.imageUrl && (
@@ -143,7 +142,7 @@ export const SearchOverlay = ({ isOpen, onClose }: SearchOverlayProps) => {
                         <div className="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-500">
                           <span>{article.category}</span>
                           <span>•</span>
-                          <span>{formatDistanceToNow(new Date(article.publishedAt))} geleden</span>
+                          <span>{article.publishedAt}</span>
                         </div>
                       </div>
                     </div>
