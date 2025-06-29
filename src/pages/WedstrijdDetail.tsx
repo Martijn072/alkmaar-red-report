@@ -278,12 +278,14 @@ const WedstrijdDetail = () => {
               <Badge variant="outline" className="text-xs">
                 {fixtureData.league.name}
               </Badge>
-              <Badge 
-                variant={fixtureData.fixture.status.short === 'LIVE' ? 'default' : 'outline'}
-                className={fixtureData.fixture.status.short === 'LIVE' ? 'bg-red-500 text-white' : ''}
-              >
-                {getStatusText(fixtureData.fixture.status.short)}
-              </Badge>
+              {fixtureData.fixture.status.short === 'LIVE' && (
+                <Badge 
+                  variant="default"
+                  className="bg-red-500 text-white"
+                >
+                  {getStatusText(fixtureData.fixture.status.short)}
+                </Badge>
+              )}
             </div>
             
             {/* Teams and score - Mobile-first layout like AZFixtures */}
