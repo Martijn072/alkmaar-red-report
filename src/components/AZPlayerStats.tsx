@@ -203,7 +203,7 @@ export const AZPlayerStats = ({ teamId, isLoadingTeamId }: AZPlayerStatsProps) =
 
   if (error) {
     return (
-      <Card className="card-premium dark:bg-gray-800 dark:border-gray-700">
+      <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm">
         <CardHeader>
           <CardTitle className="text-az-black dark:text-white">Speler Statistieken</CardTitle>
         </CardHeader>
@@ -226,7 +226,7 @@ export const AZPlayerStats = ({ teamId, isLoadingTeamId }: AZPlayerStatsProps) =
 
   if (isLoading || isLoadingTeamId) {
     return (
-      <Card className="card-premium dark:bg-gray-800 dark:border-gray-700">
+      <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm">
         <CardHeader>
           <CardTitle className="text-az-black dark:text-white">Speler Statistieken</CardTitle>
         </CardHeader>
@@ -244,18 +244,18 @@ export const AZPlayerStats = ({ teamId, isLoadingTeamId }: AZPlayerStatsProps) =
   const sortedPlayers = getSortedPlayers();
 
   return (
-    <Card className="card-premium dark:bg-gray-800 dark:border-gray-700">
-      <CardHeader>
+    <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm">
+      <CardHeader className="bg-white dark:bg-gray-800">
         <div className="flex flex-col space-y-4">
           <CardTitle className="text-az-black dark:text-white">AZ Speler Statistieken Seizoen 2024-2025</CardTitle>
           
-          {/* Sort buttons */}
+          {/* Sort buttons with consistent styling */}
           <div className="flex gap-2 flex-wrap">
             <Button
               variant={sortBy === 'goals' ? 'default' : 'outline'}
               size="sm"
               onClick={() => setSortBy('goals')}
-              className={sortBy === 'goals' ? 'bg-az-red hover:bg-az-red/90' : ''}
+              className={sortBy === 'goals' ? 'bg-az-red hover:bg-az-red/90 text-white border-az-red' : 'bg-white dark:bg-gray-800 border-premium-gray-300 hover:bg-premium-gray-50 dark:border-gray-600 dark:hover:bg-gray-700 text-premium-gray-600 dark:text-gray-300'}
             >
               Doelpunten
             </Button>
@@ -263,7 +263,7 @@ export const AZPlayerStats = ({ teamId, isLoadingTeamId }: AZPlayerStatsProps) =
               variant={sortBy === 'assists' ? 'default' : 'outline'}
               size="sm"
               onClick={() => setSortBy('assists')}
-              className={sortBy === 'assists' ? 'bg-az-red hover:bg-az-red/90' : ''}
+              className={sortBy === 'assists' ? 'bg-az-red hover:bg-az-red/90 text-white border-az-red' : 'bg-white dark:bg-gray-800 border-premium-gray-300 hover:bg-premium-gray-50 dark:border-gray-600 dark:hover:bg-gray-700 text-premium-gray-600 dark:text-gray-300'}
             >
               Assists
             </Button>
@@ -271,7 +271,7 @@ export const AZPlayerStats = ({ teamId, isLoadingTeamId }: AZPlayerStatsProps) =
               variant={sortBy === 'minutes' ? 'default' : 'outline'}
               size="sm"
               onClick={() => setSortBy('minutes')}
-              className={sortBy === 'minutes' ? 'bg-az-red hover:bg-az-red/90' : ''}
+              className={sortBy === 'minutes' ? 'bg-az-red hover:bg-az-red/90 text-white border-az-red' : 'bg-white dark:bg-gray-800 border-premium-gray-300 hover:bg-premium-gray-50 dark:border-gray-600 dark:hover:bg-gray-700 text-premium-gray-600 dark:text-gray-300'}
             >
               Speelminuten
             </Button>
@@ -279,14 +279,14 @@ export const AZPlayerStats = ({ teamId, isLoadingTeamId }: AZPlayerStatsProps) =
               variant={sortBy === 'cards' ? 'default' : 'outline'}
               size="sm"
               onClick={() => setSortBy('cards')}
-              className={sortBy === 'cards' ? 'bg-az-red hover:bg-az-red/90' : ''}
+              className={sortBy === 'cards' ? 'bg-az-red hover:bg-az-red/90 text-white border-az-red' : 'bg-white dark:bg-gray-800 border-premium-gray-300 hover:bg-premium-gray-50 dark:border-gray-600 dark:hover:bg-gray-700 text-premium-gray-600 dark:text-gray-300'}
             >
               Kaarten
             </Button>
           </div>
         </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className="bg-white dark:bg-gray-800">
         {sortedPlayers.length === 0 ? (
           <div className="text-center py-8">
             <p className="text-premium-gray-600 dark:text-gray-300">
@@ -297,28 +297,28 @@ export const AZPlayerStats = ({ teamId, isLoadingTeamId }: AZPlayerStatsProps) =
             </p>
           </div>
         ) : (
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto bg-white">
             <Table>
               <TableHeader>
-                <TableRow>
-                  <TableHead>Speler</TableHead>
-                  <TableHead className="text-center">Pos</TableHead>
-                  <TableHead className="text-center">Wedst</TableHead>
-                  <TableHead className="text-center">Min</TableHead>
-                  <TableHead className="text-center">Goals</TableHead>
-                  <TableHead className="text-center">Assists</TableHead>
-                  <TableHead className="text-center">🟡</TableHead>
-                  <TableHead className="text-center">🟥</TableHead>
-                  <TableHead className="text-center">Rating</TableHead>
+                <TableRow className="bg-white hover:bg-white border-b border-gray-200">
+                  <TableHead className="text-gray-900 dark:text-white font-semibold">Speler</TableHead>
+                  <TableHead className="text-center text-gray-900 dark:text-white font-semibold">Pos</TableHead>
+                  <TableHead className="text-center text-gray-900 dark:text-white font-semibold">Wedst</TableHead>
+                  <TableHead className="text-center text-gray-900 dark:text-white font-semibold">Min</TableHead>
+                  <TableHead className="text-center text-gray-900 dark:text-white font-semibold">Goals</TableHead>
+                  <TableHead className="text-center text-gray-900 dark:text-white font-semibold">Assists</TableHead>
+                  <TableHead className="text-center text-gray-900 dark:text-white font-semibold">🟡</TableHead>
+                  <TableHead className="text-center text-gray-900 dark:text-white font-semibold">🟥</TableHead>
+                  <TableHead className="text-center text-gray-900 dark:text-white font-semibold">Rating</TableHead>
                 </TableRow>
               </TableHeader>
-              <TableBody>
+              <TableBody className="bg-white">
                 {sortedPlayers.map((playerData) => {
                   const player = playerData.player;
                   const stats = playerData.statistics[0];
                   
                   return (
-                    <TableRow key={player.id}>
+                    <TableRow key={player.id} className="bg-white hover:bg-gray-50 border-b border-gray-100">
                       <TableCell>
                         <div className="flex items-center gap-3">
                           <img 
