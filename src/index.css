@@ -180,6 +180,45 @@
   ::-webkit-scrollbar-thumb:hover {
     @apply bg-az-red;
   }
+
+  /* Enhanced Disqus Dark Mode Styling */
+  .disqus-dark-mode iframe,
+  .disqus-dark-theme iframe {
+    background-color: #1a171b !important;
+    color: #ffffff !important;
+  }
+
+  /* Force dark mode styling on Disqus elements */
+  .dark .disqus-dark-mode,
+  .dark .disqus-dark-theme {
+    background-color: #1f2937 !important;
+    color: #ffffff !important;
+  }
+
+  /* Target Disqus content when possible */
+  .dark #disqus_thread {
+    background-color: #1f2937 !important;
+    color: #ffffff !important;
+  }
+
+  /* Fallback styling for Disqus elements */
+  .dark #disqus_thread * {
+    color: #ffffff !important;
+  }
+
+  /* Override any light mode text in dark mode */
+  .dark #disqus_thread a {
+    color: #dc2626 !important;
+  }
+
+  /* Make sure buttons and interactive elements are visible */
+  .dark #disqus_thread button,
+  .dark #disqus_thread input,
+  .dark #disqus_thread textarea {
+    background-color: #374151 !important;
+    color: #ffffff !important;
+    border-color: #4b5563 !important;
+  }
 }
 
 /* Premium button styles */

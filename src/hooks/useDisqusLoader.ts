@@ -30,17 +30,42 @@ export const useDisqusLoader = ({ slug, title, articleId }: UseDisqusLoaderProps
       return false;
     }
 
-    // Configure Disqus with WordPress URL, identifier, and color scheme
+    // Enhanced Disqus configuration with better dark mode support
     window.disqus_config = function () {
       this.page.url = wpUrl;
       this.page.identifier = identifier;
       this.page.title = title;
+      
+      // Multiple approaches for dark mode theme
       this.colorScheme = isDarkMode ? 'dark' : 'light';
-      console.log('🔧 Disqus config set:', {
+      this.theme = isDarkMode ? 'dark' : 'light';
+      
+      // Additional callback to apply custom styling after load
+      this.callbacks = {
+        onReady: [function() {
+          console.log('💡 Disqus loaded, applying theme fixes...');
+          // Apply custom CSS fixes after Disqus loads
+          const iframe = document.querySelector('#disqus_thread iframe');
+          if (iframe && isDarkMode) {
+            try {
+              // Add dark mode class to container for CSS targeting
+              const container = document.getElementById('disqus_thread');
+              if (container) {
+                container.classList.add('disqus-dark-mode');
+              }
+            } catch (e) {
+              console.log('Could not access iframe content (CORS), relying on CSS fallbacks');
+            }
+          }
+        }]
+      };
+      
+      console.log('🔧 Enhanced Disqus config set:', {
         url: this.page.url,
         identifier: this.page.identifier,
         title: this.page.title,
-        colorScheme: this.colorScheme
+        colorScheme: this.colorScheme,
+        theme: this.theme
       });
     };
 
@@ -61,6 +86,15 @@ export const useDisqusLoader = ({ slug, title, articleId }: UseDisqusLoaderProps
         console.log(`✅ Disqus script loaded for identifier: ${identifier} in ${isDarkMode ? 'dark' : 'light'} mode`);
         clearTimeout(timeout);
         setCurrentIdentifier(identifier);
+        
+        // Apply dark mode class to container after script loads
+        setTimeout(() => {
+          const container = document.getElementById('disqus_thread');
+          if (container && isDarkMode) {
+            container.classList.add('disqus-dark-mode');
+          }
+        }, 1000);
+        
         resolve(true);
       };
 
@@ -136,16 +170,16 @@ export const useDisqusLoader = ({ slug, title, articleId }: UseDisqusLoaderProps
     cleanupDisqus();
   };
 
-  // Reset Disqus when dark mode changes
+  // Enhanced dark mode change handler with longer delay
   useEffect(() => {
     if (isLoaded && currentIdentifier) {
       console.log(`🌓 Dark mode changed to ${isDarkMode ? 'dark' : 'light'}, reloading Disqus...`);
       const wordpressUrl = getWordPressUrl(slug);
       
-      // Small delay to ensure theme has been applied
+      // Longer delay to ensure theme has been applied throughout the app
       setTimeout(() => {
         loadDisqusWithIdentifier(currentIdentifier, wordpressUrl);
-      }, 100);
+      }, 500);
     }
   }, [isDarkMode, isLoaded, currentIdentifier, slug, title]);
 
