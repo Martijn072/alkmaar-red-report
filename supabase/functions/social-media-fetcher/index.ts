@@ -14,19 +14,24 @@ const API_SECRET = Deno.env.get("TWITTER_CONSUMER_SECRET")?.trim();
 const ACCESS_TOKEN = Deno.env.get("TWITTER_ACCESS_TOKEN")?.trim();
 const ACCESS_TOKEN_SECRET = Deno.env.get("TWITTER_ACCESS_TOKEN_SECRET")?.trim();
 
-function validateEnvironmentVariables() {
-  if (!API_KEY) {
-    throw new Error("Missing TWITTER_CONSUMER_KEY environment variable");
+// Instagram API credentials (to be added later)
+const INSTAGRAM_ACCESS_TOKEN = Deno.env.get("INSTAGRAM_ACCESS_TOKEN")?.trim();
+const INSTAGRAM_USER_ID = Deno.env.get("INSTAGRAM_USER_ID")?.trim();
+
+function validateTwitterCredentials() {
+  if (!API_KEY || !API_SECRET || !ACCESS_TOKEN || !ACCESS_TOKEN_SECRET) {
+    console.log('⚠️ Twitter credentials not configured, skipping Twitter fetch');
+    return false;
   }
-  if (!API_SECRET) {
-    throw new Error("Missing TWITTER_CONSUMER_SECRET environment variable");
+  return true;
+}
+
+function validateInstagramCredentials() {
+  if (!INSTAGRAM_ACCESS_TOKEN || !INSTAGRAM_USER_ID) {
+    console.log('⚠️ Instagram credentials not configured, skipping Instagram fetch');
+    return false;
   }
-  if (!ACCESS_TOKEN) {
-    throw new Error("Missing TWITTER_ACCESS_TOKEN environment variable");
-  }
-  if (!ACCESS_TOKEN_SECRET) {
-    throw new Error("Missing TWITTER_ACCESS_TOKEN_SECRET environment variable");
-  }
+  return true;
 }
 
 function generateOAuthSignature(
@@ -91,9 +96,13 @@ function generateOAuthHeader(method: string, url: string, queryParams: Record<st
   );
 }
 
-async function getUserTimeline(): Promise<any[]> {
+async function fetchTwitterPosts(): Promise<any[]> {
+  if (!validateTwitterCredentials()) {
+    return [];
+  }
+
   try {
-    console.log('🐦 Fetching user timeline from Twitter API...');
+    console.log('🐦 Fetching tweets from Twitter API...');
     
     // First, get user ID for azfanpage
     const userUrl = `https://api.x.com/2/users/by/username/azfanpage`;
@@ -110,7 +119,7 @@ async function getUserTimeline(): Promise<any[]> {
     if (!userResponse.ok) {
       const errorText = await userResponse.text();
       console.error('❌ Error fetching user info:', errorText);
-      throw new Error(`Failed to fetch user info: ${userResponse.status}`);
+      return [];
     }
 
     const userData = await userResponse.json();
@@ -127,7 +136,9 @@ async function getUserTimeline(): Promise<any[]> {
     const tweetsUrl = `https://api.x.com/2/users/${userId}/tweets`;
     const queryParams = {
       'max_results': '10',
-      'tweet.fields': 'created_at,text,public_metrics'
+      'tweet.fields': 'created_at,text,public_metrics,attachments',
+      'expansions': 'attachments.media_keys',
+      'media.fields': 'url,preview_image_url,type'
     };
     
     const tweetsUrlWithParams = `${tweetsUrl}?${new URLSearchParams(queryParams).toString()}`;
@@ -144,15 +155,51 @@ async function getUserTimeline(): Promise<any[]> {
     if (!tweetsResponse.ok) {
       const errorText = await tweetsResponse.text();
       console.error('❌ Error fetching tweets:', errorText);
-      throw new Error(`Failed to fetch tweets: ${tweetsResponse.status}`);
+      return [];
     }
 
     const tweetsData = await tweetsResponse.json();
-    console.log('✅ Fetched tweets data:', tweetsData);
+    console.log('✅ Fetched tweets data:', JSON.stringify(tweetsData, null, 2));
 
     return tweetsData.data || [];
   } catch (error) {
-    console.error('❌ Error in getUserTimeline:', error);
+    console.error('❌ Error in fetchTwitterPosts:', error);
+    return [];
+  }
+}
+
+async function fetchInstagramPosts(): Promise<any[]> {
+  if (!validateInstagramCredentials()) {
+    // Return mock data for now
+    return [{
+      id: 'ig_mock_' + Date.now(),
+      caption: '🔥 Geweldige training vandaag! Het team is klaar voor de volgende wedstrijd! ⚽ #AZ #AlkmaarZaanstreek #Training',
+      media_type: 'IMAGE',
+      media_url: 'https://picsum.photos/600/600?random=' + Math.floor(Math.random() * 1000),
+      permalink: 'https://instagram.com/p/mockpost' + Date.now(),
+      timestamp: new Date().toISOString()
+    }];
+  }
+
+  try {
+    console.log('📷 Fetching Instagram posts...');
+    
+    const url = `https://graph.instagram.com/${INSTAGRAM_USER_ID}/media?fields=id,caption,media_type,media_url,permalink,timestamp&access_token=${INSTAGRAM_ACCESS_TOKEN}&limit=10`;
+    
+    const response = await fetch(url);
+    
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('❌ Error fetching Instagram posts:', errorText);
+      return [];
+    }
+
+    const data = await response.json();
+    console.log('✅ Fetched Instagram posts:', data);
+    
+    return data.data || [];
+  } catch (error) {
+    console.error('❌ Error in fetchInstagramPosts:', error);
     return [];
   }
 }
@@ -163,8 +210,6 @@ serve(async (req) => {
   }
 
   try {
-    validateEnvironmentVariables();
-    
     const supabaseClient = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
@@ -172,21 +217,14 @@ serve(async (req) => {
 
     console.log('🔍 Starting social media fetch...')
 
-    // Fetch real tweets from Twitter API
-    const twitterPosts = await getUserTimeline();
-    console.log(`🐦 Found ${twitterPosts.length} tweets from Twitter API`);
+    // Fetch from both platforms
+    const [twitterPosts, instagramPosts] = await Promise.all([
+      fetchTwitterPosts(),
+      fetchInstagramPosts()
+    ]);
 
-    // Mock Instagram posts (Instagram API requires business verification)
-    const mockInstagramPosts = [
-      {
-        id: 'insta_' + Date.now(),
-        title: 'Nieuwe Instagram post',
-        description: 'Training vandaag was intensief! De spelers zijn klaar voor de volgende wedstrijd. 💪⚽',
-        url: 'https://instagram.com/p/mockpost1',
-        thumbnail: 'https://picsum.photos/300/300?random=' + Math.floor(Math.random() * 1000),
-        timestamp: new Date().toISOString()
-      }
-    ]
+    console.log(`🐦 Found ${twitterPosts.length} tweets`);
+    console.log(`📷 Found ${instagramPosts.length} Instagram posts`);
 
     // Check for existing notifications to avoid duplicates
     const { data: existingNotifications } = await supabaseClient
@@ -194,7 +232,7 @@ serve(async (req) => {
       .select('social_media_url')
       .in('type', ['instagram', 'twitter'])
       .order('created_at', { ascending: false })
-      .limit(50)
+      .limit(100)
 
     const existingUrls = new Set(existingNotifications?.map(n => n.social_media_url) || [])
 
@@ -229,21 +267,25 @@ serve(async (req) => {
       }
     }
 
-    // Insert new Instagram posts (mock data for now)
+    // Insert new Instagram posts
     let newInstagramPosts = 0;
-    for (const post of mockInstagramPosts) {
-      if (!existingUrls.has(post.url)) {
-        console.log('📷 Adding new Instagram post:', post.title)
+    for (const post of instagramPosts) {
+      const postUrl = post.permalink || `https://instagram.com/p/mockpost${post.id}`;
+      
+      if (!existingUrls.has(postUrl)) {
+        console.log('📷 Adding new Instagram post:', post.caption?.substring(0, 50) + '...');
         
         const { error } = await supabaseClient
           .from('notifications')
           .insert({
             type: 'instagram',
-            title: post.title,
-            description: post.description,
+            title: 'Nieuwe Instagram Post van AZ',
+            description: post.caption?.length > 150 
+              ? post.caption.substring(0, 147) + '...'
+              : post.caption || 'Nieuwe Instagram post',
             icon: '📷',
-            social_media_url: post.url,
-            thumbnail_url: post.thumbnail,
+            social_media_url: postUrl,
+            thumbnail_url: post.media_url || null,
             read: false
           })
 
@@ -265,7 +307,9 @@ serve(async (req) => {
         new_twitter_posts: newTwitterPosts,
         new_instagram_posts: newInstagramPosts,
         total_twitter_checked: twitterPosts.length,
-        total_instagram_checked: mockInstagramPosts.length
+        total_instagram_checked: instagramPosts.length,
+        twitter_configured: validateTwitterCredentials(),
+        instagram_configured: validateInstagramCredentials()
       }),
       { 
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
