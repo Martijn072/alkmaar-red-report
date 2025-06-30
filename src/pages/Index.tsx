@@ -1,5 +1,4 @@
 
-import { Hero } from "@/components/Hero";
 import { NewsCard } from "@/components/NewsCard";
 import { NextMatchWidget } from "@/components/NextMatchWidget";
 import { EredivisieStandings } from "@/components/EredivisieStandings";
@@ -15,13 +14,16 @@ import { useState } from "react";
 const Index = () => {
   const [activeTab, setActiveTab] = useState("home");
   const { 
-    articles, 
+    data,
     isLoading, 
     error, 
     fetchNextPage, 
     hasNextPage, 
     isFetchingNextPage 
   } = useInfiniteArticles();
+
+  // Extract all articles from all pages
+  const articles = data?.pages.flatMap(page => page.articles) || [];
 
   if (error) {
     return (
@@ -49,8 +51,6 @@ const Index = () => {
       <Header />
       
       <main className="pb-20">
-        <Hero />
-        
         <div className="container mx-auto px-4 py-8">
           {/* Notification Test Component */}
           <NotificationTest />
@@ -80,15 +80,7 @@ const Index = () => {
                   {articles.map((article) => (
                     <NewsCard
                       key={article.id}
-                      id={article.id}
-                      title={article.title}
-                      excerpt={article.excerpt}
-                      imageUrl={article.imageUrl}
-                      publishedAt={article.publishedAt}
-                      author={article.author}
-                      category={article.category}
-                      readTime={article.readTime}
-                      isBreaking={article.isBreaking}
+                      article={article}
                     />
                   ))}
                 </div>
