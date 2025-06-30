@@ -102,7 +102,9 @@ export const NewsCard = ({ article }: NewsCardProps) => {
           
           <div className="flex items-center gap-2">
             {!isOnline && !isCached && (
-              <Wifi className="w-4 h-4 text-red-500" title="Vereist internetverbinding" />
+              <div title="Vereist internetverbinding">
+                <Wifi className="w-4 h-4 text-red-500" />
+              </div>
             )}
             <span className="whitespace-nowrap">{article.publishedAt}</span>
           </div>
