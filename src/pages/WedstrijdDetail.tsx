@@ -376,7 +376,9 @@ const WedstrijdDetail = () => {
                     <div className="flex-1">
                       <div className="font-semibold text-sm text-az-black dark:text-white">
                         {event.player.name}
-                        {event.assist && <span className="text-premium-gray-600 dark:text-gray-400 font-normal"> (assist: {event.assist.name})</span>}
+                        {event.type === 'Goal' && event.assist?.name && (
+                          <span className="text-premium-gray-600 dark:text-gray-400 font-normal"> (assist: {event.assist.name})</span>
+                        )}
                       </div>
                       <div className="text-xs text-premium-gray-600 dark:text-gray-400">
                         {getEventTypeText(event.type, event.detail)} - <span className="font-medium text-az-red">{event.team.name}</span>
