@@ -5,7 +5,6 @@ import { EredivisieStandings } from "@/components/EredivisieStandings";
 import { SocialMediaPromo } from "@/components/SocialMediaPromo";
 import { Header } from "@/components/Header";
 import { BottomNavigation } from "@/components/BottomNavigation";
-import { NotificationTest } from "@/components/NotificationTest";
 import { PullToRefreshIndicator } from "@/components/PullToRefreshIndicator";
 import { OfflineIndicator } from "@/components/OfflineIndicator";
 import { useInfiniteArticles } from "@/hooks/useInfiniteArticles";
@@ -99,19 +98,14 @@ const Index = () => {
       
       <main className="pb-20">
         <div className="container mx-auto px-4 py-8">
-          {/* Notification Test Component */}
-          <div className="animate-fade-in">
-            <NotificationTest />
-          </div>
-          
           {/* Next Match Widget */}
-          <div className="animate-fade-in" style={{ animationDelay: '0.1s' }}>
+          <div className="animate-fade-in">
             <NextMatchWidget />
           </div>
           
           {/* News Section */}
           <section className="mb-12">
-            <h2 className="headline-premium text-headline-lg text-az-black dark:text-white font-bold mb-6 animate-fade-in" style={{ animationDelay: '0.2s' }}>
+            <h2 className="headline-premium text-headline-lg text-az-black dark:text-white font-bold mb-6 animate-fade-in" style={{ animationDelay: '0.1s' }}>
               Laatste Nieuws
             </h2>
             
@@ -132,7 +126,7 @@ const Index = () => {
                     <div 
                       key={article.id}
                       className="animate-fade-in"
-                      style={{ animationDelay: `${0.3 + (index * 0.1)}s` }}
+                      style={{ animationDelay: `${0.2 + (index * 0.1)}s` }}
                     >
                       <NewsCard article={article} />
                     </div>
@@ -162,12 +156,12 @@ const Index = () => {
           </section>
 
           {/* Eredivisie Standings */}
-          <div className="animate-fade-in mb-12" style={{ animationDelay: '0.4s' }}>
+          <div className="animate-fade-in mb-12" style={{ animationDelay: '0.3s' }}>
             <EredivisieStandings />
           </div>
           
           {/* Social Media Promo */}
-          <div className="animate-fade-in" style={{ animationDelay: '0.5s' }}>
+          <div className="animate-fade-in" style={{ animationDelay: '0.4s' }}>
             <SocialMediaPromo />
           </div>
         </div>
