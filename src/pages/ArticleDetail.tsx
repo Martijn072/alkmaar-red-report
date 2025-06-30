@@ -115,15 +115,6 @@ const ArticleDetail = () => {
           />
         </div>
 
-        {/* Bottom Share Bar - after article content */}
-        <div className="mt-8 mb-8">
-          <ShareBar 
-            article={article}
-            showBackButton={false}
-            className="border border-premium-gray-200 dark:border-gray-700 rounded-lg"
-          />
-        </div>
-
         {/* WordPress Comments Section - replaces Disqus */}
         <WordPressComments
           articleId={id!}
