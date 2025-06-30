@@ -91,20 +91,9 @@ const ArticleDetail = () => {
             {article.title}
           </h1>
 
-          {/* Meta info - Improved mobile layout */}
-          <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 text-premium-gray-600 dark:text-gray-300 text-sm border-b border-premium-gray-200 dark:border-gray-700 pb-4">
-            <div className="flex items-center gap-1">
-              <ArrowLeft className="w-4 h-4" />
-              <span>{article.author}</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <ArrowLeft className="w-4 h-4" />
-              <span>{article.publishedAt}</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <ArrowLeft className="w-4 h-4" />
-              <span>{article.readTime}</span>
-            </div>
+          {/* Meta info - Compact layout with author and date only */}
+          <div className="text-premium-gray-600 dark:text-gray-300 text-sm border-b border-premium-gray-200 dark:border-gray-700 pb-4">
+            <span>{article.author} • {article.publishedAt}</span>
           </div>
         </header>
 
