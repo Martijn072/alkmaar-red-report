@@ -46,7 +46,11 @@ export const useSupporterMedia = (sortBy: 'recent' | 'popular' = 'recent') => {
       }
       
       console.log(`✅ Fetched ${data?.length || 0} media items`);
-      return data || [];
+      // Type cast the file_type to ensure it matches our interface
+      return (data || []).map(item => ({
+        ...item,
+        file_type: item.file_type as 'image' | 'video'
+      }));
     },
     staleTime: 5 * 60 * 1000, // 5 minutes
     gcTime: 30 * 60 * 1000, // 30 minutes
