@@ -9,90 +9,102 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      comment_likes: {
+      article_subscriptions: {
+        Row: {
+          article_id: string
+          created_at: string | null
+          id: string
+          subscribed: boolean | null
+          user_id: string
+        }
+        Insert: {
+          article_id: string
+          created_at?: string | null
+          id?: string
+          subscribed?: boolean | null
+          user_id: string
+        }
+        Update: {
+          article_id?: string
+          created_at?: string | null
+          id?: string
+          subscribed?: boolean | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      comment_reactions: {
         Row: {
           comment_id: string
-          created_at: string
+          created_at: string | null
           id: string
-          user_id: string | null
-          user_identifier: string | null
+          reaction_type: string
+          user_id: string
         }
         Insert: {
           comment_id: string
-          created_at?: string
+          created_at?: string | null
           id?: string
-          user_id?: string | null
-          user_identifier?: string | null
+          reaction_type: string
+          user_id: string
         }
         Update: {
           comment_id?: string
-          created_at?: string
+          created_at?: string | null
           id?: string
-          user_id?: string | null
-          user_identifier?: string | null
+          reaction_type?: string
+          user_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "comment_likes_comment_id_fkey"
+            foreignKeyName: "comment_reactions_comment_id_fkey"
             columns: ["comment_id"]
             isOneToOne: false
-            referencedRelation: "comments"
+            referencedRelation: "secure_comments"
             referencedColumns: ["id"]
           },
         ]
       }
-      comments: {
+      comment_reports: {
         Row: {
-          article_id: string
-          author_avatar: string | null
-          author_email: string | null
-          author_name: string
-          content: string
-          created_at: string
+          comment_id: string
+          created_at: string | null
+          description: string | null
           id: string
-          is_approved: boolean | null
-          is_pinned: boolean | null
-          likes_count: number | null
-          parent_id: string | null
-          updated_at: string
-          user_id: string | null
+          reason: string
+          reporter_id: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string | null
         }
         Insert: {
-          article_id: string
-          author_avatar?: string | null
-          author_email?: string | null
-          author_name: string
-          content: string
-          created_at?: string
+          comment_id: string
+          created_at?: string | null
+          description?: string | null
           id?: string
-          is_approved?: boolean | null
-          is_pinned?: boolean | null
-          likes_count?: number | null
-          parent_id?: string | null
-          updated_at?: string
-          user_id?: string | null
+          reason: string
+          reporter_id: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string | null
         }
         Update: {
-          article_id?: string
-          author_avatar?: string | null
-          author_email?: string | null
-          author_name?: string
-          content?: string
-          created_at?: string
+          comment_id?: string
+          created_at?: string | null
+          description?: string | null
           id?: string
-          is_approved?: boolean | null
-          is_pinned?: boolean | null
-          likes_count?: number | null
-          parent_id?: string | null
-          updated_at?: string
-          user_id?: string | null
+          reason?: string
+          reporter_id?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "comments_parent_id_fkey"
-            columns: ["parent_id"]
+            foreignKeyName: "comment_reports_comment_id_fkey"
+            columns: ["comment_id"]
             isOneToOne: false
-            referencedRelation: "comments"
+            referencedRelation: "secure_comments"
             referencedColumns: ["id"]
           },
         ]
@@ -209,6 +221,42 @@ export type Database = {
         }
         Relationships: []
       }
+      notification_settings: {
+        Row: {
+          created_at: string | null
+          email_comment_replies: boolean | null
+          email_new_comments: boolean | null
+          id: string
+          in_app_notifications: boolean | null
+          push_comment_replies: boolean | null
+          push_new_comments: boolean | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          email_comment_replies?: boolean | null
+          email_new_comments?: boolean | null
+          id?: string
+          in_app_notifications?: boolean | null
+          push_comment_replies?: boolean | null
+          push_new_comments?: boolean | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          email_comment_replies?: boolean | null
+          email_new_comments?: boolean | null
+          id?: string
+          in_app_notifications?: boolean | null
+          push_comment_replies?: boolean | null
+          push_new_comments?: boolean | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       notifications: {
         Row: {
           article_id: string | null
@@ -278,6 +326,130 @@ export type Database = {
         }
         Relationships: []
       }
+      secure_comments: {
+        Row: {
+          article_id: string
+          content: string
+          content_html: string | null
+          created_at: string | null
+          depth: number | null
+          dislikes_count: number | null
+          edit_count: number | null
+          hidden_reason: string | null
+          id: string
+          is_approved: boolean | null
+          is_edited: boolean | null
+          is_hidden: boolean | null
+          is_pinned: boolean | null
+          last_edited_at: string | null
+          likes_count: number | null
+          parent_id: string | null
+          reply_count: number | null
+          reports_count: number | null
+          spam_score: number | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          article_id: string
+          content: string
+          content_html?: string | null
+          created_at?: string | null
+          depth?: number | null
+          dislikes_count?: number | null
+          edit_count?: number | null
+          hidden_reason?: string | null
+          id?: string
+          is_approved?: boolean | null
+          is_edited?: boolean | null
+          is_hidden?: boolean | null
+          is_pinned?: boolean | null
+          last_edited_at?: string | null
+          likes_count?: number | null
+          parent_id?: string | null
+          reply_count?: number | null
+          reports_count?: number | null
+          spam_score?: number | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          article_id?: string
+          content?: string
+          content_html?: string | null
+          created_at?: string | null
+          depth?: number | null
+          dislikes_count?: number | null
+          edit_count?: number | null
+          hidden_reason?: string | null
+          id?: string
+          is_approved?: boolean | null
+          is_edited?: boolean | null
+          is_hidden?: boolean | null
+          is_pinned?: boolean | null
+          last_edited_at?: string | null
+          likes_count?: number | null
+          parent_id?: string | null
+          reply_count?: number | null
+          reports_count?: number | null
+          spam_score?: number | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "secure_comments_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "secure_comments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      secure_notifications: {
+        Row: {
+          article_id: string | null
+          comment_id: string | null
+          created_at: string | null
+          id: string
+          is_read: boolean | null
+          message: string
+          title: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          article_id?: string | null
+          comment_id?: string | null
+          created_at?: string | null
+          id?: string
+          is_read?: boolean | null
+          message: string
+          title: string
+          type: string
+          user_id: string
+        }
+        Update: {
+          article_id?: string | null
+          comment_id?: string | null
+          created_at?: string | null
+          id?: string
+          is_read?: boolean | null
+          message?: string
+          title?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "secure_notifications_comment_id_fkey"
+            columns: ["comment_id"]
+            isOneToOne: false
+            referencedRelation: "secure_comments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       supporter_media: {
         Row: {
           caption: string | null
@@ -335,12 +507,119 @@ export type Database = {
         }
         Relationships: []
       }
+      user_profiles: {
+        Row: {
+          account_created_at: string | null
+          avatar_url: string | null
+          ban_reason: string | null
+          banned_until: string | null
+          bio: string | null
+          created_at: string | null
+          display_name: string | null
+          id: string
+          is_banned: boolean | null
+          is_verified: boolean | null
+          last_active_at: string | null
+          last_warning_at: string | null
+          reputation: number | null
+          updated_at: string | null
+          user_id: string
+          username: string
+          warning_count: number | null
+        }
+        Insert: {
+          account_created_at?: string | null
+          avatar_url?: string | null
+          ban_reason?: string | null
+          banned_until?: string | null
+          bio?: string | null
+          created_at?: string | null
+          display_name?: string | null
+          id?: string
+          is_banned?: boolean | null
+          is_verified?: boolean | null
+          last_active_at?: string | null
+          last_warning_at?: string | null
+          reputation?: number | null
+          updated_at?: string | null
+          user_id: string
+          username: string
+          warning_count?: number | null
+        }
+        Update: {
+          account_created_at?: string | null
+          avatar_url?: string | null
+          ban_reason?: string | null
+          banned_until?: string | null
+          bio?: string | null
+          created_at?: string | null
+          display_name?: string | null
+          id?: string
+          is_banned?: boolean | null
+          is_verified?: boolean | null
+          last_active_at?: string | null
+          last_warning_at?: string | null
+          reputation?: number | null
+          updated_at?: string | null
+          user_id?: string
+          username?: string
+          warning_count?: number | null
+        }
+        Relationships: []
+      }
+      user_rate_limits: {
+        Row: {
+          action_count: number | null
+          action_type: string
+          created_at: string | null
+          id: string
+          ip_address: unknown | null
+          user_id: string
+          window_start: string | null
+        }
+        Insert: {
+          action_count?: number | null
+          action_type: string
+          created_at?: string | null
+          id?: string
+          ip_address?: unknown | null
+          user_id: string
+          window_start?: string | null
+        }
+        Update: {
+          action_count?: number | null
+          action_type?: string
+          created_at?: string | null
+          id?: string
+          ip_address?: unknown | null
+          user_id?: string
+          window_start?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      check_rate_limit: {
+        Args: {
+          p_user_id: string
+          p_ip_address: unknown
+          p_action_type: string
+          p_max_actions: number
+          p_window_minutes: number
+        }
+        Returns: boolean
+      }
+      record_rate_limit_action: {
+        Args: {
+          p_user_id: string
+          p_ip_address: unknown
+          p_action_type: string
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never

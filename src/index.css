@@ -149,7 +149,7 @@
   }
 
   .article-content img {
-    @apply rounded-lg shadow-sm my-6;
+    @apply rounded-lg shadow-sm my-6 w-full h-auto max-w-full object-contain;
   }
 
   .article-content a {

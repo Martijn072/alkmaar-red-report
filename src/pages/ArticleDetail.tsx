@@ -51,6 +51,7 @@ const ArticleDetail = () => {
   const displayArticle = article || (cachedArticle && !isOnline ? cachedArticle : null);
   const isShowingCachedContent = !article && cachedArticle && !isOnline;
 
+  // Show loading state when we're loading and don't have cached content
   if (isLoading && !cachedArticle) {
     return (
       <div className="min-h-screen bg-premium-gray-50 dark:bg-gray-900">
@@ -67,6 +68,7 @@ const ArticleDetail = () => {
     );
   }
 
+  // Show error state only when we have an error and no cached content available
   if (error && !cachedArticle) {
     return (
       <div className="min-h-screen bg-premium-gray-50 dark:bg-gray-900">
@@ -90,7 +92,8 @@ const ArticleDetail = () => {
     );
   }
 
-  if (!displayArticle) {
+  // Show "not found" only when we're NOT loading and have no data and no cached content
+  if (!isLoading && !displayArticle) {
     return (
       <div className="min-h-screen bg-premium-gray-50 dark:bg-gray-900">
         <OfflineIndicator 
@@ -113,6 +116,23 @@ const ArticleDetail = () => {
               Terug naar nieuws
             </button>
           </div>
+        </div>
+        <BottomNavigation activeTab={activeTab} onTabChange={setActiveTab} />
+      </div>
+    );
+  }
+
+  // Show loading skeleton while we're still loading (even if we have cached content)
+  if (isLoading && cachedArticle) {
+    return (
+      <div className="min-h-screen bg-premium-gray-50 dark:bg-gray-900">
+        <OfflineIndicator 
+          onSyncNow={handleManualSync}
+          issyncing={isSyncing}
+        />
+        <Header />
+        <div className="px-4 py-6">
+          <ArticlesSkeleton />
         </div>
         <BottomNavigation activeTab={activeTab} onTabChange={setActiveTab} />
       </div>
