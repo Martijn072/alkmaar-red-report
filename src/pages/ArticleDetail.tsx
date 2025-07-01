@@ -18,7 +18,7 @@ const ArticleDetail = () => {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const { isAuthenticated } = useAuth();
   
-  const { data: article, isLoading, error } = useArticleDetail(id ? parseInt(id) : 0);
+  const { data: article, isLoading, error } = useArticleDetail(id ? id : '0');
 
   console.log('ArticleDetail rendering with new secure comment system');
 
@@ -159,8 +159,10 @@ const ArticleDetail = () => {
           {/* Share Bar */}
           <div className="mt-8">
             <ShareBar
-              title={article.title}
-              description={article.excerpt}
+              article={{
+                title: article.title,
+                slug: article.slug || id || ''
+              }}
             />
           </div>
 

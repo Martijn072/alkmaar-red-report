@@ -33,7 +33,7 @@ export interface Comment {
     avatar_url: string | null;
     reputation: number;
     is_verified: boolean;
-  };
+  } | null;
 }
 
 export interface CommentFormData {
