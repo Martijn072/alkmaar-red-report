@@ -1,7 +1,9 @@
+
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
+// This hook is deprecated - use useSecureComments instead
 export interface Comment {
   id: string;
   article_id: string;
@@ -26,7 +28,6 @@ export interface Comment {
   updated_at: string;
   replies?: Comment[];
   user_profiles?: {
-    id: string;
     username: string;
     display_name: string | null;
     avatar_url: string | null;
@@ -40,6 +41,7 @@ export interface CommentFormData {
   parent_id?: string;
 }
 
+// DEPRECATED: Use useSecureComments instead
 export const useComments = (articleId: string) => {
   const { toast } = useToast();
   
@@ -51,8 +53,7 @@ export const useComments = (articleId: string) => {
         .from('secure_comments')
         .select(`
           *,
-          user_profiles!inner (
-            id,
+          user_profiles (
             username,
             display_name,
             avatar_url,
@@ -84,6 +85,7 @@ export const useComments = (articleId: string) => {
   };
 };
 
+// DEPRECATED: Use useAddSecureComment instead
 export const useAddComment = () => {
   const queryClient = useQueryClient();
   const { toast } = useToast();
@@ -130,6 +132,7 @@ export const useAddComment = () => {
   });
 };
 
+// DEPRECATED: Use useCommentReaction instead
 export const useLikeComment = () => {
   const queryClient = useQueryClient();
   const { toast } = useToast();
