@@ -1,81 +1,55 @@
 
-
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
-// This hook is deprecated - use useSecureComments instead
 export interface Comment {
   id: string;
   article_id: string;
-  user_id: string;
-  parent_id: string | null;
+  user_id: string | null;
+  author_name: string;
+  author_email: string | null;
+  author_avatar: string | null;
   content: string;
-  content_html: string | null;
+  parent_id: string | null;
+  likes_count: number;
   is_approved: boolean;
   is_pinned: boolean;
-  is_edited: boolean;
-  edit_count: number;
-  last_edited_at: string | null;
-  likes_count: number;
-  dislikes_count: number;
-  reports_count: number;
-  is_hidden: boolean;
-  hidden_reason: string | null;
-  spam_score: number;
-  reply_count: number;
-  depth: number;
   created_at: string;
   updated_at: string;
   replies?: Comment[];
-  user_profiles?: {
-    username: string;
-    display_name: string | null;
-    avatar_url: string | null;
-    reputation: number;
-    is_verified: boolean;
-  } | null;
 }
 
 export interface CommentFormData {
+  author_name: string;
+  author_email?: string;
   content: string;
   parent_id?: string;
 }
 
-// DEPRECATED: Use useSecureComments instead
 export const useComments = (articleId: string) => {
   const { toast } = useToast();
   
   const { data: comments = [], isLoading } = useQuery({
-    queryKey: ['secure_comments', articleId],
+    queryKey: ['comments', articleId],
     queryFn: async () => {
-      console.log('🔍 Fetching secure comments for article:', articleId);
+      console.log('🔍 Fetching comments for article:', articleId);
       const { data, error } = await supabase
-        .from('secure_comments')
-        .select(`
-          *,
-          user_profiles (
-            username,
-            display_name,
-            avatar_url,
-            reputation,
-            is_verified
-          )
-        `)
+        .from('comments')
+        .select('*')
         .eq('article_id', articleId)
         .eq('is_approved', true)
-        .eq('is_hidden', false)
         .order('created_at', { ascending: false });
       
       if (error) {
-        console.error('❌ Error fetching secure comments:', error);
+        console.error('❌ Error fetching comments:', error);
         throw error;
       }
       
-      console.log('✅ Secure comments fetched:', data);
+      console.log('✅ Comments fetched:', data);
       
-      // Organize comments with replies - cast to Comment[] to handle type conversion
-      const organizedComments = organizeCommentsWithReplies(data as any[] as Comment[]);
+      // Organize comments with replies
+      const organizedComments = organizeCommentsWithReplies(data as Comment[]);
       return organizedComments;
     },
   });
@@ -86,44 +60,44 @@ export const useComments = (articleId: string) => {
   };
 };
 
-// DEPRECATED: Use useAddSecureComment instead
 export const useAddComment = () => {
   const queryClient = useQueryClient();
   const { toast } = useToast();
 
   return useMutation({
     mutationFn: async ({ articleId, commentData }: { articleId: string; commentData: CommentFormData }) => {
-      console.log('💬 Adding new secure comment:', commentData);
+      console.log('💬 Adding new comment:', commentData);
       const { data, error } = await supabase
-        .from('secure_comments')
+        .from('comments')
         .insert({
           article_id: articleId,
-          user_id: (await supabase.auth.getUser()).data.user?.id!,
+          author_name: commentData.author_name,
+          author_email: commentData.author_email,
           content: commentData.content,
           parent_id: commentData.parent_id || null,
-          is_approved: false, // Will be approved by moderation
+          author_avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${commentData.author_name}`,
         })
         .select()
         .single();
 
       if (error) {
-        console.error('❌ Error adding secure comment:', error);
+        console.error('❌ Error adding comment:', error);
         throw error;
       }
 
-      console.log('✅ Secure comment added:', data);
+      console.log('✅ Comment added:', data);
       return data;
     },
     onSuccess: (data, variables) => {
-      queryClient.invalidateQueries({ queryKey: ['secure_comments', variables.articleId] });
+      queryClient.invalidateQueries({ queryKey: ['comments', variables.articleId] });
       toast({
         title: "Reactie geplaatst",
-        description: "Je reactie wordt gecontroleerd en verschijnt binnenkort.",
+        description: "Je reactie is succesvol toegevoegd!",
         className: "bg-white dark:bg-gray-800 border border-premium-gray-200 dark:border-gray-700 text-premium-gray-900 dark:text-white",
       });
     },
     onError: (error) => {
-      console.error('❌ Error in add secure comment mutation:', error);
+      console.error('❌ Error in add comment mutation:', error);
       toast({
         title: "Fout",
         description: "Kon reactie niet plaatsen. Probeer het opnieuw.",
@@ -133,70 +107,89 @@ export const useAddComment = () => {
   });
 };
 
-// DEPRECATED: Use useCommentReaction instead
 export const useLikeComment = () => {
   const queryClient = useQueryClient();
   const { toast } = useToast();
 
   return useMutation({
-    mutationFn: async ({ commentId, reactionType }: { commentId: string; reactionType: 'like' | 'dislike' }) => {
-      console.log('👍 Toggling reaction for comment:', commentId, reactionType);
+    mutationFn: async ({ commentId, userIdentifier }: { commentId: string; userIdentifier: string }) => {
+      console.log('👍 Toggling like for comment:', commentId);
       
-      const userId = (await supabase.auth.getUser()).data.user?.id;
-      if (!userId) throw new Error('User not authenticated');
-
-      // Check if already reacted
-      const { data: existingReaction } = await supabase
-        .from('comment_reactions')
-        .select('id, reaction_type')
+      // Check if already liked
+      const { data: existingLike } = await supabase
+        .from('comment_likes')
+        .select('id')
         .eq('comment_id', commentId)
-        .eq('user_id', userId)
+        .eq('user_identifier', userIdentifier)
         .single();
 
-      if (existingReaction) {
-        if (existingReaction.reaction_type === reactionType) {
-          // Remove reaction if same type
-          const { error } = await supabase
-            .from('comment_reactions')
-            .delete()
-            .eq('comment_id', commentId)
-            .eq('user_id', userId);
-
-          if (error) throw error;
-          return { action: 'removed', reactionType };
-        } else {
-          // Update reaction if different type
-          const { error } = await supabase
-            .from('comment_reactions')
-            .update({ reaction_type: reactionType })
-            .eq('comment_id', commentId)
-            .eq('user_id', userId);
-
-          if (error) throw error;
-          return { action: 'updated', reactionType };
-        }
-      } else {
-        // Add new reaction
+      if (existingLike) {
+        // Unlike: remove the like
         const { error } = await supabase
-          .from('comment_reactions')
+          .from('comment_likes')
+          .delete()
+          .eq('comment_id', commentId)
+          .eq('user_identifier', userIdentifier);
+
+        if (error) throw error;
+
+        // Get current likes count and decrease by 1
+        const { data: currentComment } = await supabase
+          .from('comments')
+          .select('likes_count')
+          .eq('id', commentId)
+          .single();
+
+        if (currentComment) {
+          const newCount = Math.max(0, (currentComment.likes_count || 0) - 1);
+          const { error: updateError } = await supabase
+            .from('comments')
+            .update({ likes_count: newCount })
+            .eq('id', commentId);
+
+          if (updateError) throw updateError;
+        }
+        
+        return { action: 'unliked' };
+      } else {
+        // Like: add the like
+        const { error } = await supabase
+          .from('comment_likes')
           .insert({
             comment_id: commentId,
-            user_id: userId,
-            reaction_type: reactionType,
+            user_identifier: userIdentifier,
           });
 
         if (error) throw error;
-        return { action: 'added', reactionType };
+
+        // Get current likes count and increase by 1
+        const { data: currentComment } = await supabase
+          .from('comments')
+          .select('likes_count')
+          .eq('id', commentId)
+          .single();
+
+        if (currentComment) {
+          const newCount = (currentComment.likes_count || 0) + 1;
+          const { error: updateError } = await supabase
+            .from('comments')
+            .update({ likes_count: newCount })
+            .eq('id', commentId);
+
+          if (updateError) throw updateError;
+        }
+        
+        return { action: 'liked' };
       }
     },
     onSuccess: (data, variables) => {
-      queryClient.invalidateQueries({ queryKey: ['secure_comments'] });
+      queryClient.invalidateQueries({ queryKey: ['comments'] });
     },
     onError: (error) => {
-      console.error('❌ Error toggling reaction:', error);
+      console.error('❌ Error toggling like:', error);
       toast({
         title: "Fout",
-        description: "Kon reactie niet registreren. Probeer het opnieuw.",
+        description: "Kon reactie niet liken. Probeer het opnieuw.",
         variant: "destructive",
       });
     },
@@ -227,4 +220,3 @@ const organizeCommentsWithReplies = (comments: Comment[]): Comment[] => {
 
   return rootComments;
 };
-

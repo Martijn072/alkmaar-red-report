@@ -18,11 +18,13 @@ export const CommentCard = ({ comment, articleId, depth = 0 }: CommentCardProps)
   const [isLiked, setIsLiked] = useState(false);
   const likeComment = useLikeComment();
 
+  const userIdentifier = `anonymous_user_${Math.random().toString(36).substr(2, 9)}`;
+
   const handleLike = async () => {
     try {
       await likeComment.mutateAsync({
         commentId: comment.id,
-        reactionType: 'like',
+        userIdentifier,
       });
       setIsLiked(!isLiked);
     } catch (error) {
@@ -34,10 +36,6 @@ export const CommentCard = ({ comment, articleId, depth = 0 }: CommentCardProps)
     setShowReplyForm(false);
   };
 
-  // Get user display information
-  const userDisplayName = comment.user_profiles?.display_name || comment.user_profiles?.username || 'Anonymous';
-  const userAvatar = comment.user_profiles?.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${userDisplayName}`;
-
   return (
     <div className={`${depth > 0 ? 'ml-8 border-l-2 border-premium-gray-200 dark:border-gray-700 pl-4' : ''}`}>
       <article className="bg-white dark:bg-gray-800 rounded-lg border border-premium-gray-200 dark:border-gray-700 p-4 mb-4 hover:shadow-sm transition-shadow">
@@ -45,13 +43,13 @@ export const CommentCard = ({ comment, articleId, depth = 0 }: CommentCardProps)
         <div className="flex items-start justify-between mb-3">
           <div className="flex items-center gap-3">
             <img
-              src={userAvatar}
-              alt={userDisplayName}
+              src={comment.author_avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${comment.author_name}`}
+              alt={comment.author_name}
               className="w-8 h-8 rounded-full"
             />
             <div>
               <h4 className="headline-premium text-headline-sm text-az-black dark:text-white font-semibold">
-                {userDisplayName}
+                {comment.author_name}
               </h4>
               <p className="text-xs text-premium-gray-500 dark:text-gray-400">
                 {formatDistanceToNow(new Date(comment.created_at), {
@@ -113,7 +111,7 @@ export const CommentCard = ({ comment, articleId, depth = 0 }: CommentCardProps)
               articleId={articleId}
               parentId={comment.id}
               onSuccess={handleReplySuccess}
-              placeholder={`Reageer op ${userDisplayName}...`}
+              placeholder={`Reageer op ${comment.author_name}...`}
               compact={true}
             />
           </div>
