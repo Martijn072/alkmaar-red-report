@@ -44,7 +44,11 @@ const Community = () => {
               variant={sortBy === 'recent' ? 'default' : 'outline'}
               size="sm"
               onClick={() => setSortBy('recent')}
-              className="flex items-center gap-2"
+              className={`flex items-center gap-2 ${
+                sortBy === 'recent' 
+                  ? 'bg-az-red hover:bg-red-700 text-white' 
+                  : 'border-premium-gray-300 hover:bg-az-red/5 hover:border-az-red/30 hover:text-az-red'
+              }`}
             >
               <Clock className="w-4 h-4" />
               Nieuwste
@@ -53,7 +57,11 @@ const Community = () => {
               variant={sortBy === 'popular' ? 'default' : 'outline'}
               size="sm"
               onClick={() => setSortBy('popular')}
-              className="flex items-center gap-2"
+              className={`flex items-center gap-2 ${
+                sortBy === 'popular' 
+                  ? 'bg-az-red hover:bg-red-700 text-white' 
+                  : 'border-premium-gray-300 hover:bg-az-red/5 hover:border-az-red/30 hover:text-az-red'
+              }`}
             >
               <TrendingUp className="w-4 h-4" />
               Populair
@@ -114,11 +122,11 @@ const Community = () => {
           </div>
 
           {/* Feature Info */}
-          <div className="mt-8 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
-            <h4 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">
+          <div className="mt-8 bg-az-red/5 dark:bg-az-red/10 border border-az-red/20 dark:border-az-red/30 rounded-lg p-4">
+            <h4 className="font-semibold text-az-red dark:text-az-red mb-2">
               🏆 Foto van de Week
             </h4>
-            <p className="text-sm text-blue-700 dark:text-blue-300">
+            <p className="text-sm text-premium-gray-700 dark:text-gray-300">
               De foto/video met de meeste stemmen wordt wekelijks uitgelicht als "Foto van de Week"!
             </p>
           </div>
