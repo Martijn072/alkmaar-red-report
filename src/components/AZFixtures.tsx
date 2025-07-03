@@ -11,8 +11,9 @@ import { callFootballApi } from '@/utils/footballApiClient';
 import { FootballApiResponse, Fixture } from '@/types/footballApi';
 import { FixtureCard } from './FixtureCard';
 
-const currentSeason = '2024';
+const currentSeason = '2025';
 const seasons = [
+  { value: '2025', label: '2025-2026' },
   { value: '2024', label: '2024-2025' },
   { value: '2023', label: '2023-2024' },
   { value: '2022', label: '2022-2023' },
@@ -61,11 +62,11 @@ export const AZFixtures = ({ teamId, isLoadingTeamId }: AZFixturesProps) => {
     retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 30000),
   });
 
-  // Fetch historical fixtures for any season
+  // Fetch historical fixtures for non-current seasons
   const { data: historicalFixtures, isLoading: historicalLoading, error: historicalError } = useQuery({
     queryKey: ['az-historical-fixtures', teamId, filter, selectedSeason],
     queryFn: async () => {
-      if (!teamId) return [];
+      if (!teamId || selectedSeason === currentSeason) return [];
       
       console.log(`🏆 Fetching AZ fixtures for season ${selectedSeason}...`);
       const params: Record<string, string> = {
@@ -87,7 +88,7 @@ export const AZFixtures = ({ teamId, isLoadingTeamId }: AZFixturesProps) => {
       console.log('📊 Historical Fixtures Response:', response);
       return response.response || [];
     },
-    enabled: !!teamId,
+    enabled: !!teamId && selectedSeason !== currentSeason,
     staleTime: 1000 * 60 * 15,
     retry: 2,
     retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 30000),
@@ -150,9 +151,11 @@ export const AZFixtures = ({ teamId, isLoadingTeamId }: AZFixturesProps) => {
 
   // Separate upcoming and played fixtures for current season
   const upcoming = upcomingFixtures || [];
-  const played = historicalFixtures?.filter(fixture => 
-    fixture.goals.home !== null && fixture.goals.away !== null
-  ) || [];
+  const played = isCurrentSeason 
+    ? historicalFixtures?.filter(fixture => 
+        fixture.goals.home !== null && fixture.goals.away !== null
+      ) || []
+    : historicalFixtures || []; // For historical seasons, show all fixtures
   const sortedUpcoming = upcoming.sort((a, b) => new Date(a.fixture.date).getTime() - new Date(b.fixture.date).getTime());
   const sortedPlayed = played.sort((a, b) => new Date(b.fixture.date).getTime() - new Date(a.fixture.date).getTime());
 
