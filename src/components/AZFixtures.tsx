@@ -211,15 +211,20 @@ export const AZFixtures = ({ teamId, isLoadingTeamId }: AZFixturesProps) => {
     <Card className="bg-white dark:bg-gray-800 border border-premium-gray-200 dark:border-gray-700 shadow-sm">
       <CardHeader className="bg-white dark:bg-gray-800">
         <div className="flex flex-col space-y-4">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <CardTitle className="text-az-black dark:text-white">AZ Wedstrijdprogramma</CardTitle>
             <div className="flex items-center gap-2">
               <Calendar className="w-4 h-4 text-premium-gray-600 dark:text-gray-400" />
               <Select value={selectedSeason} onValueChange={setSelectedSeason}>
-                <SelectTrigger className="w-40 bg-white dark:bg-gray-800 border-premium-gray-300 dark:border-gray-600 text-az-black dark:text-white focus:ring-2 focus:ring-az-red focus:border-az-red hover:bg-premium-gray-50 dark:hover:bg-gray-700">
+                <SelectTrigger className="w-32 sm:w-40 bg-white dark:bg-gray-800 border-premium-gray-300 dark:border-gray-600 text-az-black dark:text-white focus:ring-2 focus:ring-az-red focus:border-az-red hover:bg-premium-gray-50 dark:hover:bg-gray-700">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="bg-white dark:bg-gray-800 border-premium-gray-300 dark:border-gray-600 z-50">
+                <SelectContent 
+                  className="bg-white dark:bg-gray-800 border-premium-gray-300 dark:border-gray-600 z-50" 
+                  position="popper"
+                  side="bottom"
+                  align="end"
+                >
                   {seasons.map((season) => (
                     <SelectItem 
                       key={season.value} 
