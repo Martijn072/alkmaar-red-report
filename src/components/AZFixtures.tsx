@@ -210,18 +210,25 @@ export const AZFixtures = ({ teamId, isLoadingTeamId }: AZFixturesProps) => {
         <div className="flex flex-col space-y-4">
           <div className="flex items-center justify-between">
             <CardTitle className="text-az-black dark:text-white">AZ Wedstrijdprogramma</CardTitle>
-            <Select value={selectedSeason} onValueChange={setSelectedSeason}>
-              <SelectTrigger className="w-40">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {seasons.map((season) => (
-                  <SelectItem key={season.value} value={season.value}>
-                    {season.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <div className="flex items-center gap-2">
+              <Calendar className="w-4 h-4 text-premium-gray-600 dark:text-gray-400" />
+              <Select value={selectedSeason} onValueChange={setSelectedSeason}>
+                <SelectTrigger className="w-40 bg-white dark:bg-gray-800 border-premium-gray-300 dark:border-gray-600 text-az-black dark:text-white focus:ring-2 focus:ring-az-red focus:border-az-red hover:bg-premium-gray-50 dark:hover:bg-gray-700">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="bg-white dark:bg-gray-800 border-premium-gray-300 dark:border-gray-600 z-50">
+                  {seasons.map((season) => (
+                    <SelectItem 
+                      key={season.value} 
+                      value={season.value}
+                      className="text-az-black dark:text-white hover:bg-premium-gray-50 dark:hover:bg-gray-700 focus:bg-az-red focus:text-white"
+                    >
+                      {season.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
           
           {/* Filter buttons - reordered as requested */}
