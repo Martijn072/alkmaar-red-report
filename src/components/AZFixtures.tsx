@@ -25,13 +25,12 @@ interface AZFixturesProps {
 }
 
 export const AZFixtures = ({ teamId, isLoadingTeamId }: AZFixturesProps) => {
-  const [filter, setFilter] = useState<string>('all');
   const [selectedSeason, setSelectedSeason] = useState<string>(currentSeason);
   const navigate = useNavigate();
 
   // Fetch upcoming fixtures for current season
   const { data: upcomingFixtures, isLoading: upcomingLoading, error: upcomingError } = useQuery({
-    queryKey: ['az-upcoming-fixtures', teamId, filter],
+    queryKey: ['az-upcoming-fixtures', teamId],
     queryFn: async () => {
       if (!teamId || selectedSeason !== currentSeason) return [];
       
@@ -41,15 +40,6 @@ export const AZFixtures = ({ teamId, isLoadingTeamId }: AZFixturesProps) => {
         next: '20', // Get next 20 fixtures
         timezone: 'Europe/Amsterdam'
       };
-
-      // Add league filter if not 'all'
-      if (filter === 'eredivisie') {
-        params.league = '88'; // Eredivisie
-      } else if (filter === 'knvb') {
-        params.league = '94'; // KNVB Beker
-      } else if (filter === 'europa') {
-        params.league = '848'; // Conference League
-      }
 
       const response: FootballApiResponse<Fixture> = await callFootballApi('/fixtures', params);
       
@@ -64,7 +54,7 @@ export const AZFixtures = ({ teamId, isLoadingTeamId }: AZFixturesProps) => {
 
   // Fetch historical fixtures for non-current seasons
   const { data: historicalFixtures, isLoading: historicalLoading, error: historicalError } = useQuery({
-    queryKey: ['az-historical-fixtures', teamId, filter, selectedSeason],
+    queryKey: ['az-historical-fixtures', teamId, selectedSeason],
     queryFn: async () => {
       if (!teamId || selectedSeason === currentSeason) return [];
       
@@ -73,15 +63,6 @@ export const AZFixtures = ({ teamId, isLoadingTeamId }: AZFixturesProps) => {
         team: teamId.toString(),
         season: selectedSeason
       };
-
-      // Add league filter if not 'all'
-      if (filter === 'eredivisie') {
-        params.league = '88'; // Eredivisie
-      } else if (filter === 'knvb') {
-        params.league = '94'; // KNVB Beker
-      } else if (filter === 'europa') {
-        params.league = '848'; // Conference League
-      }
 
       const response: FootballApiResponse<Fixture> = await callFootballApi('/fixtures', params);
       
@@ -229,42 +210,6 @@ export const AZFixtures = ({ teamId, isLoadingTeamId }: AZFixturesProps) => {
                 </SelectContent>
               </Select>
             </div>
-          </div>
-          
-          {/* Filter buttons - reordered as requested */}
-          <div className="flex gap-2 flex-wrap">
-            <Button
-              variant={filter === 'eredivisie' ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => setFilter('eredivisie')}
-              className={filter === 'eredivisie' ? 'bg-az-red hover:bg-az-red/90 text-white border-az-red' : 'bg-white dark:bg-gray-800 border-premium-gray-300 hover:bg-premium-gray-50 dark:border-gray-600 dark:hover:bg-gray-700 text-premium-gray-600 dark:text-gray-300'}
-            >
-              Eredivisie
-            </Button>
-            <Button
-              variant={filter === 'knvb' ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => setFilter('knvb')}
-              className={filter === 'knvb' ? 'bg-az-red hover:bg-az-red/90 text-white border-az-red' : 'bg-white dark:bg-gray-800 border-premium-gray-300 hover:bg-premium-gray-50 dark:border-gray-600 dark:hover:bg-gray-700 text-premium-gray-600 dark:text-gray-300'}
-            >
-              KNVB Beker
-            </Button>
-            <Button
-              variant={filter === 'europa' ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => setFilter('europa')}
-              className={filter === 'europa' ? 'bg-az-red hover:bg-az-red/90 text-white border-az-red' : 'bg-white dark:bg-gray-800 border-premium-gray-300 hover:bg-premium-gray-50 dark:border-gray-600 dark:hover:bg-gray-700 text-premium-gray-600 dark:text-gray-300'}
-            >
-              Europa
-            </Button>
-            <Button
-              variant={filter === 'all' ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => setFilter('all')}
-              className={filter === 'all' ? 'bg-az-red hover:bg-az-red/90 text-white border-az-red' : 'bg-white dark:bg-gray-800 border-premium-gray-300 hover:bg-premium-gray-50 dark:border-gray-600 dark:hover:bg-gray-700 text-premium-gray-600 dark:text-gray-300'}
-            >
-              Alles
-            </Button>
           </div>
         </div>
       </CardHeader>
