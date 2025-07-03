@@ -12,7 +12,6 @@ import { OfflineIndicator } from "@/components/OfflineIndicator";
 import { useOfflineSync } from "@/hooks/useOfflineSync";
 import { useOfflineDetection } from "@/hooks/useOfflineDetection";
 import { articleCache } from "@/services/articleCache";
-import { useCurrentPlayers, addPlayerLinksToContent } from "@/hooks/usePlayerLinking";
 
 const ArticleDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -22,7 +21,6 @@ const ArticleDetail = () => {
   const [cachedArticle, setCachedArticle] = useState(null);
   
   const { isSyncing, handleManualSync, isOnline } = useOfflineSync();
-  const { data: players } = useCurrentPlayers();
   
   // Check for cached version
   useEffect(() => {
@@ -66,20 +64,58 @@ const ArticleDetail = () => {
     }
   }, [article]);
 
+  // Function to convert internal azfanpage.nl links to app routes
+  const convertInternalLinks = (content: string): string => {
+    if (!content) return content;
+    
+    // Regex to match azfanpage.nl article links
+    const linkRegex = /<a[^>]*href=["']https:\/\/www\.azfanpage\.nl\/[^"']*\/[^"']*\/?["'][^>]*>([^<]*)<\/a>/gi;
+    
+    return content.replace(linkRegex, (match, linkText) => {
+      // Extract the href
+      const hrefMatch = match.match(/href=["'](https:\/\/www\.azfanpage\.nl\/[^"']*)\/?["']/i);
+      if (!hrefMatch) return match;
+      
+      const originalUrl = hrefMatch[1];
+      console.log('🔗 Found internal link:', originalUrl);
+      
+      // Try to extract article ID from various URL patterns
+      let articleId = null;
+      
+      // Pattern 1: URL with article ID at the end
+      const idPattern1 = /\/(\d+)\/?$/;
+      const idMatch1 = originalUrl.match(idPattern1);
+      if (idMatch1) {
+        articleId = idMatch1[1];
+      } else {
+        // Pattern 2: Look for article ID in the URL path segments
+        const urlParts = originalUrl.split('/');
+        for (const part of urlParts) {
+          if (/^\d+$/.test(part) && parseInt(part) > 1000) { // Assuming article IDs are > 1000
+            articleId = part;
+            break;
+          }
+        }
+      }
+      
+      if (articleId) {
+        console.log('✅ Converting internal link to app route:', `/artikel/${articleId}`);
+        // Replace with internal app link that uses router navigation
+        return `<a href="/artikel/${articleId}" class="internal-link text-az-red hover:text-red-700 underline">${linkText}</a>`;
+      }
+      
+      console.log('❌ Could not extract article ID from:', originalUrl);
+      return match; // Return original if we can't parse the ID
+    });
+  };
+
   // Use cached content if offline and no online data
   const displayArticle = article || (cachedArticle && !isOnline ? cachedArticle : null);
   const isShowingCachedContent = !article && cachedArticle && !isOnline;
 
-  // Debug logging
-  console.log('🔍 ArticleDetail render:', { 
-    displayArticle: !!displayArticle, 
-    players: players?.length || 0,
-    playersData: players 
-  });
-
-  // Process article content to add player links
+  // Process article content to convert internal links
   const processedContent = displayArticle?.content 
-    ? addPlayerLinksToContent(displayArticle.content, players || [])
+    ? convertInternalLinks(displayArticle.content)
     : displayArticle?.excerpt || '';
 
   // Show loading state when we're loading and don't have cached content
