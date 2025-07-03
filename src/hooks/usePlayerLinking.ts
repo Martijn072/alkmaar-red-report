@@ -41,18 +41,27 @@ export const useCurrentPlayers = () => {
   return useQuery({
     queryKey: ['current-az-players'],
     queryFn: async () => {
+      console.log('🔍 Fetching current AZ players...');
+      
       // Get current AZ team ID first
       const teamsResponse: FootballApiResponse<{ team: { id: number; name: string } }> = await callFootballApi('/teams', {
         search: 'AZ Alkmaar',
         country: 'Netherlands'
       });
 
+      console.log('🏟️ Teams response:', teamsResponse);
+
       const azTeam = teamsResponse.response?.find(t => 
         t.team.name.toLowerCase().includes('az') && 
         t.team.name.toLowerCase().includes('alkmaar')
       );
 
-      if (!azTeam) return [];
+      if (!azTeam) {
+        console.log('❌ AZ team not found');
+        return [];
+      }
+
+      console.log('✅ Found AZ team:', azTeam.team);
 
       // Get current season players
       const playersResponse: FootballApiResponse<PlayerStatistics> = await callFootballApi('/players', {
@@ -60,6 +69,8 @@ export const useCurrentPlayers = () => {
         season: '2025',
         league: '88' // Eredivisie
       });
+
+      console.log('👥 Players response:', playersResponse);
 
       // Filter for active players with minutes
       const activePlayers = playersResponse.response?.filter(playerData => {
@@ -70,12 +81,15 @@ export const useCurrentPlayers = () => {
         );
       }) || [];
 
-      return activePlayers.map(playerData => ({
+      const processedPlayers = activePlayers.map(playerData => ({
         id: playerData.player.id,
         name: playerData.player.name,
         firstname: playerData.player.firstname,
         lastname: playerData.player.lastname
       }));
+
+      console.log('✅ Processed players for linking:', processedPlayers);
+      return processedPlayers;
     },
     staleTime: 1000 * 60 * 60 * 24, // Cache for 24 hours
     retry: 1,
@@ -83,7 +97,12 @@ export const useCurrentPlayers = () => {
 };
 
 export const addPlayerLinksToContent = (content: string, players: Player[]): string => {
-  if (!content || !players.length) return content;
+  console.log('🔗 Adding player links to content...', { contentLength: content.length, playersCount: players.length });
+  
+  if (!content || !players.length) {
+    console.log('❌ No content or no players available for linking');
+    return content;
+  }
 
   let processedContent = content;
   const linkedPlayers = new Set<number>();
@@ -98,6 +117,7 @@ export const addPlayerLinksToContent = (content: string, players: Player[]): str
     const nameRegex = new RegExp(`\\b${player.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i');
     
     if (nameRegex.test(processedContent)) {
+      console.log(`🎯 Found player "${player.name}" in content, adding link...`);
       // Replace only the first occurrence
       processedContent = processedContent.replace(nameRegex, (match) => {
         linkedPlayers.add(player.id);
@@ -106,5 +126,6 @@ export const addPlayerLinksToContent = (content: string, players: Player[]): str
     }
   });
 
+  console.log(`✅ Player linking completed. Linked ${linkedPlayers.size} players.`);
   return processedContent;
 };
