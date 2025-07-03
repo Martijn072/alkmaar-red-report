@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, Download, Wifi } from "lucide-react";
+import { ArrowLeft, Download, Wifi, Volume2 } from "lucide-react";
 import { useArticleDetail } from "@/hooks/useArticleDetail";
 import { ArticlesSkeleton } from "@/components/ArticlesSkeleton";
 import { ErrorMessage } from "@/components/ErrorMessage";
@@ -12,6 +12,9 @@ import { OfflineIndicator } from "@/components/OfflineIndicator";
 import { useOfflineSync } from "@/hooks/useOfflineSync";
 import { useOfflineDetection } from "@/hooks/useOfflineDetection";
 import { articleCache } from "@/services/articleCache";
+import { AudioControls } from "@/components/AudioControls";
+import { MiniAudioPlayer } from "@/components/MiniAudioPlayer";
+import { useTextToSpeech } from "@/hooks/useTextToSpeech";
 
 const ArticleDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -19,6 +22,10 @@ const ArticleDetail = () => {
   const { data: article, isLoading, error, refetch } = useArticleDetail(id!);
   const [activeTab, setActiveTab] = useState("news");
   const [cachedArticle, setCachedArticle] = useState(null);
+  const [showAudioControls, setShowAudioControls] = useState(false);
+  const [audioControlsExpanded, setAudioControlsExpanded] = useState(false);
+  
+  const { state: audioState } = useTextToSpeech();
   
   const { isSyncing, handleManualSync, isOnline } = useOfflineSync();
   
@@ -339,15 +346,38 @@ const ArticleDetail = () => {
             )}
           </div>
 
-          <h1 className="headline-premium text-headline-xl mb-4 text-az-black dark:text-white">
-            {displayArticle.title}
-          </h1>
+          <div className="flex items-start justify-between gap-4 mb-4">
+            <h1 className="headline-premium text-headline-xl text-az-black dark:text-white flex-1">
+              {displayArticle.title}
+            </h1>
+            
+            {/* Text-to-Speech Button */}
+            <button
+              onClick={() => setShowAudioControls(!showAudioControls)}
+              className="flex-shrink-0 p-3 bg-az-red hover:bg-red-700 text-white rounded-full transition-colors duration-200 shadow-lg"
+              title="Artikel voorlezen"
+            >
+              <Volume2 className="h-5 w-5" />
+            </button>
+          </div>
 
           {/* Meta info - Compact layout with author and date only */}
           <div className="text-premium-gray-600 dark:text-gray-300 text-sm border-b border-premium-gray-200 dark:border-gray-700 pb-4">
             <span>{displayArticle.author} • {displayArticle.publishedAt}</span>
           </div>
         </header>
+
+        {/* Audio Controls */}
+        {showAudioControls && displayArticle && (
+          <div className="mb-6">
+            <AudioControls
+              text={`${displayArticle.title}. ${displayArticle.content}`}
+              title={displayArticle.title}
+              isExpanded={audioControlsExpanded}
+              onToggleExpanded={() => setAudioControlsExpanded(!audioControlsExpanded)}
+            />
+          </div>
+        )}
 
         {/* Article content with enhanced styling and debug info */}
         <div 
@@ -391,6 +421,21 @@ const ArticleDetail = () => {
           </div>
         )}
       </article>
+
+      {/* Mini Audio Player */}
+      {(audioState.isPlaying || audioState.isPaused) && !showAudioControls && displayArticle && (
+        <MiniAudioPlayer
+          title={displayArticle.title}
+          onClose={() => {
+            // Stop audio and hide mini player
+            setShowAudioControls(false);
+          }}
+          onExpand={() => {
+            setShowAudioControls(true);
+            setAudioControlsExpanded(true);
+          }}
+        />
+      )}
 
       <BottomNavigation activeTab={activeTab} onTabChange={setActiveTab} />
     </div>
