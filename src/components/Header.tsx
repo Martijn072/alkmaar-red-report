@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useDarkMode } from "@/contexts/DarkModeContext";
 import { HeaderMenu } from "./HeaderMenu";
 import { SearchOverlay } from "./SearchOverlay";
+import { AccessibilitySettings } from "./AccessibilitySettings";
 import { useNotifications } from "@/hooks/useNotifications";
 
 export const Header = () => {
@@ -34,9 +35,10 @@ export const Header = () => {
             <div className="flex items-center">
               <img 
                 src="/lovable-uploads/02689d46-9781-412f-9093-feef3e99cfe2.png" 
-                alt="AZ Fanpage Logo" 
+                alt="AZ Fanpage - Officiële fansite van AZ Alkmaar" 
                 className="h-10 w-auto cursor-pointer hover:opacity-80 transition-opacity focus:ring-2 focus:ring-az-red rounded"
                 onClick={handleLogoClick}
+                role="img"
               />
             </div>
 
@@ -64,7 +66,7 @@ export const Header = () => {
               <button 
                 onClick={toggleDarkMode}
                 className="p-2 hover:bg-premium-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors focus:ring-2 focus:ring-az-red"
-                aria-label="Toggle dark mode"
+                aria-label={isDarkMode ? "Schakel naar lichte modus" : "Schakel naar donkere modus"}
               >
                 {isDarkMode ? (
                   <Sun className="w-5 h-5 text-premium-gray-600 dark:text-gray-300" />
@@ -72,6 +74,7 @@ export const Header = () => {
                   <Moon className="w-5 h-5 text-premium-gray-600 dark:text-gray-300" />
                 )}
               </button>
+              <AccessibilitySettings />
               <HeaderMenu />
             </div>
           </div>

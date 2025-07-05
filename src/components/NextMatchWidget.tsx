@@ -87,7 +87,14 @@ export const NextMatchWidget = () => {
 
   return (
     <div className="mb-6">
-      <div className="card-premium dark:bg-gray-800 dark:border-gray-700 p-4 hover:shadow-lg transition-all duration-300 animate-fade-in transform hover:scale-[1.01]">
+      <section 
+        className="card-premium dark:bg-gray-800 dark:border-gray-700 p-4 hover:shadow-lg transition-all duration-300 animate-fade-in transform hover:scale-[1.01]"
+        role="region"
+        aria-labelledby="next-match-title"
+        aria-describedby="next-match-details"
+      >
+        <h2 id="next-match-title" className="sr-only">Volgende AZ wedstrijd</h2>
+        
         {/* Competitie naam */}
         <div className="text-center mb-4">
           <p className="text-sm text-premium-gray-600 dark:text-gray-400">
@@ -96,19 +103,20 @@ export const NextMatchWidget = () => {
         </div>
 
         {/* Teams met Logo's */}
-        <div className="flex items-center justify-center space-x-8 mb-4">
+        <div className="flex items-center justify-center space-x-8 mb-4" id="next-match-details">
           {/* AZ Logo */}
           <div className="flex flex-col items-center transform transition-transform duration-300 hover:scale-110">
             <div className="relative w-12 h-12">
               <img
                 src={azTeam.logo}
-                alt="AZ Alkmaar"
+                alt="AZ Alkmaar clublogo"
                 className="w-full h-full object-contain transition-transform duration-300"
                 onError={handleImageError}
               />
               <span 
                 className="absolute inset-0 bg-az-red text-white text-xs font-bold rounded-full flex items-center justify-center"
                 style={{ display: 'none' }}
+                aria-hidden="true"
               >
                 AZ
               </span>
@@ -117,7 +125,10 @@ export const NextMatchWidget = () => {
 
           {/* VS */}
           <div className="flex flex-col items-center">
-            <span className="text-xl font-bold text-premium-gray-400 dark:text-gray-500 animate-pulse">
+            <span 
+              className="text-xl font-bold text-premium-gray-400 dark:text-gray-500 animate-pulse"
+              aria-label="tegen"
+            >
               VS
             </span>
           </div>
@@ -127,13 +138,14 @@ export const NextMatchWidget = () => {
             <div className="relative w-12 h-12">
               <img
                 src={opponentTeam.logo}
-                alt={opponentTeam.name}
+                alt={`${opponentTeam.name} clublogo`}
                 className="w-full h-full object-contain transition-transform duration-300"
                 onError={handleImageError}
               />
               <span 
                 className="absolute inset-0 bg-premium-gray-600 text-white text-xs font-bold rounded-full flex items-center justify-center"
                 style={{ display: 'none' }}
+                aria-hidden="true"
               >
                 {opponentTeam.name.substring(0, 3).toUpperCase()}
               </span>
@@ -144,12 +156,20 @@ export const NextMatchWidget = () => {
         {/* Datum en tijd */}
         <div className="text-center mb-4">
           <div className="flex items-center justify-center space-x-4 text-premium-gray-600 dark:text-gray-400">
-            <div className="flex items-center space-x-1 transform transition-transform duration-200 hover:scale-105">
-              <Calendar size={14} />
+            <div 
+              className="flex items-center space-x-1 transform transition-transform duration-200 hover:scale-105"
+              role="text"
+              aria-label={`Wedstrijddatum: ${formatDate(matchDate)}`}
+            >
+              <Calendar size={14} aria-hidden="true" />
               <span className="text-sm">{formatDate(matchDate)}</span>
             </div>
-            <div className="flex items-center space-x-1 transform transition-transform duration-200 hover:scale-105">
-              <Clock size={14} />
+            <div 
+              className="flex items-center space-x-1 transform transition-transform duration-200 hover:scale-105"
+              role="text" 
+              aria-label={`Aanvangstijd: ${formatTime(matchDate)}`}
+            >
+              <Clock size={14} aria-hidden="true" />
               <span className="text-sm">{formatTime(matchDate)}</span>
             </div>
           </div>
@@ -161,12 +181,13 @@ export const NextMatchWidget = () => {
             href="https://072design.nl"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-xs text-premium-gray-400 dark:text-gray-500 hover:text-az-red dark:hover:text-az-red hover:underline cursor-pointer transition-all duration-200 transform hover:scale-105"
+            className="text-xs text-premium-gray-400 dark:text-gray-500 hover:text-az-red dark:hover:text-az-red hover:underline cursor-pointer transition-all duration-200 transform hover:scale-105 focus:ring-2 focus:ring-az-red focus:ring-offset-2 rounded"
+            aria-label="Externe link naar 072DESIGN website"
           >
             Powered by 072DESIGN
           </a>
         </div>
-      </div>
+      </section>
     </div>
   );
 };

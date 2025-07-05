@@ -292,6 +292,14 @@ const ArticleDetail = () => {
       
       <Header />
       
+      {/* Skip to main content link for screen readers */}
+      <a 
+        href="#main-content" 
+        className="sr-only focus:not-sr-only focus:absolute focus:top-20 focus:left-4 bg-az-red text-white px-4 py-2 rounded z-50"
+      >
+        Ga naar hoofdinhoud
+      </a>
+      
       {/* Sticky Share Bar - positioned below Header with correct offset */}
       <ShareBar 
         article={displayArticle}
@@ -301,7 +309,8 @@ const ArticleDetail = () => {
       />
 
       {/* Article content */}
-      <article className="max-w-4xl mx-auto px-4 py-6 pb-24">
+      <main id="main-content">
+        <article className="max-w-4xl mx-auto px-4 py-6 pb-24" role="article" aria-labelledby="article-title">
         {/* Offline content indicator */}
         {isShowingCachedContent && (
           <div className="mb-4 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
@@ -342,7 +351,7 @@ const ArticleDetail = () => {
             )}
           </div>
 
-          <h1 className="headline-premium text-headline-xl text-az-black dark:text-white mb-4">
+          <h1 id="article-title" className="headline-premium text-headline-xl text-az-black dark:text-white mb-4">
             {displayArticle.title}
           </h1>
 
@@ -418,7 +427,8 @@ const ArticleDetail = () => {
             </p>
           </div>
         )}
-      </article>
+        </article>
+      </main>
 
       <BottomNavigation activeTab={activeTab} onTabChange={setActiveTab} />
     </div>
