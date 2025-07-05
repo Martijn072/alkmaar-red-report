@@ -146,7 +146,7 @@ export const AccessibilitySettings = () => {
           <div className="pt-4 border-t border-premium-gray-200 dark:border-gray-700">
             <Button
               variant="outline"
-              className="w-full rounded-lg border-premium-gray-300 dark:border-gray-600 hover:bg-az-red/5 hover:text-az-red hover:border-az-red/30"
+              className="w-full rounded-lg border-premium-gray-300 dark:border-gray-600 hover:bg-az-red/5 hover:text-az-red hover:border-az-red/30 bg-white dark:bg-gray-800 text-az-black dark:text-white"
               onClick={() => {
                 applyTextSize("100");
                 applyHighContrast(false);
