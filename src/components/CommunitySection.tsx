@@ -21,8 +21,8 @@ export const CommunitySection = () => {
             <div className="bg-az-red/10 p-3 rounded-full">
               <Upload className="w-6 h-6 text-az-red" />
             </div>
-            <div className="bg-yellow-500/10 p-3 rounded-full">
-              <Trophy className="w-6 h-6 text-yellow-600" />
+            <div className="bg-az-red/10 p-3 rounded-full">
+              <Trophy className="w-6 h-6 text-az-red" />
             </div>
           </div>
           

@@ -95,7 +95,7 @@ export const MediaCard = ({ media }: MediaCardProps) => {
         )}
         
         {media.is_featured && (
-          <div className="absolute top-2 left-2 bg-yellow-500 text-white px-2 py-1 rounded text-xs font-semibold">
+          <div className="absolute top-2 left-2 bg-az-red text-white px-2 py-1 rounded text-xs font-semibold">
             🏆 Foto van de Week
           </div>
         )}

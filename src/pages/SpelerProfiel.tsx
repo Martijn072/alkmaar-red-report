@@ -370,7 +370,7 @@ const SpelerProfiel = () => {
                   <div className="text-sm text-premium-gray-600 dark:text-gray-300">Assists</div>
                 </div>
                 <div className="text-center p-4 bg-premium-gray-50 dark:bg-gray-700 rounded-lg">
-                  <div className="text-2xl font-bold text-yellow-600">{careerTotals.yellowCards}</div>
+                  <div className="text-2xl font-bold text-az-red">{careerTotals.yellowCards}</div>
                   <div className="text-sm text-premium-gray-600 dark:text-gray-300">Gele kaarten</div>
                 </div>
                 <div className="text-center p-4 bg-premium-gray-50 dark:bg-gray-700 rounded-lg">
