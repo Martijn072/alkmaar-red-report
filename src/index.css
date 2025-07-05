@@ -288,4 +288,21 @@
   .interactive-icon {
     @apply transform transition-all duration-200 hover:scale-110 hover:text-az-red;
   }
+
+  /* Audio Player Slider Styling - Force AZ Red */
+  .audio-slider [data-radix-slider-track] {
+    @apply bg-premium-gray-200 dark:bg-gray-700;
+  }
+
+  .audio-slider [data-radix-slider-range] {
+    @apply bg-az-red;
+  }
+
+  .audio-slider [data-radix-slider-thumb] {
+    @apply bg-az-red border-az-red hover:bg-red-700 focus:ring-az-red;
+  }
+
+  .audio-slider [data-radix-slider-thumb]:focus {
+    @apply ring-2 ring-az-red ring-offset-2;
+  }
 }

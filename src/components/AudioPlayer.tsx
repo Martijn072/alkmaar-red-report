@@ -139,12 +139,12 @@ export const AudioPlayer = ({ text, title, className = '' }: AudioPlayerProps) =
               <SelectTrigger className="w-20 bg-az-red text-white border-az-red hover:bg-red-700">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="0.75">0.75x</SelectItem>
-                <SelectItem value="0.9">0.9x</SelectItem>
-                <SelectItem value="1">1x</SelectItem>
-                <SelectItem value="1.25">1.25x</SelectItem>
-                <SelectItem value="1.5">1.5x</SelectItem>
+              <SelectContent className="bg-white dark:bg-gray-800 border border-premium-gray-200 dark:border-gray-700">
+                <SelectItem value="0.75" className="hover:bg-az-red/10 focus:bg-az-red/10">0.75x</SelectItem>
+                <SelectItem value="0.9" className="hover:bg-az-red/10 focus:bg-az-red/10">0.9x</SelectItem>
+                <SelectItem value="1" className="hover:bg-az-red/10 focus:bg-az-red/10">1x</SelectItem>
+                <SelectItem value="1.25" className="hover:bg-az-red/10 focus:bg-az-red/10">1.25x</SelectItem>
+                <SelectItem value="1.5" className="hover:bg-az-red/10 focus:bg-az-red/10">1.5x</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -152,7 +152,7 @@ export const AudioPlayer = ({ text, title, className = '' }: AudioPlayerProps) =
 
         {/* Volume Control */}
         <div className="flex items-center gap-2 flex-1">
-          <Volume2 className="w-4 h-4 text-az-black dark:text-gray-300" />
+          <Volume2 className="w-4 h-4 text-az-red" />
           <div className="flex-1">
             <Slider
               value={[volume]}
@@ -160,7 +160,7 @@ export const AudioPlayer = ({ text, title, className = '' }: AudioPlayerProps) =
               max={1}
               min={0}
               step={0.1}
-              className="flex-1 [&_.slider-thumb]:bg-az-red [&_.slider-track]:bg-az-red"
+              className="flex-1 audio-slider"
             />
           </div>
         </div>
