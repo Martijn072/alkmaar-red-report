@@ -67,6 +67,31 @@ const ArticleDetail = () => {
     }
   }, [article]);
 
+  // Function to clean image attributes that cause cropping
+  const cleanImageAttributes = (content: string): string => {
+    if (!content) return content;
+    
+    console.log('🧹 Cleaning image attributes from content...');
+    
+    // Remove width and height attributes from img tags
+    let cleanedContent = content
+      .replace(/<img([^>]*)\s+width\s*=\s*["'][^"']*["']([^>]*)/gi, '<img$1$2')
+      .replace(/<img([^>]*)\s+height\s*=\s*["'][^"']*["']([^>]*)/gi, '<img$1$2');
+    
+    // Log if any changes were made
+    if (cleanedContent !== content) {
+      console.log('✅ Removed inline width/height attributes from images');
+      const beforeImages = content.match(/<img[^>]*>/g) || [];
+      const afterImages = cleanedContent.match(/<img[^>]*>/g) || [];
+      console.log('Before cleaning:', beforeImages.length, 'images');
+      console.log('After cleaning:', afterImages.length, 'images');
+      beforeImages.slice(0, 3).forEach((img, i) => console.log(`Before ${i+1}:`, img));
+      afterImages.slice(0, 3).forEach((img, i) => console.log(`After ${i+1}:`, img));
+    }
+    
+    return cleanedContent;
+  };
+
   // Function to convert internal azfanpage.nl links to app routes
   const convertInternalLinks = (content: string): string => {
     if (!content) return content;
@@ -125,10 +150,46 @@ const ArticleDetail = () => {
   const displayArticle = article || (cachedArticle && !isOnline ? cachedArticle : null);
   const isShowingCachedContent = !article && cachedArticle && !isOnline;
 
-  // Process article content to convert internal links
+  // Process article content to clean images and convert internal links
   const processedContent = displayArticle?.content 
-    ? convertInternalLinks(displayArticle.content)
+    ? convertInternalLinks(cleanImageAttributes(displayArticle.content))
     : displayArticle?.excerpt || '';
+
+  // DOM cleanup for any remaining image attributes after rendering
+  useEffect(() => {
+    if (!displayArticle) return;
+
+    const cleanDOMImages = () => {
+      const articleContent = document.querySelector('.article-content');
+      if (!articleContent) return;
+
+      const images = articleContent.querySelectorAll('img');
+      console.log('🧹 Cleaning DOM images, found:', images.length);
+      
+      images.forEach((img, index) => {
+        const hadWidth = img.hasAttribute('width');
+        const hadHeight = img.hasAttribute('height');
+        
+        if (hadWidth || hadHeight) {
+          console.log(`🔧 Cleaning image ${index + 1}:`, {
+            width: img.getAttribute('width'),
+            height: img.getAttribute('height'),
+            src: img.src.substring(0, 50) + '...'
+          });
+          
+          img.removeAttribute('width');
+          img.removeAttribute('height');
+          
+          console.log(`✅ Cleaned image ${index + 1}, now has natural scaling`);
+        }
+      });
+    };
+
+    // Run cleanup after a small delay to ensure DOM is updated
+    const timeoutId = setTimeout(cleanDOMImages, 200);
+    
+    return () => clearTimeout(timeoutId);
+  }, [displayArticle, processedContent]);
 
   // Setup click handlers for internal links after content is rendered
   useEffect(() => {
