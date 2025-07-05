@@ -67,6 +67,44 @@ const ArticleDetail = () => {
     }
   }, [article]);
 
+  // Function to clean WordPress image size variants from URLs
+  const cleanImageUrls = (content: string): string => {
+    if (!content) return content;
+    
+    console.log('🖼️ Cleaning WordPress image size variants from URLs...');
+    
+    let cleanedContent = content;
+    const originalContent = content;
+    
+    // Replace WordPress size variants (-900x600, -300x200, etc.) with original URLs
+    cleanedContent = cleanedContent.replace(
+      /(<img[^>]*src=["'])([^"']*)-\d+x\d+(\.[^"']*["'])/gi,
+      (match, prefix, baseUrl, suffix) => {
+        console.log(`🔧 Replacing size variant URL: ${baseUrl}-XXXxXXX${suffix} → ${baseUrl}${suffix}`);
+        return prefix + baseUrl + suffix;
+      }
+    );
+    
+    // Also check for data-orig-file attributes and use those if available
+    cleanedContent = cleanedContent.replace(
+      /<img([^>]*data-orig-file=["'])([^"']*)["']([^>]*src=["'])[^"']*["']([^>]*)/gi,
+      (match, prefix, origUrl, srcPrefix, suffix) => {
+        console.log(`🔧 Using data-orig-file URL: ${origUrl}`);
+        return `<img${prefix}${origUrl}"${srcPrefix}${origUrl}"${suffix}`;
+      }
+    );
+    
+    if (cleanedContent !== originalContent) {
+      console.log('✅ Cleaned WordPress image size variants from URLs');
+      const beforeUrls = originalContent.match(/src=["'][^"']*["']/gi) || [];
+      const afterUrls = cleanedContent.match(/src=["'][^"']*["']/gi) || [];
+      console.log('URLs before:', beforeUrls.slice(0, 3));
+      console.log('URLs after:', afterUrls.slice(0, 3));
+    }
+    
+    return cleanedContent;
+  };
+
   // Function to clean image attributes that cause cropping
   const cleanImageAttributes = (content: string): string => {
     if (!content) return content;
@@ -152,7 +190,7 @@ const ArticleDetail = () => {
 
   // Process article content to clean images and convert internal links
   const processedContent = displayArticle?.content 
-    ? convertInternalLinks(cleanImageAttributes(displayArticle.content))
+    ? convertInternalLinks(cleanImageAttributes(cleanImageUrls(displayArticle.content)))
     : displayArticle?.excerpt || '';
 
   // DOM cleanup for any remaining image attributes after rendering
