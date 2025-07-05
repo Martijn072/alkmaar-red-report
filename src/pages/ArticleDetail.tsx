@@ -105,6 +105,49 @@ const ArticleDetail = () => {
     return cleanedContent;
   };
 
+  // Function to clean WordPress caption containers
+  const cleanWordPressContainers = (content: string): string => {
+    if (!content) return content;
+    
+    console.log('🧹 Cleaning WordPress caption containers...');
+    
+    let cleanedContent = content;
+    const originalContent = content;
+    
+    // Remove wp-caption wrapper divs but keep the image and caption
+    cleanedContent = cleanedContent.replace(
+      /<div[^>]*class="[^"]*wp-caption[^"]*"[^>]*>(.*?)<\/div>/gis,
+      (match, innerContent) => {
+        console.log('🔧 Removing wp-caption container:', match.substring(0, 100) + '...');
+        
+        // Extract image and caption separately
+        const imageMatch = innerContent.match(/<img[^>]*>/i);
+        const captionMatch = innerContent.match(/<p[^>]*class="[^"]*wp-caption-text[^"]*"[^>]*>(.*?)<\/p>/i);
+        
+        let result = imageMatch ? imageMatch[0] : '';
+        if (captionMatch) {
+          result += `<p class="image-caption">${captionMatch[1]}</p>`;
+        }
+        return result;
+      }
+    );
+    
+    // Remove attachment wrapper divs
+    cleanedContent = cleanedContent.replace(
+      /<div[^>]*id="attachment_\d+"[^>]*>(.*?)<\/div>/gis,
+      (match, innerContent) => {
+        console.log('🔧 Removing attachment container:', match.substring(0, 100) + '...');
+        return innerContent;
+      }
+    );
+    
+    if (cleanedContent !== originalContent) {
+      console.log('✅ Cleaned WordPress caption containers');
+    }
+    
+    return cleanedContent;
+  };
+
   // Function to clean image attributes that cause cropping
   const cleanImageAttributes = (content: string): string => {
     if (!content) return content;
@@ -190,7 +233,7 @@ const ArticleDetail = () => {
 
   // Process article content to clean images and convert internal links
   const processedContent = displayArticle?.content 
-    ? convertInternalLinks(cleanImageAttributes(cleanImageUrls(displayArticle.content)))
+    ? convertInternalLinks(cleanImageAttributes(cleanImageUrls(cleanWordPressContainers(displayArticle.content))))
     : displayArticle?.excerpt || '';
 
   // DOM cleanup for any remaining image attributes after rendering

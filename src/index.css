@@ -178,6 +178,22 @@
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
   }
 
+  /* Remove any remaining caption container restrictions */
+  .article-content .wp-caption,
+  .article-content div[id^="attachment_"],
+  .article-content div[class*="wp-caption"] {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 1.5rem auto !important;
+  }
+
+  /* Clean image caption styling */
+  .article-content .image-caption {
+    @apply text-sm text-premium-gray-600 dark:text-gray-400 italic mt-2 px-4;
+    text-align: center;
+    margin: 0.5rem 0 1rem 0;
+  }
+
   /* Ensure featured images keep their styling */
   .article-content img.featured-image {
     aspect-ratio: 16/9;
