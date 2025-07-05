@@ -11,9 +11,12 @@ import { ShareBar } from "@/components/ShareBar";
 import { OfflineIndicator } from "@/components/OfflineIndicator";
 import { TTSButton } from "@/components/TTSButton";
 import { AudioPlayer } from "@/components/AudioPlayer";
+import { TweetCard } from "@/components/TweetCard";
 import { useOfflineSync } from "@/hooks/useOfflineSync";
 import { useOfflineDetection } from "@/hooks/useOfflineDetection";
 import { articleCache } from "@/services/articleCache";
+import { processTwitterContent } from "@/utils/tweetDetector";
+import { TweetData } from "@/utils/tweetParser";
 
 const ArticleDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -22,6 +25,7 @@ const ArticleDetail = () => {
   const [activeTab, setActiveTab] = useState("news");
   const [cachedArticle, setCachedArticle] = useState(null);
   const [showAudioPlayer, setShowAudioPlayer] = useState(false);
+  const [tweetData, setTweetData] = useState<TweetData[]>([]);
   
   const { isSyncing, handleManualSync, isOnline } = useOfflineSync();
   
@@ -231,9 +235,22 @@ const ArticleDetail = () => {
   const displayArticle = article || (cachedArticle && !isOnline ? cachedArticle : null);
   const isShowingCachedContent = !article && cachedArticle && !isOnline;
 
-  // Process article content to clean images and convert internal links
+  // Process article content to clean images, convert internal links, and replace Twitter embeds
   const processedContent = displayArticle?.content 
-    ? convertInternalLinks(cleanImageAttributes(cleanImageUrls(cleanWordPressContainers(displayArticle.content))))
+    ? (() => {
+        // First process Twitter content
+        const twitterProcessed = processTwitterContent(displayArticle.content);
+        setTweetData(twitterProcessed.tweets);
+        
+        // Then apply other content processing
+        return convertInternalLinks(
+          cleanImageAttributes(
+            cleanImageUrls(
+              cleanWordPressContainers(twitterProcessed.processedContent)
+            )
+          )
+        );
+      })()
     : displayArticle?.excerpt || '';
 
   // DOM cleanup for any remaining image attributes after rendering
@@ -272,16 +289,16 @@ const ArticleDetail = () => {
     return () => clearTimeout(timeoutId);
   }, [displayArticle, processedContent]);
 
-  // Setup click handlers for internal links after content is rendered
+  // Setup click handlers for internal links and render tweet cards after content is rendered
   useEffect(() => {
     if (!displayArticle) return;
 
-    const setupInternalLinks = () => {
+    const setupInteractiveContent = () => {
       const articleContent = document.querySelector('.article-content');
       if (!articleContent) return;
 
+      // Setup internal links
       const internalLinks = articleContent.querySelectorAll('a[data-internal-link]');
-      
       console.log(`🔧 Setting up ${internalLinks.length} internal links`);
       
       internalLinks.forEach((link) => {
@@ -302,10 +319,35 @@ const ArticleDetail = () => {
         // Add new listener
         link.addEventListener('click', handleClick);
       });
+
+      // Setup tweet card replacements
+      const tweetPlaceholders = articleContent.querySelectorAll('div[data-tweet-replacement]');
+      console.log(`🐦 Found ${tweetPlaceholders.length} tweet placeholders to replace`);
+      
+      tweetPlaceholders.forEach((placeholder) => {
+        const tweetId = placeholder.getAttribute('data-tweet-replacement');
+        const tweetUrl = placeholder.getAttribute('data-tweet-url');
+        
+        if (tweetId && tweetUrl) {
+          const tweet = tweetData.find(t => t.id === tweetId);
+          if (tweet && placeholder.parentNode) {
+            // Create tweet card container
+            const tweetContainer = document.createElement('div');
+            tweetContainer.className = 'tweet-card-container';
+            
+            // Replace placeholder with tweet container
+            placeholder.parentNode.replaceChild(tweetContainer, placeholder);
+            
+            // Note: The actual TweetCard component will be rendered by React
+            // This is just setting up the DOM structure
+            console.log(`✅ Prepared tweet card for @${tweet.username}`);
+          }
+        }
+      });
     };
 
     // Run setup after a small delay to ensure DOM is updated
-    const timeoutId = setTimeout(setupInternalLinks, 100);
+    const timeoutId = setTimeout(setupInteractiveContent, 100);
     
     return () => {
       clearTimeout(timeoutId);
@@ -320,7 +362,7 @@ const ArticleDetail = () => {
         });
       }
     };
-  }, [displayArticle, processedContent, navigate]);
+  }, [displayArticle, processedContent, navigate, tweetData]);
 
   // Handle clicks on internal links (fallback)
   const handleContentClick = (e: React.MouseEvent) => {
@@ -528,7 +570,7 @@ const ArticleDetail = () => {
           </div>
         )}
 
-        {/* Article content with enhanced styling and debug info */}
+        {/* Article content with enhanced styling, debug info, and embedded tweets */}
         <div 
           className={`article-content ${typeof window !== 'undefined' && document.documentElement.classList.contains('dark') ? 'prose-invert' : ''}`}
           onLoad={() => {
@@ -551,6 +593,15 @@ const ArticleDetail = () => {
             onClick={handleContentClick}
             dangerouslySetInnerHTML={{ __html: processedContent }}
           />
+          
+          {/* Render tweet cards for any found tweets */}
+          {tweetData.length > 0 && (
+            <div className="tweet-cards-section">
+              {tweetData.map((tweet, index) => (
+                <TweetCard key={`${tweet.id}-${index}`} tweet={tweet} />
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Comments only show for online content */}
