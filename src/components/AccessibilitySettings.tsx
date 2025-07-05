@@ -80,13 +80,13 @@ export const AccessibilitySettings = () => {
               Tekstgrootte
             </Label>
             <Select value={textSize} onValueChange={applyTextSize}>
-              <SelectTrigger id="text-size" aria-label="Selecteer tekstgrootte" className="focus:ring-az-red border-premium-gray-200 dark:border-gray-700">
-                <SelectValue />
+              <SelectTrigger id="text-size" aria-label="Selecteer tekstgrootte" className="focus:ring-az-red border-premium-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+                <SelectValue className="text-az-black dark:text-white" />
               </SelectTrigger>
               <SelectContent className="bg-white dark:bg-gray-800 border-premium-gray-200 dark:border-gray-700">
-                <SelectItem value="100" className="hover:bg-az-red/10 hover:text-az-red">Normaal (100%)</SelectItem>
-                <SelectItem value="125" className="hover:bg-az-red/10 hover:text-az-red">Groot (125%)</SelectItem>
-                <SelectItem value="150" className="hover:bg-az-red/10 hover:text-az-red">Extra groot (150%)</SelectItem>
+                <SelectItem value="100" className="hover:bg-az-red hover:text-white focus:bg-az-red focus:text-white">Normaal (100%)</SelectItem>
+                <SelectItem value="125" className="hover:bg-az-red hover:text-white focus:bg-az-red focus:text-white">Groot (125%)</SelectItem>
+                <SelectItem value="150" className="hover:bg-az-red hover:text-white focus:bg-az-red focus:text-white">Extra groot (150%)</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -145,8 +145,8 @@ export const AccessibilitySettings = () => {
           {/* Reset Button */}
           <div className="pt-4 border-t border-premium-gray-200 dark:border-gray-700">
             <Button
-              variant="outline"
-              className="w-full rounded-lg border-premium-gray-300 dark:border-gray-600 hover:bg-az-red/5 hover:text-az-red hover:border-az-red/30 bg-white dark:bg-gray-800 text-az-black dark:text-white"
+              variant="default"
+              className="w-full rounded-lg bg-az-red hover:bg-red-700 text-white"
               onClick={() => {
                 applyTextSize("100");
                 applyHighContrast(false);
