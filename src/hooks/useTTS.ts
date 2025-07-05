@@ -57,6 +57,43 @@ export const useTTS = () => {
 
   const speak = useCallback(async (text: string, options: TTSOptions = {}) => {
     try {
+      // Pre-initialize audio element within user gesture for mobile compatibility
+      if (!audioRef.current) {
+        audioRef.current = new Audio();
+        
+        // Create a silent audio blob to establish audio context
+        const silentBlob = new Blob([new Uint8Array([])], { type: 'audio/mp3' });
+        const silentUrl = URL.createObjectURL(silentBlob);
+        audioRef.current.src = silentUrl;
+        
+        // Try to play (and immediately pause) to unlock audio context on mobile
+        try {
+          await audioRef.current.play();
+          audioRef.current.pause();
+        } catch (e) {
+          console.log('Audio context unlock attempt:', e);
+        }
+        
+        audioRef.current.addEventListener('ended', () => {
+          currentChunkRef.current++;
+          playNextChunk();
+        });
+
+        audioRef.current.addEventListener('timeupdate', () => {
+          setState(prev => ({
+            ...prev,
+            currentTime: audioRef.current?.currentTime || 0
+          }));
+        });
+
+        audioRef.current.addEventListener('loadedmetadata', () => {
+          setState(prev => ({
+            ...prev,
+            duration: audioRef.current?.duration || 0
+          }));
+        });
+      }
+
       setState(prev => ({ 
         ...prev, 
         isLoading: true, 
@@ -81,30 +118,6 @@ export const useTTS = () => {
 
       audioChunksRef.current = data.audioChunks;
       currentChunkRef.current = 0;
-
-      // Create audio element if not exists
-      if (!audioRef.current) {
-        audioRef.current = new Audio();
-        
-        audioRef.current.addEventListener('ended', () => {
-          currentChunkRef.current++;
-          playNextChunk();
-        });
-
-        audioRef.current.addEventListener('timeupdate', () => {
-          setState(prev => ({
-            ...prev,
-            currentTime: audioRef.current?.currentTime || 0
-          }));
-        });
-
-        audioRef.current.addEventListener('loadedmetadata', () => {
-          setState(prev => ({
-            ...prev,
-            duration: audioRef.current?.duration || 0
-          }));
-        });
-      }
 
       setState(prev => ({
         ...prev,
