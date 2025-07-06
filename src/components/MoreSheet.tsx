@@ -19,18 +19,6 @@ export const MoreSheet = ({ children }: MoreSheetProps) => {
     },
     {
       icon: Users,
-      label: "Speler Statistieken",
-      path: "/spelers",
-      description: "Bekijk de laatste AZ speler stats"
-    },
-    {
-      icon: Trophy,
-      label: "Conference League",
-      path: "/conference-league",
-      description: "Stand en wedstrijden Conference League"
-    },
-    {
-      icon: Users,
       label: "Community",
       path: "/community",
       description: "AZ Supporters social media posts"
