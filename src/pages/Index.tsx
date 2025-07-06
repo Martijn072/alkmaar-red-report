@@ -2,8 +2,6 @@
 import { NewsCard } from "@/components/NewsCard";
 import { NextMatchWidget } from "@/components/NextMatchWidget";
 import { SocialMediaPromo } from "@/components/SocialMediaPromo";
-import { ForumWidget } from "@/components/ForumWidget";
-import { TrendingForumWidget } from "@/components/TrendingForumWidget";
 import { Header } from "@/components/Header";
 import { BottomNavigation } from "@/components/BottomNavigation";
 import { PullToRefreshIndicator } from "@/components/PullToRefreshIndicator";
@@ -102,16 +100,6 @@ const Index = () => {
           {/* Next Match Widget */}
           <div className="animate-fade-in">
             <NextMatchWidget />
-          </div>
-          
-          {/* Forum Widgets */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-12">
-            <div className="animate-fade-in" style={{ animationDelay: '0.05s' }}>
-              <ForumWidget />
-            </div>
-            <div className="animate-fade-in" style={{ animationDelay: '0.1s' }}>
-              <TrendingForumWidget />
-            </div>
           </div>
           
           {/* News Section */}

@@ -1,23 +1,18 @@
 import { useState, useEffect, useRef } from "react";
-import { ArrowLeft, MessageSquare, Bell, Search } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { MessageSquare, RefreshCw, ExternalLink } from "lucide-react";
 import { Header } from "@/components/Header";
 import { BottomNavigation } from "@/components/BottomNavigation";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/use-toast";
 
 const Forum = () => {
-  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("forum");
   const [isLoading, setIsLoading] = useState(true);
   const [webviewError, setWebviewError] = useState(false);
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  const { toast } = useToast();
 
   const forumUrl = "https://www.azfanpage.nl/forum/";
 
   useEffect(() => {
-    // Handle iframe load
     const iframe = iframeRef.current;
     if (iframe) {
       const handleLoad = () => {
@@ -28,34 +23,23 @@ const Forum = () => {
       const handleError = () => {
         setIsLoading(false);
         setWebviewError(true);
-        toast({
-          title: "Forum laden mislukt",
-          description: "Er is een probleem bij het laden van het forum. Probeer opnieuw.",
-          variant: "destructive",
-        });
       };
 
       iframe.addEventListener('load', handleLoad);
       iframe.addEventListener('error', handleError);
 
+      // Set a timeout to stop loading state after reasonable time
+      const timeout = setTimeout(() => {
+        setIsLoading(false);
+      }, 8000);
+
       return () => {
         iframe.removeEventListener('load', handleLoad);
         iframe.removeEventListener('error', handleError);
+        clearTimeout(timeout);
       };
     }
-  }, [toast]);
-
-  const handleNewTopic = () => {
-    if (iframeRef.current) {
-      // Try to navigate iframe to new topic page
-      try {
-        iframeRef.current.src = `${forumUrl}posting.php?mode=post`;
-      } catch (error) {
-        // Fallback: open in new tab
-        window.open(`${forumUrl}posting.php?mode=post`, '_blank');
-      }
-    }
-  };
+  }, []);
 
   const handleRefresh = () => {
     if (iframeRef.current) {
@@ -70,11 +54,11 @@ const Forum = () => {
   };
 
   return (
-    <div className="min-h-screen bg-premium-gray-50 dark:bg-gray-900 flex flex-col">
+    <div className="min-h-screen bg-white dark:bg-gray-900 flex flex-col">
       <Header />
       
       {/* Forum Header */}
-      <div className="bg-white dark:bg-gray-800 border-b border-premium-gray-200 dark:border-gray-700 px-4 py-3 flex items-center justify-between">
+      <div className="bg-white dark:bg-gray-800 border-b border-premium-gray-200 dark:border-gray-700 px-4 py-3 flex items-center justify-between shrink-0">
         <div className="flex items-center gap-3">
           <MessageSquare className="w-6 h-6 text-az-red" />
           <h1 className="text-lg font-bold text-az-black dark:text-white">
@@ -89,21 +73,21 @@ const Forum = () => {
             onClick={handleRefresh}
             className="text-premium-gray-600 dark:text-gray-300 hover:text-az-red"
           >
-            Vernieuwen
+            <RefreshCw className="w-4 h-4" />
           </Button>
           <Button
-            variant="ghost"
+            variant="ghost" 
             size="sm"
             onClick={openInBrowser}
             className="text-premium-gray-600 dark:text-gray-300 hover:text-az-red"
           >
-            Browser
+            <ExternalLink className="w-4 h-4" />
           </Button>
         </div>
       </div>
 
       {/* Forum Content */}
-      <div className="flex-1 relative bg-white dark:bg-gray-900">
+      <div className="flex-1 relative min-h-0">
         {isLoading && (
           <div className="absolute inset-0 flex items-center justify-center bg-white dark:bg-gray-900 z-10">
             <div className="text-center">
@@ -123,10 +107,10 @@ const Forum = () => {
                 Forum niet beschikbaar
               </h3>
               <p className="text-premium-gray-500 dark:text-gray-400 mb-6">
-                Het forum kan momenteel niet worden geladen. Probeer het later opnieuw.
+                Het forum kan momenteel niet worden geladen.
               </p>
               <div className="space-y-3">
-                <Button onClick={handleRefresh} className="w-full">
+                <Button onClick={handleRefresh} className="w-full bg-az-red hover:bg-red-700">
                   Opnieuw proberen
                 </Button>
                 <Button variant="outline" onClick={openInBrowser} className="w-full">
@@ -141,20 +125,11 @@ const Forum = () => {
             src={forumUrl}
             className="w-full h-full border-0"
             title="AZ Forum"
-            sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-top-navigation"
-            loading="lazy"
+            style={{ minHeight: 'calc(100vh - 140px)' }}
+            allowFullScreen
           />
         )}
       </div>
-
-      {/* Floating Action Button */}
-      <button
-        onClick={handleNewTopic}
-        className="fixed bottom-24 right-4 w-14 h-14 bg-az-red hover:bg-red-700 text-white rounded-full shadow-lg flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95 z-40"
-        aria-label="Nieuw topic starten"
-      >
-        <MessageSquare className="w-6 h-6" />
-      </button>
 
       <BottomNavigation activeTab={activeTab} onTabChange={setActiveTab} />
     </div>
