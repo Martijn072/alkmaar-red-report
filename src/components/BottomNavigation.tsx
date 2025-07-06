@@ -1,5 +1,5 @@
 
-import { Bell, House, MessageSquare, BarChart3, MoreHorizontal } from "lucide-react";
+import { Bell, Calendar, House, Table, MessageSquare, MoreHorizontal } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { MoreSheet } from "./MoreSheet";
 
@@ -15,19 +15,21 @@ export const BottomNavigation = ({ activeTab, onTabChange }: BottomNavigationPro
   const tabs = [
     { id: "home", label: "Home", icon: House, path: "/" },
     { id: "news", label: "Nieuws", icon: Bell, path: "/nieuws" },
-    { id: "azdata", label: "AZ Data", icon: BarChart3, path: "/azdata" },
+    { id: "programma", label: "Programma", icon: Calendar, path: "/programma" },
     { id: "forum", label: "Forum", icon: MessageSquare, path: "/forum" },
+    { id: "eredivisie", label: "Stand", icon: Table, path: "/eredivisie" },
   ];
 
   // Determine active tab based on current route
   const getActiveTab = () => {
     if (location.pathname === "/") return "home";
     if (location.pathname === "/nieuws") return "news";
-    if (location.pathname === "/azdata") return "azdata";
+    if (location.pathname === "/programma") return "programma";
+    if (location.pathname === "/eredivisie") return "eredivisie";
     if (location.pathname === "/forum") return "forum";
     if (location.pathname === "/notificaties") return "notifications";
-    // Legacy routes still map to azdata
-    if (location.pathname === "/eredivisie" || location.pathname === "/programma" || location.pathname === "/spelers" || location.pathname === "/conference-league") return "azdata";
+    // More sheet routes
+    if (location.pathname === "/spelers" || location.pathname === "/conference-league" || location.pathname === "/community") return "meer";
     // For "more" pages, don't highlight any main tab
     if (location.pathname === "/spelers" || location.pathname === "/conference-league") return "meer";
     return activeTab;

@@ -8,7 +8,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { Menu, Home, Bell, MessageSquare, BarChart3 } from "lucide-react";
+import { Menu, Home, Bell, Calendar, Table, MessageSquare, Users, Trophy } from "lucide-react";
 
 export const HeaderMenu = () => {
   const navigate = useNavigate();
@@ -17,8 +17,11 @@ export const HeaderMenu = () => {
   const menuItems = [
     { id: "home", label: "Home", icon: Home, path: "/" },
     { id: "news", label: "Nieuws", icon: Bell, path: "/nieuws" },
-    { id: "azdata", label: "AZ Data", icon: BarChart3, path: "/azdata" },
+    { id: "programma", label: "Programma", icon: Calendar, path: "/programma" },
     { id: "forum", label: "Forum", icon: MessageSquare, path: "/forum" },
+    { id: "eredivisie", label: "Eredivisie Stand", icon: Table, path: "/eredivisie" },
+    { id: "spelers", label: "Speler Stats", icon: Users, path: "/spelers" },
+    { id: "conference", label: "Conference League", icon: Trophy, path: "/conference-league" },
   ];
 
   const handleMenuClick = (path: string) => {
