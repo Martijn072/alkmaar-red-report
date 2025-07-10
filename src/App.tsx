@@ -41,16 +41,8 @@ const App = () => (
             <Route path="/programma" element={<AZProgramma />} />
             <Route path="/spelers" element={<SpelerStatistieken />} />
             <Route path="/conference-league" element={<ConferenceLeague />} />
-            <Route path="/notificaties" element={
-              <ProtectedRoute>
-                <Notifications />
-              </ProtectedRoute>
-            } />
-            <Route path="/instellingen/notificaties" element={
-              <ProtectedRoute>
-                <NotificationSettings />
-              </ProtectedRoute>
-            } />
+            <Route path="/notificaties" element={<Notifications />} />
+            <Route path="/instellingen/notificaties" element={<NotificationSettings />} />
             <Route path="/forum" element={<Forum />} />
             <Route path="/wedstrijd/:fixtureId" element={<WedstrijdDetail />} />
             <Route path="/speler/:playerId" element={<SpelerProfiel />} />
