@@ -31,8 +31,6 @@ export const BottomNavigation = ({ activeTab, onTabChange }: BottomNavigationPro
       location.pathname === "/forum" ||
       location.pathname === "/spelers" || 
       location.pathname === "/conference-league" || 
-      location.pathname === "/partners" ||
-      location.pathname.startsWith("/partner/") ||
       location.pathname === "/notificaties"
     ) {
       return "meer";

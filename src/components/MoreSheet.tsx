@@ -1,6 +1,6 @@
 
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { Bell, MessageSquare, Info, Building2 } from "lucide-react";
+import { Bell, MessageSquare, Info } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 interface MoreSheetProps {
@@ -16,12 +16,6 @@ export const MoreSheet = ({ children }: MoreSheetProps) => {
       label: "Forum",
       path: "/forum",
       description: "Discussie en community"
-    },
-    {
-      icon: Building2,
-      label: "Partners",
-      path: "/partners",
-      description: "Bedrijven die AZFanpage steunen"
     },
     {
       icon: Bell,

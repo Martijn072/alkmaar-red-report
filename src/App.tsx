@@ -16,8 +16,6 @@ import Notifications from "./pages/Notifications";
 import WedstrijdDetail from "./pages/WedstrijdDetail";
 import SpelerProfiel from "./pages/SpelerProfiel";
 import Forum from "./pages/Forum";
-import Partners from "./pages/Partners";
-import PartnerDetail from "./pages/PartnerDetail";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -39,8 +37,6 @@ const App = () => (
             <Route path="/conference-league" element={<ConferenceLeague />} />
             <Route path="/notificaties" element={<Notifications />} />
             <Route path="/forum" element={<Forum />} />
-            <Route path="/partners" element={<Partners />} />
-            <Route path="/partner/:partnerId" element={<PartnerDetail />} />
             <Route path="/wedstrijd/:fixtureId" element={<WedstrijdDetail />} />
             <Route path="/speler/:playerId" element={<SpelerProfiel />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
