@@ -1,6 +1,6 @@
 
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { Bell, MessageSquare, Info } from "lucide-react";
+import { Bell, MessageSquare, Info, Users, Trophy } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 interface MoreSheetProps {
@@ -11,6 +11,18 @@ export const MoreSheet = ({ children }: MoreSheetProps) => {
   const navigate = useNavigate();
 
   const menuItems = [
+    {
+      icon: Users,
+      label: "Spelers",
+      path: "/spelers",
+      description: "Statistieken en profielen van AZ spelers"
+    },
+    {
+      icon: Trophy,
+      label: "Conference League",
+      path: "/conference-league",
+      description: "Stand en programma Conference League"
+    },
     {
       icon: MessageSquare,
       label: "Forum",
