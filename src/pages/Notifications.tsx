@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { X, Trash2, CheckCheck, Bell, Goal, Newspaper, Trophy, AlertTriangle, Instagram, Twitter } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -10,6 +9,8 @@ import { formatDistanceToNow } from 'date-fns';
 import { nl } from 'date-fns/locale';
 import { Header } from '@/components/Header';
 import { BottomNavigation } from '@/components/BottomNavigation';
+import { useWordPressAuth } from '@/contexts/WordPressAuthContext';
+import NotificationSettingsCTA from '@/components/NotificationSettingsCTA';
 
 const Notifications = () => {
   const navigate = useNavigate();
@@ -17,6 +18,7 @@ const Notifications = () => {
   const markAsRead = useMarkAsRead();
   const clearAll = useClearAllNotifications();
   const deleteNotification = useDeleteNotification();
+  const { isAuthenticated } = useWordPressAuth();
 
   const handleNotificationClick = async (notification: Notification) => {
     // Mark as read
@@ -86,6 +88,13 @@ const Notifications = () => {
             Notificaties
           </h1>
         </div>
+
+        {/* CTA for non-authenticated users */}
+        {!isAuthenticated && (
+          <div className="bg-white dark:bg-gray-900 border-b border-premium-gray-200 dark:border-gray-700 px-6 py-4">
+            <NotificationSettingsCTA />
+          </div>
+        )}
 
         {/* Status Bar */}
         {notifications.length > 0 && (
