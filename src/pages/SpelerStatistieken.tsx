@@ -27,7 +27,6 @@ const SpelerStatistieken = () => {
       <Header />
       
       <div className="px-4 pb-20 pt-6">
-        {/* Player Statistics */}
         <div>
           <AZPlayerStats teamId={teamId} isLoadingTeamId={teamIdLoading} />
         </div>

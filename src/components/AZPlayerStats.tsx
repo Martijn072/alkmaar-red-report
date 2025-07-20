@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
@@ -8,7 +7,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Calendar } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Calendar, Info } from "lucide-react";
+import { getCurrentActiveSeason, getSeasonOptions } from '@/utils/seasonUtils';
 
 interface PlayerStatistics {
   player: {
@@ -134,19 +135,7 @@ const translatePosition = (position: string): string => {
   return positionMap[position] || position;
 };
 
-const currentSeason = '2025';
-const seasons = [
-  { value: '2025', label: '2025-2026' },
-  { value: '2024', label: '2024-2025' },
-  { value: '2023', label: '2023-2024' },
-  { value: '2022', label: '2022-2023' },
-  { value: '2021', label: '2021-2022' },
-  { value: '2020', label: '2020-2021' },
-  { value: '2019', label: '2019-2020' },
-  { value: '2018', label: '2018-2019' },
-  { value: '2017', label: '2017-2018' },
-  { value: '2016', label: '2016-2017' },
-];
+const seasons = getSeasonOptions();
 
 interface AZPlayerStatsProps {
   teamId: number | null;
@@ -155,7 +144,8 @@ interface AZPlayerStatsProps {
 
 export const AZPlayerStats = ({ teamId, isLoadingTeamId }: AZPlayerStatsProps) => {
   const navigate = useNavigate();
-  const [selectedSeason, setSelectedSeason] = useState<string>(currentSeason);
+  const seasonInfo = getCurrentActiveSeason();
+  const [selectedSeason, setSelectedSeason] = useState<string>(seasonInfo.currentSeason);
   const [sortBy, setSortBy] = useState<'goals' | 'assists' | 'minutes' | 'cards'>('goals');
 
   const { data, isLoading, error, refetch } = useQuery({
@@ -276,6 +266,7 @@ export const AZPlayerStats = ({ teamId, isLoadingTeamId }: AZPlayerStatsProps) =
   }
 
   const sortedPlayers = getSortedPlayers();
+  const isCurrentSeasonSelected = selectedSeason === seasonInfo.currentSeason;
 
   return (
     <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm">
@@ -308,6 +299,16 @@ export const AZPlayerStats = ({ teamId, isLoadingTeamId }: AZPlayerStatsProps) =
               </Select>
             </div>
           </div>
+          
+          {/* Season status indicator */}
+          {isCurrentSeasonSelected && seasonInfo.isPreviousSeason && (
+            <div className="flex items-center gap-2 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+              <Info className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+              <span className="text-sm text-blue-700 dark:text-blue-300">
+                {seasonInfo.displaySeason}
+              </span>
+            </div>
+          )}
           
           {/* Sort buttons */}
           <div className="flex gap-2 flex-wrap">
