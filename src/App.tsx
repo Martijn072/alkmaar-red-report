@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { DarkModeProvider } from "@/contexts/DarkModeContext";
+import { WordPressAuthProvider } from "@/contexts/WordPressAuthContext";
 import Index from "./pages/Index";
 import News from "./pages/News";
 import ArticleDetail from "./pages/ArticleDetail";
@@ -19,17 +20,21 @@ import SpelerProfiel from "./pages/SpelerProfiel";
 import Forum from "./pages/Forum";
 import Over from "./pages/Over";
 import NotFound from "./pages/NotFound";
+import { Auth } from "./pages/Auth";
+import { ProtectedRoute } from "./components/auth/ProtectedRoute";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <DarkModeProvider>
-      <TooltipProvider>
+      <WordPressAuthProvider>
+        <TooltipProvider>
         <Toaster />
         <Sonner />
         <BrowserRouter>
           <Routes>
+            <Route path="/auth" element={<Auth />} />
             <Route path="/" element={<Index />} />
             <Route path="/nieuws" element={<News />} />
             <Route path="/artikel/:id" element={<ArticleDetail />} />
@@ -48,6 +53,7 @@ const App = () => (
           </Routes>
         </BrowserRouter>
       </TooltipProvider>
+      </WordPressAuthProvider>
     </DarkModeProvider>
   </QueryClientProvider>
 );

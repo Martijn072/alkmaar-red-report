@@ -6,6 +6,7 @@ import { useDarkMode } from "@/contexts/DarkModeContext";
 import { HeaderMenu } from "./HeaderMenu";
 import { SearchOverlay } from "./SearchOverlay";
 import { useNotifications } from "@/hooks/useNotifications";
+import { useWordPressAuth } from "@/contexts/WordPressAuthContext";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,6 +22,7 @@ export const Header = () => {
   const { isDarkMode, toggleDarkMode } = useDarkMode();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const { unreadCount } = useNotifications();
+  const { user, isAuthenticated, logout } = useWordPressAuth();
   const isMobile = useIsMobile();
 
   const handleLogoClick = () => {
@@ -35,6 +37,14 @@ export const Header = () => {
     navigate("/notificaties");
   };
 
+  const handleLogin = () => {
+    navigate("/auth");
+  };
+
+  const handleLogout = async () => {
+    await logout();
+    navigate("/");
+  };
 
   return (
     <>      
@@ -52,9 +62,43 @@ export const Header = () => {
               />
             </div>
 
-            {/* Mobile Actions - Notifications, dark mode, and hamburger menu */}
+            {/* Mobile Actions - User avatar, notifications, dark mode, and hamburger menu */}
             {isMobile ? (
               <div className="flex items-center gap-3">
+                {/* User Avatar on Mobile */}
+                {isAuthenticated && user && (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 rounded-full p-0"
+                      >
+                        {user.avatar_url ? (
+                          <img
+                            src={user.avatar_url}
+                            alt={user.display_name}
+                            className="h-8 w-8 rounded-full object-cover"
+                          />
+                        ) : (
+                          <User className="h-5 w-5" />
+                        )}
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-48">
+                      <div className="flex flex-col space-y-1 p-2">
+                        <p className="text-sm font-medium">{user.display_name}</p>
+                        <p className="text-xs text-muted-foreground">{user.email}</p>
+                      </div>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={handleLogout}>
+                        <LogOut className="w-4 h-4 mr-2" />
+                        Uitloggen
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                )}
+                
                 {/* Notifications */}
                 <button 
                   onClick={handleNotificationClick}
@@ -118,6 +162,48 @@ export const Header = () => {
                     <Moon className="w-5 h-5 text-premium-gray-600 dark:text-gray-300" />
                   )}
                 </button>
+                {/* User Profile / Login */}
+                {isAuthenticated && user ? (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-10 w-10 rounded-full"
+                      >
+                        {user.avatar_url ? (
+                          <img
+                            src={user.avatar_url}
+                            alt={user.display_name}
+                            className="h-8 w-8 rounded-full object-cover"
+                          />
+                        ) : (
+                          <User className="h-5 w-5" />
+                        )}
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-48">
+                      <div className="flex flex-col space-y-1 p-2">
+                        <p className="text-sm font-medium">{user.display_name}</p>
+                        <p className="text-xs text-muted-foreground">{user.email}</p>
+                      </div>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={handleLogout}>
+                        <LogOut className="w-4 h-4 mr-2" />
+                        Uitloggen
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                ) : (
+                  <Button
+                    onClick={handleLogin}
+                    variant="ghost"
+                    size="sm"
+                    className="text-premium-gray-600 dark:text-gray-300 hover:text-az-red dark:hover:text-az-red"
+                  >
+                    Inloggen
+                  </Button>
+                )}
                 <HeaderMenu />
               </div>
             )}

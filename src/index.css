@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -294,116 +293,74 @@
     @apply bg-az-red;
   }
 
-  /* ENHANCED DISQUS DARK MODE STYLING WITH MULTIPLE APPROACHES */
+  /* ENHANCED DISQUS DARK MODE STYLING WITH FILTER APPROACH */
   
-  /* Primary approach: Advanced CSS filter combinations for better readability */
-  .dark .disqus-enhanced-dark iframe {
-    /* Method 1: Improved inversion with warmer tones */
-    filter: invert(0.95) hue-rotate(180deg) brightness(1.1) contrast(0.9) saturate(1.2) !important;
+  /* Primary approach: CSS filter inversion for dark mode */
+  .dark .disqus-inverted iframe {
+    filter: invert(1) hue-rotate(180deg) !important;
     background-color: #1f2937 !important;
-    border-radius: 8px !important;
-    transition: filter 0.3s ease !important;
   }
   
-  /* Alternative method: Sepia-based dark mode for warmer feel */
-  .dark .disqus-sepia-dark iframe {
-    filter: sepia(0.2) hue-rotate(180deg) invert(0.9) brightness(1.15) contrast(0.85) !important;
-    background-color: #1f2937 !important;
-    border-radius: 8px !important;
-  }
-  
-  /* Method 3: High contrast dark mode */
-  .dark .disqus-high-contrast iframe {
-    filter: invert(1) hue-rotate(180deg) brightness(1.2) contrast(1.1) !important;
-    background-color: #111827 !important;
-    border-radius: 8px !important;
-  }
-  
-  /* Enhanced container styling for better integration */
-  .dark .disqus-enhanced-dark,
-  .dark .disqus-sepia-dark,
-  .dark .disqus-high-contrast {
-    background: linear-gradient(135deg, #1f2937 0%, #111827 100%) !important;
-    border-radius: 12px !important;
-    padding: 8px !important;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
-    border: 1px solid #374151 !important;
+  /* Secondary approach: Direct styling attempts */
+  .dark .disqus-dark-mode iframe,
+  .dark .disqus-dark-theme iframe {
+    background-color: #1a171b !important;
+    color: #ffffff !important;
   }
 
-  /* Preserve images and media from being overly filtered */
-  .dark .disqus-enhanced-dark img,
-  .dark .disqus-enhanced-dark video,
-  .dark .disqus-sepia-dark img,
-  .dark .disqus-sepia-dark video,
-  .dark .disqus-high-contrast img,
-  .dark .disqus-high-contrast video {
-    filter: invert(1) hue-rotate(180deg) brightness(0.9) !important;
-    border-radius: 4px !important;
-  }
-
-  /* Fallback: Traditional dark mode styling */
-  .dark .disqus-fallback {
+  /* Force dark mode styling on Disqus container */
+  .dark .disqus-dark-mode,
+  .dark .disqus-dark-theme {
     background-color: #1f2937 !important;
     color: #ffffff !important;
-    border-radius: 12px !important;
-    padding: 12px !important;
-    border: 1px solid #374151 !important;
   }
 
-  .dark .disqus-fallback iframe {
-    background-color: #1f2937 !important;
-    border-radius: 8px !important;
-    border: 1px solid #4b5563 !important;
-  }
-
-  /* Enhanced targeting for better text readability */
+  /* Enhanced targeting for Disqus content */
   .dark #disqus_thread {
     background-color: #1f2937 !important;
     color: #ffffff !important;
-    border-radius: 12px !important;
-    padding: 8px !important;
   }
 
-  /* Improved button and form styling within Disqus */
+  /* Attempt to style iframe content (limited by CORS) */
+  .dark #disqus_thread iframe {
+    background-color: #1f2937 !important;
+  }
+
+  /* Filter-based approach for the entire Disqus container in dark mode */
+  .dark .disqus-inverted {
+    filter: invert(0.9) hue-rotate(180deg);
+    background-color: #1f2937 !important;
+  }
+
+  /* Preserve certain elements from being inverted */
+  .dark .disqus-inverted img,
+  .dark .disqus-inverted video,
+  .dark .disqus-inverted [data-preserve-color] {
+    filter: invert(1) hue-rotate(180deg);
+  }
+
+  /* Alternative: Brightness and contrast adjustments */
+  .dark .disqus-dark-mode iframe {
+    filter: brightness(0.8) contrast(1.2) !important;
+  }
+
+  /* Ensure buttons and interactive elements remain functional */
   .dark #disqus_thread button,
   .dark #disqus_thread input,
   .dark #disqus_thread textarea {
     background-color: #374151 !important;
     color: #ffffff !important;
     border-color: #4b5563 !important;
-    border-radius: 6px !important;
   }
 
-  /* Enhanced link visibility */
+  /* Links should remain visible and functional */
   .dark #disqus_thread a {
-    color: #f87171 !important;
-    text-decoration: underline !important;
-  }
-
-  .dark #disqus_thread a:hover {
     color: #dc2626 !important;
   }
 
-  /* Loading state styling */
-  .dark .disqus-loading {
-    background: linear-gradient(90deg, #374151 25%, #4b5563 50%, #374151 75%) !important;
-    background-size: 200% 100% !important;
-    animation: loading-shimmer 1.5s infinite !important;
-    border-radius: 8px !important;
-    min-height: 200px !important;
-  }
-
-  @keyframes loading-shimmer {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
-  }
-
-  /* CSS custom properties for dynamic adjustments */
-  .dark {
-    --disqus-bg: #1f2937;
-    --disqus-text: #ffffff;
-    --disqus-border: #374151;
-    --disqus-accent: #f87171;
+  /* Fallback for when filter approach affects readability */
+  .dark .disqus-inverted * {
+    text-shadow: none !important;
   }
 }
 

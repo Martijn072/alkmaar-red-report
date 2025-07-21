@@ -6,8 +6,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
+import { useWordPressAuth } from "@/contexts/WordPressAuthContext";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { NavigationMenuItems } from "./header/NavigationMenuItems";
+import { AuthenticatedMenuItems } from "./header/AuthenticatedMenuItems";
 import { MobileMenuUtilities } from "./header/MobileMenuUtilities";
 
 interface HeaderMenuProps {
@@ -15,6 +17,7 @@ interface HeaderMenuProps {
 }
 
 export const HeaderMenu = ({ onSearchClick }: HeaderMenuProps) => {
+  const { isAuthenticated } = useWordPressAuth();
   const isMobile = useIsMobile();
 
   return (
@@ -39,6 +42,9 @@ export const HeaderMenu = ({ onSearchClick }: HeaderMenuProps) => {
 
         {/* Navigation items */}
         <NavigationMenuItems />
+        
+        {/* Authenticated user menu items */}
+        {isAuthenticated && <AuthenticatedMenuItems />}
       </DropdownMenuContent>
     </DropdownMenu>
   );

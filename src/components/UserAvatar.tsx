@@ -1,45 +1,36 @@
-
 import React from 'react';
-import { User } from 'lucide-react';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useWordPressAuth } from '@/contexts/WordPressAuthContext';
 
 interface UserAvatarProps {
   size?: 'sm' | 'md' | 'lg';
-  src?: string;
-  alt?: string;
   className?: string;
 }
 
-export const UserAvatar = ({ 
-  size = 'md', 
-  src, 
-  alt = 'User Avatar',
-  className = '' 
-}: UserAvatarProps) => {
+export const UserAvatar = ({ size = 'md', className }: UserAvatarProps) => {
+  const { user } = useWordPressAuth();
+
   const sizeClasses = {
-    sm: 'w-6 h-6',
-    md: 'w-8 h-8', 
-    lg: 'w-12 h-12'
+    sm: 'h-6 w-6 text-xs',
+    md: 'h-8 w-8 text-sm',
+    lg: 'h-12 w-12 text-base'
   };
 
-  const iconSizes = {
-    sm: 'w-3 h-3',
-    md: 'w-4 h-4',
-    lg: 'w-6 h-6'
-  };
+  if (!user) return null;
 
-  if (src) {
-    return (
-      <img
-        src={src}
-        alt={alt}
-        className={`${sizeClasses[size]} rounded-full object-cover ${className}`}
-      />
-    );
-  }
+  const initials = user.display_name
+    .split(' ')
+    .map(name => name[0])
+    .join('')
+    .toUpperCase()
+    .slice(0, 2);
 
   return (
-    <div className={`${sizeClasses[size]} rounded-full bg-premium-gray-200 dark:bg-gray-700 flex items-center justify-center ${className}`}>
-      <User className={`${iconSizes[size]} text-premium-gray-500 dark:text-gray-400`} />
-    </div>
+    <Avatar className={`${sizeClasses[size]} ${className}`}>
+      <AvatarImage src={user.avatar_url} alt={user.display_name} />
+      <AvatarFallback className="bg-primary text-primary-foreground">
+        {initials}
+      </AvatarFallback>
+    </Avatar>
   );
 };
