@@ -65,10 +65,10 @@ export const NextMatchWidget = () => {
 
   const matchDate = new Date(displayFixture.fixture.date);
   
-  // Get latest event for live matches
+  // Get latest event for live matches - only goals for homepage
   const latestEvent = events && events.length > 0 
     ? events
-        .filter(event => ['Goal', 'Card', 'subst'].includes(event.type))
+        .filter(event => event.type === 'Goal' && event.player?.name) // Only goals with valid player names
         .sort((a, b) => b.time.elapsed - a.time.elapsed)[0]
     : null;
 
@@ -92,15 +92,11 @@ export const NextMatchWidget = () => {
   const azTeam = isAZHome ? displayFixture.teams.home : displayFixture.teams.away;
   const opponentTeam = isAZHome ? displayFixture.teams.away : displayFixture.teams.home;
   
-  // Format event for display
+  // Format event for display - only goals for homepage
   const formatLatestEvent = (event: any) => {
-    if (!event) return null;
+    if (!event || !event.player?.name) return null;
     
-    const eventIcon = event.type === 'Goal' ? '⚽' : 
-                     event.type === 'Card' ? (event.detail.includes('Yellow') ? '🟨' : '🟥') : 
-                     '🔄';
-    
-    return `${eventIcon} ${event.player.name} ${event.time.elapsed}'`;
+    return `⚽ ${event.player.name} ${event.time.elapsed}'`;
   };
 
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
@@ -123,8 +119,8 @@ export const NextMatchWidget = () => {
         {/* Live Badge */}
         {isLive && (
           <div className="absolute top-2 right-2 z-10">
-            <div className="bg-az-red text-white rounded-full px-3 py-2 text-xs font-medium animate-pulse flex items-center gap-2">
-              <div className="w-2 h-2 bg-white rounded-full animate-ping"></div>
+            <div className="bg-green-700 text-white rounded-md px-2 py-1 text-xs font-medium animate-pulse flex items-center gap-1">
+              <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
               LIVE
             </div>
           </div>
