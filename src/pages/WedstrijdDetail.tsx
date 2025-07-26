@@ -148,6 +148,13 @@ const WedstrijdDetail = () => {
     });
   };
 
+  const translateLeagueName = (leagueName: string) => {
+    if (leagueName.toLowerCase().includes('friendlies') || leagueName.toLowerCase().includes('club friendlies')) {
+      return 'Vriendschappelijk';
+    }
+    return leagueName;
+  };
+
   const getStatusText = (status: string) => {
     switch (status) {
       case 'NS': return 'Te spelen';
@@ -273,10 +280,15 @@ const WedstrijdDetail = () => {
         {/* Match header */}
         <Card className="mb-6 bg-white dark:bg-gray-800 border border-premium-gray-200 dark:border-gray-700">
           <CardHeader className="text-center">
-            <div className="flex items-center justify-center gap-2 mb-2">
-              <Badge className="text-xs bg-premium-gray-100 text-premium-gray-700 dark:bg-gray-700 dark:text-gray-300 border-none">
-                {fixtureData.league.name}
-              </Badge>
+            {/* Competition name at top */}
+            <div className="mb-4">
+              <p className="text-sm text-premium-gray-600 dark:text-gray-400">
+                {translateLeagueName(fixtureData.league.name)}
+              </p>
+            </div>
+            
+            {/* Live indicator */}
+            <div className="flex items-center justify-center mb-4">
               <LiveEventIndicator 
                 status={fixtureData.fixture.status.short}
                 elapsed={fixtureData.fixture.status.elapsed}
@@ -329,22 +341,10 @@ const WedstrijdDetail = () => {
               </div>
             </div>
 
-            {/* Match info */}
-            <div className="space-y-2 text-sm text-premium-gray-600 dark:text-gray-400">
-              <div className="flex items-center justify-center gap-2">
-                <Calendar className="w-4 h-4" />
-                <span>{formatDate(fixtureData.fixture.date)}</span>
-              </div>
-              <div className="flex items-center justify-center gap-2">
-                <MapPin className="w-4 h-4" />
-                <span>{fixtureData.fixture.venue.name}, {fixtureData.fixture.venue.city}</span>
-              </div>
-              {fixtureData.fixture.referee && (
-                <div className="flex items-center justify-center gap-2">
-                  <Users className="w-4 h-4" />
-                  <span>Scheidsrechter: {fixtureData.fixture.referee}</span>
-                </div>
-              )}
+            {/* Basic match info - only date/time */}
+            <div className="flex items-center justify-center gap-2 text-sm text-premium-gray-600 dark:text-gray-400">
+              <Calendar className="w-4 h-4" />
+              <span>{formatDate(fixtureData.fixture.date)}</span>
             </div>
           </CardHeader>
         </Card>

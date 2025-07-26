@@ -123,7 +123,7 @@ export const NextMatchWidget = () => {
         {/* Live Badge */}
         {isLive && (
           <div className="absolute top-2 right-2 z-10">
-            <div className="bg-az-red text-white rounded-full px-2 py-1 text-xs font-medium animate-pulse flex items-center gap-1">
+            <div className="bg-az-red text-white rounded-full px-3 py-2 text-xs font-medium animate-pulse flex items-center gap-2">
               <div className="w-2 h-2 bg-white rounded-full animate-ping"></div>
               LIVE
             </div>
