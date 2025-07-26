@@ -149,7 +149,10 @@ const WedstrijdDetail = () => {
   };
 
   const translateLeagueName = (leagueName: string) => {
-    if (leagueName.toLowerCase().includes('friendlies') || leagueName.toLowerCase().includes('club friendlies')) {
+    const lowerName = leagueName.toLowerCase();
+    if (lowerName.includes('friendlies') || 
+        lowerName.includes('friendly') || 
+        lowerName.includes('vriendschappelijk')) {
       return 'Vriendschappelijk';
     }
     return leagueName;
