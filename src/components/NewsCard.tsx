@@ -19,10 +19,9 @@ interface Article {
 
 interface NewsCardProps {
   article: Article;
-  variant?: 'default' | 'hero' | 'medium' | 'small';
 }
 
-export const NewsCard = ({ article, variant = 'default' }: NewsCardProps) => {
+export const NewsCard = ({ article }: NewsCardProps) => {
   const navigate = useNavigate();
   const { isOnline } = useOfflineDetection();
   const [isCached, setIsCached] = useState(false);
@@ -49,59 +48,10 @@ export const NewsCard = ({ article, variant = 'default' }: NewsCardProps) => {
     setIsCached(true);
   };
 
-  const getCardClasses = () => {
-    const baseClasses = "card-premium dark:bg-gray-800 dark:border-gray-700 overflow-hidden animate-slide-up w-full max-w-full group transform transition-all duration-300 hover:scale-[1.02] hover:shadow-xl"
-    
-    switch (variant) {
-      case 'hero':
-        return `${baseClasses} lg:flex lg:items-center lg:gap-6`
-      default:
-        return baseClasses
-    }
-  }
-
-  const getImageClasses = () => {
-    switch (variant) {
-      case 'hero':
-        return "relative aspect-[16/9] lg:aspect-[4/3] overflow-hidden cursor-pointer w-full lg:w-1/2"
-      default:
-        return "relative aspect-[16/9] overflow-hidden cursor-pointer w-full"
-    }
-  }
-
-  const getContentClasses = () => {
-    switch (variant) {
-      case 'hero':
-        return "p-6 lg:w-1/2 lg:p-8 w-full max-w-full"
-      default:
-        return "p-6 w-full max-w-full"
-    }
-  }
-
-  const getTitleClasses = () => {
-    switch (variant) {
-      case 'hero':
-        return "headline-premium text-headline-lg lg:text-headline-xl mb-3 lg:mb-4 hover:text-az-red transition-colors duration-300 cursor-pointer break-words text-az-black dark:text-white group-hover:text-az-red font-bold leading-tight"
-      default:
-        return "headline-premium text-headline-md mb-3 hover:text-az-red transition-colors duration-300 cursor-pointer break-words text-az-black dark:text-white group-hover:text-az-red"
-    }
-  }
-
-  const getExcerptClasses = () => {
-    switch (variant) {
-      case 'hero':
-        return "body-premium text-body-lg lg:text-body-lg text-premium-gray-600 dark:text-gray-300 mb-4 lg:mb-6 break-words leading-relaxed"
-      case 'small':
-        return "body-premium text-body-sm text-premium-gray-600 dark:text-gray-300 mb-3 line-clamp-2 break-words"
-      default:
-        return "body-premium text-body-md text-premium-gray-600 dark:text-gray-300 mb-4 line-clamp-2 break-words"
-    }
-  }
-
   return (
-    <article className={getCardClasses()}>
+    <article className="card-premium dark:bg-gray-800 dark:border-gray-700 overflow-hidden animate-slide-up w-full max-w-full group transform transition-all duration-300 hover:scale-[1.02] hover:shadow-xl">
       {/* Image */}
-      <div className={getImageClasses()} onClick={handleTitleClick}>
+      <div className="relative aspect-[16/9] overflow-hidden cursor-pointer w-full" onClick={handleTitleClick}>
         <img 
           src={article.imageUrl} 
           alt={article.title}
@@ -121,15 +71,15 @@ export const NewsCard = ({ article, variant = 'default' }: NewsCardProps) => {
       </div>
 
       {/* Content */}
-      <div className={getContentClasses()}>
+      <div className="p-6 w-full max-w-full">
         <h2 
-          className={getTitleClasses()}
+          className="headline-premium text-headline-md mb-3 hover:text-az-red transition-colors duration-300 cursor-pointer break-words text-az-black dark:text-white group-hover:text-az-red"
           onClick={handleTitleClick}
         >
           {article.title}
         </h2>
         
-        <p className={getExcerptClasses()}>
+        <p className="body-premium text-body-md text-premium-gray-600 dark:text-gray-300 mb-4 line-clamp-2 break-words">
           {article.excerpt}
         </p>
 
@@ -151,8 +101,10 @@ export const NewsCard = ({ article, variant = 'default' }: NewsCardProps) => {
             <span className="whitespace-nowrap">{article.publishedAt}</span>
           </div>
         </div>
-        
-        {/* Interaction strip */}
+      </div>
+      
+      {/* Interaction strip */}
+      <div className="px-6 pb-4 w-full max-w-full">
         <div className="flex items-center justify-between pt-4 border-t border-premium-gray-100 dark:border-gray-700">
           <button 
             onClick={handleReadMore}
