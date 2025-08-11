@@ -293,22 +293,6 @@
   ::-webkit-scrollbar-thumb:hover {
     @apply bg-az-red;
   }
-
-  /* OPTIMIZED DISQUS DARK MODE - Clean and effective approach */
-  .dark .disqus-invert {
-    background-color: #1f2937 !important;
-  }
-
-  .dark .disqus-invert iframe {
-    filter: invert(0.9) hue-rotate(180deg) saturate(0.8) !important;
-    background-color: #1f2937 !important;
-  }
-
-  /* Preserve images and certain elements from being inverted */
-  .dark .disqus-invert iframe img,
-  .dark .disqus-invert iframe [data-preserve-color] {
-    filter: invert(1) hue-rotate(180deg) !important;
-  }
 }
 
 /* Premium button styles */
@@ -425,4 +409,3 @@
     outline-offset: 2px !important;
   }
 }
-
