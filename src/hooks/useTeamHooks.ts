@@ -33,5 +33,5 @@ export const useAZTeamId = () => {
 };
 
 // Export team statistics and fixtures hooks
-export { useTeamStatistics, useTeamFixtures, useTeamNextFixtures } from './useTeamStatistics';
-export { useTeamStatistics as useTeamStats, useTeamFixtures as useTeamMatches, useTeamNextFixtures as useTeamUpcoming } from './useTeamFixtures';
+export { useTeamStatistics } from './useTeamStatistics';
+export { useTeamFixtures, useTeamNextFixtures } from './useTeamFixtures';

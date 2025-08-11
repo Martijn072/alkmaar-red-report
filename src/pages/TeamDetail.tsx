@@ -2,7 +2,8 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { BottomNavigation } from "@/components/BottomNavigation";
-import { useTeamStatistics, useTeamFixtures, useTeamNextFixtures } from "@/hooks/useTeamStatistics";
+import { useTeamStatistics } from "@/hooks/useTeamStatistics";
+import { useTeamFixtures, useTeamNextFixtures } from "@/hooks/useTeamFixtures";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
