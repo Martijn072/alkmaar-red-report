@@ -19,7 +19,7 @@ import WedstrijdDetail from "./pages/WedstrijdDetail";
 import JongAZ from "./pages/JongAZ";
 import Forum from "./pages/Forum";
 import Over from "./pages/Over";
-import Auth from "./pages/Auth";
+import { Auth } from "./pages/Auth";
 import Notifications from "./pages/Notifications";
 import NotificationSettings from "./pages/NotificationSettings";
 import NotFound from "./pages/NotFound";
