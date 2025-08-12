@@ -37,15 +37,28 @@ export const useLeagueIdByName = (country: string, leagueName: string) => {
       
       console.log('📊 Leagues API Response:', response);
       
-      // Find the league by name (case insensitive)
-      const league = response.response.find(item => 
-        item.name.toLowerCase().includes(leagueName.toLowerCase()) ||
-        item.name.toLowerCase().includes('eerste divisie') ||
-        item.name.toLowerCase().includes('keuken kampioen divisie')
+      // Filter leagues strictly by country and match robustly by name
+      const leaguesInCountry = (response.response || []).filter(item => 
+        item?.country?.name?.toLowerCase() === country.toLowerCase()
       );
+
+      const normalize = (s: string) => s.toLowerCase().replace(/[^a-z]/g, '');
+      const targets = ['eerstedivisie', 'keukenkampioendivisie'];
+
+      const league = leaguesInCountry.find(item => {
+        const name = normalize(item.name);
+        return targets.some(t => name.includes(t));
+      });
       
-      const leagueId = league ? league.id : null;
-      const foundName = league ? league.name : null;
+      let leagueId = league ? league.id : null;
+      let foundName = league ? league.name : null;
+
+      // Fallback to known ID if API doesn't return the league for some reason
+      if (!leagueId && country.toLowerCase() === 'netherlands') {
+        console.warn('⚠️ Eerste Divisie not found via API, falling back to static ID 94');
+        leagueId = 94; // API-Football ID for Eerste Divisie
+        foundName = 'Eerste Divisie';
+      }
       
       console.log(`🆔 League found: "${foundName}" with ID: ${leagueId}`);
       
