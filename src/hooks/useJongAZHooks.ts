@@ -23,7 +23,14 @@ export const useJongAZTeamId = () => {
         item.team.name.toLowerCase().includes('az')
       );
       
-      const teamId = jongAZTeam ? jongAZTeam.team.id : null;
+      let teamId = jongAZTeam ? jongAZTeam.team.id : null;
+      
+      // Fallback to known ID if API doesn't return Jong AZ for some reason
+      if (!teamId) {
+        console.warn('⚠️ Jong AZ not found via API, falling back to static ID 418');
+        teamId = 418; // API-Football ID for Jong AZ
+      }
+      
       console.log('🆔 Jong AZ Team ID found:', teamId);
       
       return teamId;

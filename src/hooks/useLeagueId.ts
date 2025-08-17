@@ -55,9 +55,9 @@ export const useLeagueIdByName = (country: string, leagueName: string) => {
 
       // Fallback to known ID if API doesn't return the league for some reason
       if (!leagueId && country.toLowerCase() === 'netherlands') {
-        console.warn('⚠️ Eerste Divisie not found via API, falling back to static ID 94');
-        leagueId = 94; // API-Football ID for Eerste Divisie
-        foundName = 'Eerste Divisie';
+        console.warn('⚠️ Eerste Divisie not found via API, falling back to static ID 89');
+        leagueId = 89; // API-Football ID for Keuken Kampioen Divisie (Eerste Divisie)
+        foundName = 'Keuken Kampioen Divisie';
       }
       
       console.log(`🆔 League found: "${foundName}" with ID: ${leagueId}`);
