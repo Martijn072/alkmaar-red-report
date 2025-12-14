@@ -1,7 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useEuropeanParticipation } from "@/hooks/useEuropeanParticipation";
 import { useAZTeamId } from "@/hooks/useFootballApi";
@@ -73,7 +72,7 @@ export const ConferenceLeagueStandings = () => {
   if (error) {
     return (
       <div className="text-center py-8">
-        <p className="text-premium-gray-600 dark:text-gray-300 mb-4">
+        <p className="text-muted-foreground mb-4">
           Fout bij het laden van de Conference League stand
         </p>
         <button 
@@ -103,26 +102,26 @@ export const ConferenceLeagueStandings = () => {
     <div>
       {allStandings.length === 0 ? (
         <div className="text-center py-8">
-          <p className="text-premium-gray-600 dark:text-gray-300">
+          <p className="text-muted-foreground">
             Geen Conference League poulefase data beschikbaar
           </p>
         </div>
       ) : (
-        <div className="overflow-x-auto bg-white dark:bg-gray-800">
+        <div className="overflow-x-auto bg-card">
           <Table>
             <TableHeader>
-              <TableRow className="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
-                <TableHead className="w-12 text-gray-900 dark:text-gray-100 font-semibold">#</TableHead>
-                <TableHead className="text-gray-900 dark:text-gray-100 font-semibold">Team</TableHead>
-                <TableHead className="text-center w-12 text-gray-900 dark:text-gray-100 font-semibold">Wed</TableHead>
-                <TableHead className="text-center w-12 text-gray-900 dark:text-gray-100 font-semibold">W</TableHead>
-                <TableHead className="text-center w-12 text-gray-900 dark:text-gray-100 font-semibold">G</TableHead>
-                <TableHead className="text-center w-12 text-gray-900 dark:text-gray-100 font-semibold">V</TableHead>
-                <TableHead className="text-center w-16 text-gray-900 dark:text-gray-100 font-semibold">Doelpunten</TableHead>
-                <TableHead className="text-center w-12 text-gray-900 dark:text-gray-100 font-semibold">Ptn</TableHead>
+              <TableRow className="hover:bg-muted/50 border-b border-border">
+                <TableHead className="w-12 text-foreground font-semibold">#</TableHead>
+                <TableHead className="text-foreground font-semibold">Team</TableHead>
+                <TableHead className="text-center w-12 text-foreground font-semibold">Wed</TableHead>
+                <TableHead className="text-center w-12 text-foreground font-semibold">W</TableHead>
+                <TableHead className="text-center w-12 text-foreground font-semibold">G</TableHead>
+                <TableHead className="text-center w-12 text-foreground font-semibold">V</TableHead>
+                <TableHead className="text-center w-16 text-foreground font-semibold">Doelpunten</TableHead>
+                <TableHead className="text-center w-12 text-foreground font-semibold">Ptn</TableHead>
               </TableRow>
             </TableHeader>
-            <TableBody className="bg-white dark:bg-gray-800">
+            <TableBody>
               {allStandings.map((standing) => {
                 const isAZ = standing.team.name.toLowerCase().includes('az') && 
                            standing.team.name.toLowerCase().includes('alkmaar');
@@ -130,10 +129,10 @@ export const ConferenceLeagueStandings = () => {
                 return (
                   <TableRow 
                     key={`${standing.group}-${standing.team.id}`}
-                    className={isAZ ? 'bg-az-red/10 dark:bg-az-red/20 border-b border-az-red/20 dark:border-az-red/30 hover:bg-az-red/15 dark:hover:bg-az-red/25' : 'bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 border-b border-gray-100 dark:border-gray-600'}
+                    className={isAZ ? 'bg-az-red/10 border-b border-az-red/20 hover:bg-az-red/15' : 'hover:bg-muted/50 border-b border-border'}
                   >
                     <TableCell className="font-medium">
-                      <span className={isAZ ? 'text-az-red font-bold' : 'text-gray-900 dark:text-gray-100'}>
+                      <span className={isAZ ? 'text-az-red font-bold' : 'text-foreground'}>
                         {standing.rank}
                       </span>
                     </TableCell>
@@ -144,38 +143,38 @@ export const ConferenceLeagueStandings = () => {
                           alt={standing.team.name}
                           className="w-6 h-6 object-contain"
                         />
-                        <span className={`hidden sm:block font-medium ${isAZ ? 'text-az-red font-bold' : 'text-az-black dark:text-gray-100'}`}>
+                        <span className={`hidden sm:block font-medium ${isAZ ? 'text-az-red font-bold' : 'text-foreground'}`}>
                           {standing.team.name}
                         </span>
                       </div>
                     </TableCell>
                     <TableCell className="text-center">
-                      <span className={isAZ ? 'text-az-red font-bold' : 'text-gray-900 dark:text-gray-100'}>
+                      <span className={isAZ ? 'text-az-red font-bold' : 'text-foreground'}>
                         {standing.all.played}
                       </span>
                     </TableCell>
                     <TableCell className="text-center">
-                      <span className={isAZ ? 'text-az-red font-bold' : 'text-gray-900 dark:text-gray-100'}>
+                      <span className={isAZ ? 'text-az-red font-bold' : 'text-foreground'}>
                         {standing.all.win}
                       </span>
                     </TableCell>
                     <TableCell className="text-center">
-                      <span className={isAZ ? 'text-az-red font-bold' : 'text-gray-900 dark:text-gray-100'}>
+                      <span className={isAZ ? 'text-az-red font-bold' : 'text-foreground'}>
                         {standing.all.draw}
                       </span>
                     </TableCell>
                     <TableCell className="text-center">
-                      <span className={isAZ ? 'text-az-red font-bold' : 'text-gray-900 dark:text-gray-100'}>
+                      <span className={isAZ ? 'text-az-red font-bold' : 'text-foreground'}>
                         {standing.all.lose}
                       </span>
                     </TableCell>
                     <TableCell className="text-center">
-                      <span className={isAZ ? 'text-az-red font-bold' : 'text-gray-900 dark:text-gray-100'}>
+                      <span className={isAZ ? 'text-az-red font-bold' : 'text-foreground'}>
                         {standing.all.goals.for}-{standing.all.goals.against}
                       </span>
                     </TableCell>
                     <TableCell className="text-center">
-                      <span className={`font-bold ${isAZ ? 'text-az-red' : 'text-gray-900 dark:text-gray-100'}`}>
+                      <span className={`font-bold ${isAZ ? 'text-az-red' : 'text-foreground'}`}>
                         {standing.points}
                       </span>
                     </TableCell>

@@ -7,7 +7,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
 import { Calendar, Info } from "lucide-react";
 import { getCurrentActiveSeason, getSeasonOptions } from '@/utils/seasonUtils';
 
@@ -159,12 +158,11 @@ export const AZPlayerStats = ({ teamId, isLoadingTeamId }: AZPlayerStatsProps) =
       
       console.log(`👥 Fetching AZ player statistics for season ${selectedSeason}...`);
       
-      // Fetch all pages
       do {
         const response: FootballApiResponse<PlayerStatistics> = await callFootballApi('/players', {
           team: teamId.toString(),
           season: selectedSeason,
-          league: '88', // Eredivisie
+          league: '88',
           page: currentPage.toString()
         });
         
@@ -180,7 +178,6 @@ export const AZPlayerStats = ({ teamId, isLoadingTeamId }: AZPlayerStatsProps) =
       
       console.log(`✅ Total players fetched: ${allPlayers.length}`);
       
-      // Filter for active players with statistics
       const activePlayers = allPlayers.filter(player => {
         const stats = player.statistics[0];
         return stats && (
@@ -193,7 +190,7 @@ export const AZPlayerStats = ({ teamId, isLoadingTeamId }: AZPlayerStatsProps) =
       return activePlayers;
     },
     enabled: !!teamId,
-    staleTime: 1000 * 60 * 30, // Cache for 30 minutes
+    staleTime: 1000 * 60 * 30,
     retry: 2,
     retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 30000),
   });
@@ -227,13 +224,13 @@ export const AZPlayerStats = ({ teamId, isLoadingTeamId }: AZPlayerStatsProps) =
 
   if (error) {
     return (
-      <Card className="bg-white dark:bg-gray-800 border border-premium-gray-200 dark:border-gray-700 shadow-sm">
+      <Card className="card-premium">
         <CardHeader>
-          <CardTitle className="text-az-black dark:text-white">Speler Statistieken</CardTitle>
+          <CardTitle className="text-foreground">Speler Statistieken</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="text-center py-8">
-            <p className="text-premium-gray-600 dark:text-gray-300 mb-4">
+            <p className="text-muted-foreground mb-4">
               Fout bij het laden van speler statistieken
             </p>
             <button 
@@ -250,9 +247,9 @@ export const AZPlayerStats = ({ teamId, isLoadingTeamId }: AZPlayerStatsProps) =
 
   if (isLoading || isLoadingTeamId) {
     return (
-      <Card className="bg-white dark:bg-gray-800 border border-premium-gray-200 dark:border-gray-700 shadow-sm">
+      <Card className="card-premium">
         <CardHeader>
-          <CardTitle className="text-az-black dark:text-white">Speler Statistieken</CardTitle>
+          <CardTitle className="text-foreground">Speler Statistieken</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
@@ -269,29 +266,20 @@ export const AZPlayerStats = ({ teamId, isLoadingTeamId }: AZPlayerStatsProps) =
   const isCurrentSeasonSelected = selectedSeason === seasonInfo.currentSeason;
 
   return (
-    <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm">
+    <Card className="card-premium">
       <CardHeader>
         <div className="flex flex-col space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <CardTitle className="text-az-black dark:text-white">AZ Speler Statistieken</CardTitle>
+            <CardTitle className="text-foreground">AZ Speler Statistieken</CardTitle>
             <div className="flex items-center gap-2">
-              <Calendar className="w-4 h-4 text-premium-gray-600 dark:text-gray-400" />
+              <Calendar className="w-4 h-4 text-muted-foreground" />
               <Select value={selectedSeason} onValueChange={setSelectedSeason}>
-                <SelectTrigger className="w-32 sm:w-40 bg-white dark:bg-gray-800 border-premium-gray-300 dark:border-gray-600 text-az-black dark:text-white focus:ring-2 focus:ring-az-red focus:border-az-red hover:bg-premium-gray-50 dark:hover:bg-gray-700">
+                <SelectTrigger className="w-32 sm:w-40">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent 
-                  className="bg-white dark:bg-gray-800 border-premium-gray-300 dark:border-gray-600 z-50" 
-                  position="popper"
-                  side="bottom"
-                  align="end"
-                >
+                <SelectContent>
                   {seasons.map((season) => (
-                    <SelectItem 
-                      key={season.value} 
-                      value={season.value}
-                      className="text-az-black dark:text-white hover:bg-premium-gray-50 dark:hover:bg-gray-700 focus:bg-az-red focus:text-white"
-                    >
+                    <SelectItem key={season.value} value={season.value}>
                       {season.label}
                     </SelectItem>
                   ))}
@@ -300,23 +288,21 @@ export const AZPlayerStats = ({ teamId, isLoadingTeamId }: AZPlayerStatsProps) =
             </div>
           </div>
           
-          {/* Season status indicator */}
           {isCurrentSeasonSelected && seasonInfo.isPreviousSeason && (
-            <div className="flex items-center gap-2 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
-              <Info className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-              <span className="text-sm text-blue-700 dark:text-blue-300">
+            <div className="flex items-center gap-2 p-3 bg-blue-500/10 rounded-lg border border-blue-500/20">
+              <Info className="w-4 h-4 text-blue-500" />
+              <span className="text-sm text-blue-600 dark:text-blue-400">
                 {seasonInfo.displaySeason}
               </span>
             </div>
           )}
           
-          {/* Sort buttons */}
           <div className="flex gap-2 flex-wrap">
             <Button
               variant={sortBy === 'goals' ? 'default' : 'outline'}
               size="sm"
               onClick={() => setSortBy('goals')}
-              className={sortBy === 'goals' ? 'bg-az-red hover:bg-az-red/90 text-white border-az-red' : 'bg-white dark:bg-gray-800 border-premium-gray-300 hover:bg-premium-gray-50 dark:border-gray-600 dark:hover:bg-gray-700 text-premium-gray-600 dark:text-gray-300'}
+              className={sortBy === 'goals' ? 'bg-az-red hover:bg-az-red/90 text-white border-az-red' : ''}
             >
               Doelpunten
             </Button>
@@ -324,7 +310,7 @@ export const AZPlayerStats = ({ teamId, isLoadingTeamId }: AZPlayerStatsProps) =
               variant={sortBy === 'assists' ? 'default' : 'outline'}
               size="sm"
               onClick={() => setSortBy('assists')}
-              className={sortBy === 'assists' ? 'bg-az-red hover:bg-az-red/90 text-white border-az-red' : 'bg-white dark:bg-gray-800 border-premium-gray-300 hover:bg-premium-gray-50 dark:border-gray-600 dark:hover:bg-gray-700 text-premium-gray-600 dark:text-gray-300'}
+              className={sortBy === 'assists' ? 'bg-az-red hover:bg-az-red/90 text-white border-az-red' : ''}
             >
               Assists
             </Button>
@@ -332,7 +318,7 @@ export const AZPlayerStats = ({ teamId, isLoadingTeamId }: AZPlayerStatsProps) =
               variant={sortBy === 'minutes' ? 'default' : 'outline'}
               size="sm"
               onClick={() => setSortBy('minutes')}
-              className={sortBy === 'minutes' ? 'bg-az-red hover:bg-az-red/90 text-white border-az-red' : 'bg-white dark:bg-gray-800 border-premium-gray-300 hover:bg-premium-gray-50 dark:border-gray-600 dark:hover:bg-gray-700 text-premium-gray-600 dark:text-gray-300'}
+              className={sortBy === 'minutes' ? 'bg-az-red hover:bg-az-red/90 text-white border-az-red' : ''}
             >
               Speelminuten
             </Button>
@@ -340,7 +326,7 @@ export const AZPlayerStats = ({ teamId, isLoadingTeamId }: AZPlayerStatsProps) =
               variant={sortBy === 'cards' ? 'default' : 'outline'}
               size="sm"
               onClick={() => setSortBy('cards')}
-              className={sortBy === 'cards' ? 'bg-az-red hover:bg-az-red/90 text-white border-az-red' : 'bg-white dark:bg-gray-800 border-premium-gray-300 hover:bg-premium-gray-50 dark:border-gray-600 dark:hover:bg-gray-700 text-premium-gray-600 dark:text-gray-300'}
+              className={sortBy === 'cards' ? 'bg-az-red hover:bg-az-red/90 text-white border-az-red' : ''}
             >
               Kaarten
             </Button>
@@ -350,10 +336,10 @@ export const AZPlayerStats = ({ teamId, isLoadingTeamId }: AZPlayerStatsProps) =
       <CardContent>
         {sortedPlayers.length === 0 ? (
           <div className="text-center py-8">
-            <p className="text-premium-gray-600 dark:text-gray-300">
+            <p className="text-muted-foreground">
               Geen speler statistieken beschikbaar voor seizoen {seasons.find(s => s.value === selectedSeason)?.label}
             </p>
-            <p className="text-sm text-premium-gray-500 dark:text-gray-400 mt-2">
+            <p className="text-sm text-muted-foreground/70 mt-2">
               Alleen spelers met speelminuten in het eerste elftal worden getoond.
             </p>
           </div>
@@ -361,16 +347,16 @@ export const AZPlayerStats = ({ teamId, isLoadingTeamId }: AZPlayerStatsProps) =
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
-                <TableRow className="hover:bg-transparent border-b border-gray-200 dark:border-gray-700">
-                  <TableHead className="text-az-black dark:text-white font-semibold">Speler</TableHead>
-                  <TableHead className="text-center text-az-black dark:text-white font-semibold">Pos</TableHead>
-                  <TableHead className="text-center text-az-black dark:text-white font-semibold">Wedst</TableHead>
-                  <TableHead className="text-center text-az-black dark:text-white font-semibold">Min</TableHead>
-                  <TableHead className="text-center text-az-black dark:text-white font-semibold">Goals</TableHead>
-                  <TableHead className="text-center text-az-black dark:text-white font-semibold">Assists</TableHead>
-                  <TableHead className="text-center text-az-black dark:text-white font-semibold">🟡</TableHead>
-                  <TableHead className="text-center text-az-black dark:text-white font-semibold">🟥</TableHead>
-                  <TableHead className="text-center text-az-black dark:text-white font-semibold">Rating</TableHead>
+                <TableRow className="hover:bg-transparent border-b border-border">
+                  <TableHead className="text-foreground font-semibold">Speler</TableHead>
+                  <TableHead className="text-center text-foreground font-semibold">Pos</TableHead>
+                  <TableHead className="text-center text-foreground font-semibold">Wedst</TableHead>
+                  <TableHead className="text-center text-foreground font-semibold">Min</TableHead>
+                  <TableHead className="text-center text-foreground font-semibold">Goals</TableHead>
+                  <TableHead className="text-center text-foreground font-semibold">Assists</TableHead>
+                  <TableHead className="text-center text-foreground font-semibold">🟡</TableHead>
+                  <TableHead className="text-center text-foreground font-semibold">🟥</TableHead>
+                  <TableHead className="text-center text-foreground font-semibold">Rating</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -382,7 +368,7 @@ export const AZPlayerStats = ({ teamId, isLoadingTeamId }: AZPlayerStatsProps) =
                     <TableRow 
                       key={player.id} 
                       onClick={() => handlePlayerClick(player.id)}
-                      className="hover:bg-premium-gray-50 dark:hover:bg-gray-700 border-b border-gray-100 dark:border-gray-700 cursor-pointer transition-colors"
+                      className="hover:bg-muted/50 border-b border-border cursor-pointer transition-colors"
                     >
                       <TableCell>
                         <div className="flex items-center gap-3">
@@ -395,22 +381,22 @@ export const AZPlayerStats = ({ teamId, isLoadingTeamId }: AZPlayerStatsProps) =
                             }}
                           />
                           <div>
-                            <span className="font-medium text-az-black dark:text-white">
+                            <span className="font-medium text-foreground">
                               {player.name}
                             </span>
-                            <div className="text-xs text-premium-gray-600 dark:text-gray-300">
+                            <div className="text-xs text-muted-foreground">
                               {player.age} jaar
                             </div>
                           </div>
                         </div>
                       </TableCell>
-                      <TableCell className="text-center text-xs text-premium-gray-600 dark:text-gray-300">
+                      <TableCell className="text-center text-xs text-muted-foreground">
                         {stats?.games?.position ? translatePosition(stats.games.position) : '-'}
                       </TableCell>
-                      <TableCell className="text-center text-premium-gray-600 dark:text-gray-300">
+                      <TableCell className="text-center text-muted-foreground">
                         {stats?.games?.appearences || 0}
                       </TableCell>
-                      <TableCell className="text-center text-premium-gray-600 dark:text-gray-300">
+                      <TableCell className="text-center text-muted-foreground">
                         {stats?.games?.minutes || 0}
                       </TableCell>
                       <TableCell className="text-center font-bold text-az-red">
@@ -419,13 +405,13 @@ export const AZPlayerStats = ({ teamId, isLoadingTeamId }: AZPlayerStatsProps) =
                       <TableCell className="text-center font-bold text-green-600">
                         {stats?.goals?.assists || 0}
                       </TableCell>
-                      <TableCell className="text-center text-premium-gray-600 dark:text-gray-300">
+                      <TableCell className="text-center text-muted-foreground">
                         {stats?.cards?.yellow || 0}
                       </TableCell>
-                      <TableCell className="text-center text-premium-gray-600 dark:text-gray-300">
+                      <TableCell className="text-center text-muted-foreground">
                         {stats?.cards?.red || 0}
                       </TableCell>
-                      <TableCell className="text-center text-premium-gray-600 dark:text-gray-300">
+                      <TableCell className="text-center text-muted-foreground">
                         {stats?.games?.rating ? parseFloat(stats.games.rating).toFixed(1) : '-'}
                       </TableCell>
                     </TableRow>

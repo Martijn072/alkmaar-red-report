@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Header } from "@/components/Header";
 import { NewsCard } from "@/components/NewsCard";
@@ -42,7 +41,7 @@ const News = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearch(searchQuery);
-      setCurrentPage(1); // Reset to first page when searching
+      setCurrentPage(1);
     }, 500);
 
     return () => clearTimeout(timer);
@@ -59,7 +58,6 @@ const News = () => {
   const { isRefreshing, pullDistance } = usePullToRefresh({
     onRefresh: async () => {
       await refetch();
-      // Cache the new articles
       const articles = data?.articles || [];
       if (articles.length > 0) {
         await articleCache.cacheArticles(articles);
@@ -104,7 +102,7 @@ const News = () => {
   };
 
   return (
-    <div className="min-h-screen bg-premium-gray-50 dark:bg-gray-900 overflow-x-hidden">
+    <div className="min-h-screen bg-background overflow-x-hidden">
       <OfflineIndicator 
         onSyncNow={handleManualSync}
         issyncing={isSyncing}
@@ -122,11 +120,11 @@ const News = () => {
         {/* Hero Section */}
         <div className="pt-8 pb-8 animate-fade-in">
           <div className="max-w-4xl">
-            <h1 className="headline-premium text-headline-xl mb-2 text-az-black dark:text-white leading-tight">
+            <h1 className="headline-premium text-headline-xl mb-2 text-foreground leading-tight">
               AZ Nieuws
             </h1>
             {shouldShowOfflineContent && (
-              <p className="text-sm text-premium-gray-600 dark:text-gray-300 mb-4">
+              <p className="text-sm text-muted-foreground mb-4">
                 📱 Offline beschikbare artikelen ({cachedArticles.length})
               </p>
             )}
@@ -180,9 +178,9 @@ const News = () => {
             </div>
 
             {displayArticles.length === 0 && (
-              <div className="card-premium dark:bg-gray-800 p-12 text-center max-w-full animate-fade-in">
+              <div className="card-premium p-12 text-center max-w-full animate-fade-in">
                 <div className="max-w-md mx-auto">
-                  <p className="body-premium text-body-lg text-premium-gray-600 dark:text-gray-300 mb-2">
+                  <p className="body-premium text-body-lg text-muted-foreground mb-2">
                     {searchQuery || selectedCategory !== 'Alle' 
                       ? 'Geen artikelen gevonden voor de huidige filters.'
                       : !isOnline 
@@ -191,7 +189,7 @@ const News = () => {
                     }
                   </p>
                   {(searchQuery || selectedCategory !== 'Alle') && (
-                    <p className="body-premium text-body-sm text-premium-gray-500 dark:text-gray-400">
+                    <p className="body-premium text-body-sm text-muted-foreground/70">
                       Probeer andere zoektermen of wijzig de filters.
                     </p>
                   )}

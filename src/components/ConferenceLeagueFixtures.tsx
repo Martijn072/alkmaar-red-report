@@ -74,7 +74,6 @@ export const ConferenceLeagueFixtures = ({ teamId, isLoadingTeamId }: Conference
       
       const seasons = [seasonInfo.currentSeason];
       
-      // If we're in early season (before August), also check next season
       if (seasonInfo.currentSeason === '2025') {
         seasons.push('2026');
       }
@@ -83,7 +82,6 @@ export const ConferenceLeagueFixtures = ({ teamId, isLoadingTeamId }: Conference
       
       let allFixtures: Fixture[] = [];
       
-      // Try each season to get all relevant fixtures
       for (const season of seasons) {
         try {
           console.log(`📅 Fetching fixtures for season ${season}...`);
@@ -102,14 +100,13 @@ export const ConferenceLeagueFixtures = ({ teamId, isLoadingTeamId }: Conference
         }
       }
       
-      // Sort fixtures by date (newest first for better UX)
       allFixtures.sort((a, b) => new Date(a.fixture.date).getTime() - new Date(b.fixture.date).getTime());
       
       console.log('📊 Total European fixtures found:', allFixtures.length);
       return allFixtures;
     },
     enabled: !!teamId && !!participation?.competition,
-    staleTime: 1000 * 60 * 15, // Cache for 15 minutes
+    staleTime: 1000 * 60 * 15,
     retry: 2,
     retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 30000),
   });
@@ -125,18 +122,6 @@ export const ConferenceLeagueFixtures = ({ teamId, isLoadingTeamId }: Conference
     });
   };
 
-  const getStatusText = (status: string) => {
-    switch (status) {
-      case 'NS': return 'Te spelen';
-      case 'FT': return 'Afgelopen';
-      case 'LIVE': return 'Live';
-      case '1H': return '1e helft';
-      case 'HT': return 'Rust';
-      case '2H': return '2e helft';
-      default: return status;
-    }
-  };
-
   const handleFixtureClick = (fixtureId: number) => {
     navigate(`/wedstrijd/${fixtureId}`);
   };
@@ -144,7 +129,7 @@ export const ConferenceLeagueFixtures = ({ teamId, isLoadingTeamId }: Conference
   if (error) {
     return (
       <div className="text-center py-8">
-        <p className="text-premium-gray-600 dark:text-gray-300 mb-4">
+        <p className="text-muted-foreground mb-4">
           Fout bij het laden van Europese wedstrijden
         </p>
         <button 
@@ -170,10 +155,10 @@ export const ConferenceLeagueFixtures = ({ teamId, isLoadingTeamId }: Conference
   if (!participation?.active) {
     return (
       <div className="text-center py-8">
-        <p className="text-premium-gray-600 dark:text-gray-300">
+        <p className="text-muted-foreground">
           AZ neemt dit seizoen niet deel aan Europese competities
         </p>
-        <p className="text-sm text-premium-gray-500 dark:text-gray-400 mt-2">
+        <p className="text-sm text-muted-foreground/70 mt-2">
           Volg de Eredivisie stand voor kwalificatieplaatsen voor volgend seizoen
         </p>
       </div>
@@ -185,14 +170,13 @@ export const ConferenceLeagueFixtures = ({ teamId, isLoadingTeamId }: Conference
   if (fixtures.length === 0) {
     return (
       <div className="text-center py-8">
-        <p className="text-premium-gray-600 dark:text-gray-300">
+        <p className="text-muted-foreground">
           Geen Europese wedstrijden gevonden voor AZ
         </p>
       </div>
     );
   }
 
-  // Separate upcoming and played fixtures
   const now = new Date();
   const upcomingFixtures = fixtures.filter(f => new Date(f.fixture.date) > now);
   const playedFixtures = fixtures.filter(f => new Date(f.fixture.date) <= now);
@@ -202,7 +186,7 @@ export const ConferenceLeagueFixtures = ({ teamId, isLoadingTeamId }: Conference
       {/* Aankomende wedstrijden */}
       {upcomingFixtures.length > 0 && (
         <div className="mb-6">
-          <h3 className="text-lg font-semibold text-az-black dark:text-white mb-3">
+          <h3 className="text-lg font-semibold text-foreground mb-3">
             Aankomende wedstrijden
           </h3>
           <div className="space-y-3">
@@ -210,14 +194,14 @@ export const ConferenceLeagueFixtures = ({ teamId, isLoadingTeamId }: Conference
               <div 
                 key={fixture.fixture.id}
                 onClick={() => handleFixtureClick(fixture.fixture.id)}
-                className="bg-white dark:bg-gray-800 border border-premium-gray-200 dark:border-gray-600 rounded-lg p-3 sm:p-4 shadow-sm hover:shadow-md transition-all cursor-pointer hover:bg-premium-gray-50 dark:hover:bg-gray-700"
+                className="card-premium p-3 sm:p-4 hover:shadow-md transition-all cursor-pointer"
               >
                 <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-2 text-xs sm:text-sm text-premium-gray-600 dark:text-gray-300">
+                  <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
                     <Calendar className="w-3 h-3 sm:w-4 sm:h-4" />
                     <span className="font-medium">{formatDate(fixture.fixture.date)}</span>
                   </div>
-                  <div className="flex items-center gap-1 text-xs sm:text-sm text-premium-gray-600 dark:text-gray-300">
+                  <div className="flex items-center gap-1 text-xs sm:text-sm text-muted-foreground">
                     <MapPin className="w-3 h-3 sm:w-4 sm:h-4" />
                     <span className="truncate">
                       {fixture.fixture.venue?.name || 'Onbekend'}
@@ -232,7 +216,7 @@ export const ConferenceLeagueFixtures = ({ teamId, isLoadingTeamId }: Conference
                       alt={fixture.teams.home.name}
                       className="w-10 h-10 sm:w-12 sm:h-12 object-contain"
                     />
-                    <span className="hidden sm:block font-semibold text-az-black dark:text-white text-center text-sm">
+                    <span className="hidden sm:block font-semibold text-foreground text-center text-sm">
                       {fixture.teams.home.name === 'AZ Alkmaar' ? 'AZ' : fixture.teams.home.name}
                     </span>
                   </div>
@@ -243,7 +227,7 @@ export const ConferenceLeagueFixtures = ({ teamId, isLoadingTeamId }: Conference
                         {fixture.goals.home} - {fixture.goals.away}
                       </div>
                     ) : (
-                      <div className="text-premium-gray-400 dark:text-gray-500 font-medium text-lg">
+                      <div className="text-muted-foreground font-medium text-lg">
                         vs
                       </div>
                     )}
@@ -255,7 +239,7 @@ export const ConferenceLeagueFixtures = ({ teamId, isLoadingTeamId }: Conference
                       alt={fixture.teams.away.name}
                       className="w-10 h-10 sm:w-12 sm:h-12 object-contain"
                     />
-                    <span className="hidden sm:block font-semibold text-az-black dark:text-white text-center text-sm">
+                    <span className="hidden sm:block font-semibold text-foreground text-center text-sm">
                       {fixture.teams.away.name === 'AZ Alkmaar' ? 'AZ' : fixture.teams.away.name}
                     </span>
                   </div>
@@ -278,7 +262,7 @@ export const ConferenceLeagueFixtures = ({ teamId, isLoadingTeamId }: Conference
       {/* Gespeelde wedstrijden */}
       {playedFixtures.length > 0 && (
         <div>
-          <h3 className="text-lg font-semibold text-az-black dark:text-white mb-3">
+          <h3 className="text-lg font-semibold text-foreground mb-3">
             Gespeelde wedstrijden
           </h3>
           <div className="space-y-3">
@@ -286,14 +270,14 @@ export const ConferenceLeagueFixtures = ({ teamId, isLoadingTeamId }: Conference
               <div 
                 key={fixture.fixture.id}
                 onClick={() => handleFixtureClick(fixture.fixture.id)}
-                className="bg-white dark:bg-gray-800 border border-premium-gray-200 dark:border-gray-600 rounded-lg p-3 sm:p-4 shadow-sm hover:shadow-md transition-all cursor-pointer hover:bg-premium-gray-50 dark:hover:bg-gray-700 opacity-75"
+                className="card-premium p-3 sm:p-4 hover:shadow-md transition-all cursor-pointer opacity-75"
               >
                 <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-2 text-xs sm:text-sm text-premium-gray-600 dark:text-gray-300">
+                  <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
                     <Calendar className="w-3 h-3 sm:w-4 sm:h-4" />
                     <span className="font-medium">{formatDate(fixture.fixture.date)}</span>
                   </div>
-                  <div className="flex items-center gap-1 text-xs sm:text-sm text-premium-gray-600 dark:text-gray-300">
+                  <div className="flex items-center gap-1 text-xs sm:text-sm text-muted-foreground">
                     <MapPin className="w-3 h-3 sm:w-4 sm:h-4" />
                     <span className="truncate">
                       {fixture.fixture.venue?.name || 'Onbekend'}
@@ -308,7 +292,7 @@ export const ConferenceLeagueFixtures = ({ teamId, isLoadingTeamId }: Conference
                       alt={fixture.teams.home.name}
                       className="w-10 h-10 sm:w-12 sm:h-12 object-contain"
                     />
-                    <span className="hidden sm:block font-semibold text-az-black dark:text-white text-center text-sm">
+                    <span className="hidden sm:block font-semibold text-foreground text-center text-sm">
                       {fixture.teams.home.name === 'AZ Alkmaar' ? 'AZ' : fixture.teams.home.name}
                     </span>
                   </div>
@@ -319,7 +303,7 @@ export const ConferenceLeagueFixtures = ({ teamId, isLoadingTeamId }: Conference
                         {fixture.goals.home} - {fixture.goals.away}
                       </div>
                     ) : (
-                      <div className="text-premium-gray-400 dark:text-gray-500 font-medium text-lg">
+                      <div className="text-muted-foreground font-medium text-lg">
                         vs
                       </div>
                     )}
@@ -331,7 +315,7 @@ export const ConferenceLeagueFixtures = ({ teamId, isLoadingTeamId }: Conference
                       alt={fixture.teams.away.name}
                       className="w-10 h-10 sm:w-12 sm:h-12 object-contain"
                     />
-                    <span className="hidden sm:block font-semibold text-az-black dark:text-white text-center text-sm">
+                    <span className="hidden sm:block font-semibold text-foreground text-center text-sm">
                       {fixture.teams.away.name === 'AZ Alkmaar' ? 'AZ' : fixture.teams.away.name}
                     </span>
                   </div>

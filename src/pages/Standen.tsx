@@ -26,17 +26,17 @@ const Standen = () => {
   };
 
   return (
-    <div className="min-h-screen bg-premium-gray-50 dark:bg-gray-900 transition-colors duration-200">
+    <div className="min-h-screen bg-background transition-colors duration-200">
       <Header />
       
       <main className="pb-20">
         <div className="container mx-auto px-s py-m md:py-l">
-          <H2 className="text-az-black dark:text-white mb-m animate-fade-in">
+          <H2 className="text-foreground mb-m animate-fade-in">
             Standen
           </H2>
           
           <Tabs value={currentTab} onValueChange={handleTabChange} className="w-full">
-            <TabsList className="w-full grid grid-cols-3 mb-m bg-white dark:bg-gray-800 border border-premium-gray-200 dark:border-gray-700 sticky top-0 z-10">
+            <TabsList className="w-full grid grid-cols-3 mb-m bg-card border border-border sticky top-0 z-10">
               <TabsTrigger 
                 value="eredivisie" 
                 className="flex items-center gap-2 data-[state=active]:bg-az-red data-[state=active]:text-white"
@@ -69,9 +69,9 @@ const Standen = () => {
             
             <TabsContent value="europa" className="mt-0 animate-fade-in">
               {europeParticipation?.active ? (
-                <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm">
+                <Card className="card-premium">
                   <CardHeader>
-                    <CardTitle className="text-az-black dark:text-white">
+                    <CardTitle className="text-foreground">
                       {europeParticipation.competitionName} Stand
                     </CardTitle>
                   </CardHeader>
@@ -80,13 +80,13 @@ const Standen = () => {
                   </CardContent>
                 </Card>
               ) : (
-                <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm">
+                <Card className="card-premium">
                   <CardContent className="py-12 text-center">
-                    <Globe className="w-12 h-12 mx-auto mb-4 text-premium-gray-400 dark:text-gray-500" />
-                    <p className="text-premium-gray-600 dark:text-gray-400 text-lg">
+                    <Globe className="w-12 h-12 mx-auto mb-4 text-muted-foreground/50" />
+                    <p className="text-muted-foreground text-lg">
                       AZ speelt dit seizoen niet Europees
                     </p>
-                    <p className="text-premium-gray-500 dark:text-gray-500 text-sm mt-2">
+                    <p className="text-muted-foreground/70 text-sm mt-2">
                       Of de Europese competitie is nog niet gestart
                     </p>
                   </CardContent>
@@ -95,9 +95,9 @@ const Standen = () => {
             </TabsContent>
             
             <TabsContent value="jong-az" className="mt-0 animate-fade-in">
-              <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm">
+              <Card className="card-premium">
                 <CardHeader>
-                  <CardTitle className="text-az-black dark:text-white">
+                  <CardTitle className="text-foreground">
                     Eerste Divisie Stand
                   </CardTitle>
                 </CardHeader>

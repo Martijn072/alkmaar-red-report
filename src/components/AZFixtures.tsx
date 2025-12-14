@@ -2,9 +2,8 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Calendar, MapPin } from "lucide-react";
+import { Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { callFootballApi } from '@/utils/footballApiClient';
@@ -32,7 +31,7 @@ export const AZFixtures = ({ teamId, isLoadingTeamId }: AZFixturesProps) => {
       console.log('🔮 Fetching upcoming AZ fixtures...');
       const params: Record<string, string> = {
         team: teamId.toString(),
-        next: '20', // Get next 20 fixtures
+        next: '20',
         timezone: 'Europe/Amsterdam'
       };
 
@@ -56,7 +55,7 @@ export const AZFixtures = ({ teamId, isLoadingTeamId }: AZFixturesProps) => {
       console.log('📊 Fetching recent AZ fixtures...');
       const params: Record<string, string> = {
         team: teamId.toString(),
-        last: '20', // Get last 20 fixtures
+        last: '20',
         timezone: 'Europe/Amsterdam'
       };
 
@@ -106,7 +105,6 @@ export const AZFixtures = ({ teamId, isLoadingTeamId }: AZFixturesProps) => {
   };
 
   const translateRound = (round: string) => {
-    // Handle common round terminology
     if (round.toLowerCase().includes('regular season')) return 'Competitie';
     if (round.toLowerCase().includes('semi-final')) return 'Halve finale';
     if (round.toLowerCase().includes('final') && !round.toLowerCase().includes('semi')) return 'Finale';
@@ -115,15 +113,12 @@ export const AZFixtures = ({ teamId, isLoadingTeamId }: AZFixturesProps) => {
     if (round.toLowerCase().includes('round of 32')) return '1/16e finale';
     if (round.toLowerCase().includes('play-off')) return 'Play-offs';
     
-    // Handle numbered rounds (e.g., "Regular Season - 15")
     const roundMatch = round.match(/Regular Season - (\d+)/i);
     if (roundMatch) return `Speelronde ${roundMatch[1]}`;
     
-    // Handle "Matchday X" format
     const matchdayMatch = round.match(/Matchday (\d+)/i);
     if (matchdayMatch) return `Speeldag ${matchdayMatch[1]}`;
     
-    // Return original if no translation found
     return round;
   };
 
@@ -138,16 +133,15 @@ export const AZFixtures = ({ teamId, isLoadingTeamId }: AZFixturesProps) => {
 
   const getCompetitionBadgeVariant = (leagueId: number) => {
     switch (leagueId) {
-      case 88: return 'default'; // Eredivisie - primary red
-      case 848: return 'secondary'; // Conference League
-      case 94: return 'destructive'; // KNVB Beker - orange theme
+      case 88: return 'default';
+      case 848: return 'secondary';
+      case 94: return 'destructive';
       default: return 'outline';
     }
   };
 
   const normalizeVenueName = (venueName: string | undefined, homeTeamName: string, awayTeamName: string) => {
     if (!venueName) {
-      // Fallback to team-based stadium names when venue is missing
       if (homeTeamName.toLowerCase().includes('az')) return 'AFAS Stadion';
       if (homeTeamName.toLowerCase().includes('nac')) return 'Rat Verlegh Stadion';
       if (homeTeamName.toLowerCase().includes('telstar')) return 'BUKO Stadion';
@@ -155,7 +149,6 @@ export const AZFixtures = ({ teamId, isLoadingTeamId }: AZFixturesProps) => {
       return 'Onbekend stadion';
     }
 
-    // Fix known venue name issues
     if (venueName.toLowerCase() === 'afas stadio') return 'AFAS Stadion';
     
     return venueName;
@@ -165,13 +158,12 @@ export const AZFixtures = ({ teamId, isLoadingTeamId }: AZFixturesProps) => {
   const isLoading = isCurrentSeason ? (upcomingLoading || recentLoading || historicalLoading) : historicalLoading;
   const error = upcomingError || recentError || historicalError;
 
-  // Separate upcoming and played fixtures for current season
   const upcoming = upcomingFixtures || [];
   const played = isCurrentSeason 
     ? recentFixtures?.filter(fixture => 
         fixture.goals.home !== null && fixture.goals.away !== null
       ) || []
-    : historicalFixtures || []; // For historical seasons, show all fixtures
+    : historicalFixtures || [];
   const sortedUpcoming = upcoming.sort((a, b) => new Date(a.fixture.date).getTime() - new Date(b.fixture.date).getTime());
   const sortedPlayed = played.sort((a, b) => new Date(b.fixture.date).getTime() - new Date(a.fixture.date).getTime());
 
@@ -181,13 +173,13 @@ export const AZFixtures = ({ teamId, isLoadingTeamId }: AZFixturesProps) => {
 
   if (error) {
     return (
-      <Card className="bg-white dark:bg-gray-800 border border-premium-gray-200 dark:border-gray-700 shadow-sm">
+      <Card className="card-premium">
         <CardHeader>
-          <CardTitle className="text-az-black dark:text-white">AZ Wedstrijdprogramma</CardTitle>
+          <CardTitle className="text-foreground">AZ Wedstrijdprogramma</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="text-center py-8">
-            <p className="text-premium-gray-600 dark:text-gray-300 mb-4">
+            <p className="text-muted-foreground mb-4">
               Fout bij het laden van het wedstrijdprogramma
             </p>
             <Button 
@@ -204,9 +196,9 @@ export const AZFixtures = ({ teamId, isLoadingTeamId }: AZFixturesProps) => {
 
   if (isLoading || isLoadingTeamId) {
     return (
-      <Card className="bg-white dark:bg-gray-800 border border-premium-gray-200 dark:border-gray-700 shadow-sm">
+      <Card className="card-premium">
         <CardHeader>
-          <CardTitle className="text-az-black dark:text-white">AZ Wedstrijdprogramma</CardTitle>
+          <CardTitle className="text-foreground">AZ Wedstrijdprogramma</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
@@ -220,29 +212,20 @@ export const AZFixtures = ({ teamId, isLoadingTeamId }: AZFixturesProps) => {
   }
 
   return (
-    <Card className="bg-white dark:bg-gray-800 border border-premium-gray-200 dark:border-gray-700 shadow-sm">
-      <CardHeader className="bg-white dark:bg-gray-800">
+    <Card className="card-premium">
+      <CardHeader>
         <div className="flex flex-col space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <CardTitle className="text-az-black dark:text-white">AZ Wedstrijdprogramma</CardTitle>
+            <CardTitle className="text-foreground">AZ Wedstrijdprogramma</CardTitle>
             <div className="flex items-center gap-2">
-              <Calendar className="w-4 h-4 text-premium-gray-600 dark:text-gray-400" />
+              <Calendar className="w-4 h-4 text-muted-foreground" />
               <Select value={selectedSeason} onValueChange={setSelectedSeason}>
-                <SelectTrigger className="w-32 sm:w-40 bg-white dark:bg-gray-800 border-premium-gray-300 dark:border-gray-600 text-az-black dark:text-white focus:ring-2 focus:ring-az-red focus:border-az-red hover:bg-premium-gray-50 dark:hover:bg-gray-700">
+                <SelectTrigger className="w-32 sm:w-40">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent 
-                  className="bg-white dark:bg-gray-800 border-premium-gray-300 dark:border-gray-600 z-50" 
-                  position="popper"
-                  side="bottom"
-                  align="end"
-                >
+                <SelectContent>
                   {seasons.map((season) => (
-                    <SelectItem 
-                      key={season.value} 
-                      value={season.value}
-                      className="text-az-black dark:text-white hover:bg-premium-gray-50 dark:hover:bg-gray-700 focus:bg-az-red focus:text-white"
-                    >
+                    <SelectItem key={season.value} value={season.value}>
                       {season.label}
                     </SelectItem>
                   ))}
@@ -252,10 +235,10 @@ export const AZFixtures = ({ teamId, isLoadingTeamId }: AZFixturesProps) => {
           </div>
         </div>
       </CardHeader>
-      <CardContent className="bg-white dark:bg-gray-800">
+      <CardContent>
         {isCurrentSeason && sortedUpcoming.length > 0 && (
           <div className="mb-8">
-            <h3 className="text-lg font-semibold text-az-black dark:text-white mb-4">
+            <h3 className="text-lg font-semibold text-foreground mb-4">
               Aankomende wedstrijden
             </h3>
             <div className="space-y-4">
@@ -277,7 +260,7 @@ export const AZFixtures = ({ teamId, isLoadingTeamId }: AZFixturesProps) => {
 
         {sortedPlayed.length > 0 && (
           <div>
-            <h3 className="text-lg font-semibold text-az-black dark:text-white mb-4">
+            <h3 className="text-lg font-semibold text-foreground mb-4">
               {isCurrentSeason ? 'Gespeelde wedstrijden' : `Uitslagen seizoen ${seasons.find(s => s.value === selectedSeason)?.label}`}
             </h3>
             <div className="space-y-4">
@@ -299,7 +282,7 @@ export const AZFixtures = ({ teamId, isLoadingTeamId }: AZFixturesProps) => {
 
         {!isCurrentSeason && sortedPlayed.length === 0 && !isLoading && (
           <div className="text-center py-8">
-            <p className="text-premium-gray-600 dark:text-gray-300">
+            <p className="text-muted-foreground">
               Geen wedstrijden gevonden voor dit seizoen
             </p>
           </div>
@@ -307,7 +290,7 @@ export const AZFixtures = ({ teamId, isLoadingTeamId }: AZFixturesProps) => {
 
         {isCurrentSeason && sortedUpcoming.length === 0 && sortedPlayed.length === 0 && !isLoading && (
           <div className="text-center py-8">
-            <p className="text-premium-gray-600 dark:text-gray-300">
+            <p className="text-muted-foreground">
               Geen wedstrijden gevonden
             </p>
           </div>

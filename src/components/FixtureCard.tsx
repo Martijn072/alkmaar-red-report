@@ -24,10 +24,10 @@ export const FixtureCard = ({
   return (
     <div 
       onClick={() => onFixtureClick(fixture.fixture.id)}
-      className="bg-white dark:bg-gray-800 border border-premium-gray-200 dark:border-gray-600 rounded-lg p-3 sm:p-4 shadow-sm hover:shadow-md transition-all cursor-pointer hover:bg-premium-gray-50 dark:hover:bg-gray-700"
+      className="card-premium p-3 sm:p-4 hover:shadow-md transition-all cursor-pointer"
     >
       <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-2 text-xs sm:text-sm text-premium-gray-600 dark:text-gray-300">
+        <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
           <Calendar className="w-3 h-3 sm:w-4 sm:h-4" />
           <span className="font-medium">{formatDate(fixture.fixture.date)}</span>
         </div>
@@ -40,7 +40,7 @@ export const FixtureCard = ({
               ? 'bg-blue-600 text-white hover:bg-blue-700 border-blue-600'
               : fixture.league.id === 94
               ? 'bg-orange-600 text-white hover:bg-orange-700 border-orange-600'
-              : 'border-premium-gray-300 text-premium-gray-700 dark:border-gray-600 dark:text-gray-300'
+              : 'border-border text-muted-foreground'
           }`}
         >
           {getCompetitionName(fixture.league.id, fixture.league.name)}
@@ -57,7 +57,7 @@ export const FixtureCard = ({
             className="w-10 h-10 sm:w-12 sm:h-12 object-contain"
           />
           {/* Show team name only on larger screens */}
-          <span className="hidden sm:block font-semibold text-az-black dark:text-white text-center text-sm">
+          <span className="hidden sm:block font-semibold text-foreground text-center text-sm">
             {fixture.teams.home.name}
           </span>
         </div>
@@ -69,7 +69,7 @@ export const FixtureCard = ({
               {fixture.goals.home} - {fixture.goals.away}
             </div>
           ) : (
-            <div className="text-premium-gray-400 dark:text-gray-500 font-medium text-lg">
+            <div className="text-muted-foreground font-medium text-lg">
               vs
             </div>
           )}
@@ -83,7 +83,7 @@ export const FixtureCard = ({
             className="w-10 h-10 sm:w-12 sm:h-12 object-contain"
           />
           {/* Show team name only on larger screens */}
-          <span className="hidden sm:block font-semibold text-az-black dark:text-white text-center text-sm">
+          <span className="hidden sm:block font-semibold text-foreground text-center text-sm">
             {fixture.teams.away.name}
           </span>
         </div>
@@ -91,7 +91,7 @@ export const FixtureCard = ({
 
       {/* Venue and Round info */}
       <div className="flex items-center justify-between mt-3 text-xs sm:text-sm">
-        <div className="flex items-center gap-1 text-premium-gray-600 dark:text-gray-300">
+        <div className="flex items-center gap-1 text-muted-foreground">
           <MapPin className="w-3 h-3" />
           <span className="truncate">
             {normalizeVenueName 
@@ -102,7 +102,7 @@ export const FixtureCard = ({
         </div>
         <Badge 
           variant="outline" 
-          className="text-xs bg-premium-gray-50 dark:bg-gray-700 border-premium-gray-200 dark:border-gray-600 text-premium-gray-700 dark:text-gray-300"
+          className="text-xs bg-muted/50 border-border text-muted-foreground"
         >
           {translateRound(fixture.league.round)}
         </Badge>
