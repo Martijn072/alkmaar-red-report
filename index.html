@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="nl">
   <head>
@@ -7,26 +6,52 @@
     <title>AZFanpage.nl - Premium AZ Alkmaar Nieuws</title>
     <meta name="description" content="Premium nieuws app voor AZ Alkmaar supporters. Kritisch, onafhankelijk en betrokken. Powered by AZFanpage.nl" />
     <meta name="author" content="AZFanpage.nl" />
-
-    <!-- Premium font loading -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Source+Sans+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
     
+    <!-- SEO -->
+    <meta name="robots" content="index, follow" />
+    <meta name="googlebot" content="index, follow" />
+    <link rel="canonical" href="https://app.azfanpage.nl/" />
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+    <link rel="apple-touch-startup-image" href="/icons/icon-512x512.png" />
+
+    <!-- Optimized font loading -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Sans+Pro:wght@400;600;700&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Sans+Pro:wght@400;600;700&display=swap" media="print" onload="this.media='all'" />
+    <noscript>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Sans+Pro:wght@400;600;700&display=swap" />
+    </noscript>
+    
+    <!-- Open Graph -->
     <meta property="og:title" content="AZFanpage.nl - Premium AZ Nieuws" />
     <meta property="og:description" content="De beste AZ Alkmaar nieuws app met premium design en onafhankelijke journalistiek" />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://app.azfanpage.nl/" />
+    <meta property="og:site_name" content="AZFanpage.nl" />
+    <meta property="og:locale" content="nl_NL" />
     <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
 
+    <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@azfanpagenl" />
+    <meta name="twitter:title" content="AZFanpage.nl - Premium AZ Nieuws" />
+    <meta name="twitter:description" content="Kritisch, onafhankelijk en betrokken AZ Alkmaar nieuws" />
     <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
     
     <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#DB0021" />
     <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-    <meta name="apple-mobile-web-app-title" content="AZFanpage.nl" />
+    <meta name="apple-mobile-web-app-title" content="AZFanpage" />
+
+    <!-- MS Tiles -->
+    <meta name="msapplication-TileColor" content="#DB0021" />
+    <meta name="msapplication-TileImage" content="/icons/icon-144x144.png" />
   </head>
 
   <body>

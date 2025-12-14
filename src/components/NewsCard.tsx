@@ -1,9 +1,9 @@
-
 import { User, ArrowRight, Download, Wifi } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { articleCache } from "@/services/articleCache";
 import { useOfflineDetection } from "@/hooks/useOfflineDetection";
+import { OptimizedImage } from "@/components/ui/optimized-image";
 
 interface Article {
   id: number;
@@ -31,13 +31,11 @@ export const NewsCard = ({ article }: NewsCardProps) => {
   }, [article.id]);
 
   const handleReadMore = () => {
-    // Cache article when user wants to read it
     articleCache.cacheArticle(article);
     navigate(`/artikel/${article.id}`);
   };
 
   const handleTitleClick = () => {
-    // Cache article when user clicks title
     articleCache.cacheArticle(article);
     navigate(`/artikel/${article.id}`);
   };
@@ -52,17 +50,17 @@ export const NewsCard = ({ article }: NewsCardProps) => {
     <article className="card-premium dark:bg-gray-800 dark:border-gray-700 overflow-hidden animate-slide-up w-full max-w-full group transform transition-all duration-300 hover:scale-[1.02] hover:shadow-xl">
       {/* Image */}
       <div className="relative aspect-[16/9] overflow-hidden cursor-pointer w-full" onClick={handleTitleClick}>
-        <img 
+        <OptimizedImage 
           src={article.imageUrl} 
           alt={article.title}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+          className="w-full h-full group-hover:scale-105 transition-transform duration-700"
         />
         {article.isBreaking && (
-          <div className="absolute top-4 left-4 animate-pulse">
+          <div className="absolute top-s left-s animate-pulse">
             <span className="breaking-news shadow-lg">🔥 Breaking</span>
           </div>
         )}
-        <div className="absolute top-4 right-4 bg-az-red/80 backdrop-blur-md border border-white/20 px-3 py-1.5 rounded-lg text-xs font-semibold text-white shadow-lg hover:bg-az-red/90 hover:scale-105 transition-all duration-200 cursor-pointer">
+        <div className="absolute top-s right-s bg-az-red/80 backdrop-blur-md border border-white/20 px-3 py-1.5 rounded-lg text-xs font-semibold text-white shadow-lg hover:bg-az-red/90 hover:scale-105 transition-all duration-200 cursor-pointer">
           {article.category}
         </div>
         
@@ -71,28 +69,28 @@ export const NewsCard = ({ article }: NewsCardProps) => {
       </div>
 
       {/* Content */}
-      <div className="p-6 w-full max-w-full">
+      <div className="p-s md:p-m w-full max-w-full">
         <h2 
-          className="headline-premium text-headline-md mb-3 hover:text-az-red transition-colors duration-300 cursor-pointer break-words text-az-black dark:text-white group-hover:text-az-red"
+          className="headline-premium text-headline-md mb-xs hover:text-az-red transition-colors duration-300 cursor-pointer break-words text-az-black dark:text-white group-hover:text-az-red"
           onClick={handleTitleClick}
         >
           {article.title}
         </h2>
         
-        <p className="body-premium text-body-md text-premium-gray-600 dark:text-gray-300 mb-4 line-clamp-2 break-words">
+        <p className="body-premium text-body-md text-premium-gray-600 dark:text-gray-300 mb-s line-clamp-2 break-words">
           {article.excerpt}
         </p>
 
         {/* Meta info */}
-        <div className="flex items-center justify-between text-sm text-premium-gray-500 dark:text-gray-400 flex-wrap gap-2">
-          <div className="flex items-center gap-4 flex-wrap">
+        <div className="flex items-center justify-between text-sm text-premium-gray-500 dark:text-gray-400 flex-wrap gap-xs">
+          <div className="flex items-center gap-s flex-wrap">
             <div className="flex items-center gap-1">
               <User className="w-4 h-4 flex-shrink-0" />
               <span className="truncate">{article.author}</span>
             </div>
           </div>
           
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-xs">
             {!isOnline && !isCached && (
               <div title="Vereist internetverbinding">
                 <Wifi className="w-4 h-4 text-red-500" />
@@ -104,12 +102,12 @@ export const NewsCard = ({ article }: NewsCardProps) => {
       </div>
       
       {/* Interaction strip */}
-      <div className="px-6 pb-4 w-full max-w-full">
-        <div className="flex items-center justify-between pt-4 border-t border-premium-gray-100 dark:border-gray-700">
+      <div className="px-s md:px-m pb-s w-full max-w-full">
+        <div className="flex items-center justify-between pt-s border-t border-premium-gray-100 dark:border-gray-700">
           <button 
             onClick={handleReadMore}
             disabled={!isOnline && !isCached}
-            className="flex items-center gap-2 bg-az-red hover:bg-red-700 text-white px-6 py-2 rounded-lg font-medium transition-all duration-200 hover:shadow-lg hover:scale-105 active:scale-95 group/btn transform disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex items-center gap-xs bg-az-red hover:bg-red-700 text-white px-m py-2 rounded-lg font-medium transition-all duration-200 hover:shadow-lg hover:scale-105 active:scale-95 group/btn transform disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <span className="text-sm whitespace-nowrap">Lees meer</span>
             <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform duration-200 flex-shrink-0" />

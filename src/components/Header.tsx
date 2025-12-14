@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Bell, Search, Moon, Sun, User, LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -50,7 +49,7 @@ export const Header = () => {
   return (
     <>      
       <header className="sticky top-0 z-50 bg-white dark:bg-gray-900 border-b border-premium-gray-200 dark:border-gray-700 shadow-sm transition-colors duration-200">
-        <div className="px-4 py-4">
+        <div className="px-s py-s">
           <div className="flex items-center justify-between">
             {/* Logo */}
             <div className="flex items-center">
@@ -72,7 +71,7 @@ export const Header = () => {
 
             {/* Mobile Actions - User avatar, notifications, dark mode, and hamburger menu */}
             {isMobile ? (
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-s">
                 {/* User Avatar on Mobile */}
                 {isAuthenticated && user && (
                   <DropdownMenu>
@@ -139,7 +138,7 @@ export const Header = () => {
               </div>
             ) : (
               /* Desktop Actions - All original actions */
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-s">
                 <button 
                   onClick={handleSearchClick}
                   className="p-2 hover:bg-premium-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors focus:ring-2 focus:ring-az-red"
