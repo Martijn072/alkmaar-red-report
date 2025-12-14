@@ -74,13 +74,15 @@ export const useEuropeanParticipation = (teamId: number | null) => {
                        round.includes('preliminary');
               });
               
-              // Check if any fixture is in group stage/poulefase
+              // Check if any fixture is in group stage/poulefase/league stage
               const hasGroupStage = fixtures.some(f => {
                 const round = f.league.round.toLowerCase();
                 return round.includes('group') ||
                        round.includes('matchday') ||
                        round.includes('poulefase') ||
-                       round.includes('poule');
+                       round.includes('poule') ||
+                       round.includes('league stage') ||
+                       round.includes('league phase');
               });
               
               // Check if any fixture is in knockout stage

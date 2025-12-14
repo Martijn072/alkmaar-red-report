@@ -148,23 +148,18 @@ export const useJongAZStatistics = (teamId: number | null) => {
   });
 };
 
-// Hook for Eerste Divisie standings
+// Hook for Eerste Divisie standings - Direct league ID 89 for stability
 export const useEersteDivisieStandings = () => {
   const seasonInfo = getCurrentActiveSeason();
-  const { data: leagueData } = useLeagueIdByName('Netherlands', 'Eerste Divisie');
+  const EERSTE_DIVISIE_ID = 89; // Keuken Kampioen Divisie / Eerste Divisie
   
   return useQuery({
-    queryKey: ['eerste-divisie-standings', seasonInfo.currentSeason, leagueData?.id],
+    queryKey: ['eerste-divisie-standings', seasonInfo.currentSeason, EERSTE_DIVISIE_ID],
     queryFn: async () => {
-      if (!leagueData?.id) {
-        console.log('⏸️ No league ID available for Eerste Divisie standings');
-        return [];
-      }
-      
-      console.log(`🏆 Fetching ${leagueData.name} standings (ID: ${leagueData.id}) for season ${seasonInfo.currentSeason}...`);
+      console.log(`🏆 Fetching Eerste Divisie standings (ID: ${EERSTE_DIVISIE_ID}) for season ${seasonInfo.currentSeason}...`);
       
       const response: FootballApiResponse<{ league: { standings: Standing[][] } }> = await callFootballApi('/standings', {
-        league: leagueData.id.toString(),
+        league: EERSTE_DIVISIE_ID.toString(),
         season: seasonInfo.currentSeason
       });
       
@@ -174,6 +169,5 @@ export const useEersteDivisieStandings = () => {
     staleTime: 1000 * 60 * 60, // Cache for 1 hour
     retry: 2,
     retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 30000),
-    enabled: !!leagueData?.id,
   });
 };

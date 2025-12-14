@@ -59,14 +59,14 @@ export const ConferenceLeagueStandings = () => {
       console.log('📊 Conference League Standings Response:', response);
       return response.response[0]?.league.standings || [];
     },
-    enabled: participation?.status === 'poulefase' && participation?.competition === '848',
+    enabled: participation?.active && participation?.competition === '848' && (participation?.status === 'poulefase' || participation?.status === 'knock-out'),
     staleTime: 1000 * 60 * 30, // Cache for 30 minutes
     retry: 2,
     retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 30000),
   });
 
-  // Don't show anything if AZ is not in group stage
-  if (!participation?.active || participation?.status !== 'poulefase') {
+  // Don't show anything if AZ is not active in this competition
+  if (!participation?.active || participation?.competition !== '848') {
     return null;
   }
 

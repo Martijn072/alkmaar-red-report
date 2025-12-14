@@ -21,7 +21,7 @@ export const NextMatchCard = () => {
 
   if (isLoading) {
     return (
-      <Card className="bg-gradient-to-br from-az-red/5 to-az-red/10 dark:from-az-red/10 dark:to-az-red/20 border-az-red/20 dark:border-az-red/30">
+      <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
         <CardContent className="p-6">
           <div className="animate-pulse">
             <div className="flex items-center justify-between mb-6">
@@ -97,7 +97,7 @@ export const NextMatchCard = () => {
 
   return (
     <Link to={`/wedstrijd/${displayFixture.fixture.id}`} className="block">
-      <Card className="bg-gradient-to-br from-az-red/5 to-az-red/10 dark:from-az-red/10 dark:to-az-red/20 border-az-red/20 dark:border-az-red/30 hover:shadow-lg hover:shadow-az-red/10 transition-all duration-300 transform hover:scale-[1.01]">
+      <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all duration-300 transform hover:scale-[1.01]">
         <CardContent className="p-6">
           {/* Competition & Badges */}
           <div className="flex items-center justify-between mb-4">

@@ -14,8 +14,7 @@ export const useTeamFixtures = (teamId: number, last?: number) => {
       
       const params: Record<string, string> = {
         team: teamId.toString(),
-        season: seasonInfo.currentSeason,
-        league: '88' // Eredivisie league ID
+        season: seasonInfo.currentSeason
       };
       
       if (last) {
@@ -44,8 +43,7 @@ export const useTeamNextFixtures = (teamId: number, next?: number) => {
       
       const params: Record<string, string> = {
         team: teamId.toString(),
-        season: seasonInfo.currentSeason,
-        league: '88' // Eredivisie league ID
+        season: seasonInfo.currentSeason
       };
       
       if (next) {
