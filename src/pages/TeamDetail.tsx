@@ -66,7 +66,7 @@ const TeamDetail = () => {
 
   if (statsError || recentError || upcomingError) {
     return (
-      <div className="min-h-screen bg-white dark:bg-gray-900">
+      <div className="min-h-screen bg-background">
         <Header />
         <div className="px-4 pb-20 pt-6">
           <ErrorMessage onRetry={() => {
@@ -81,7 +81,7 @@ const TeamDetail = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900">
+    <div className="min-h-screen bg-background">
       <Header />
       
       <div className="px-4 pb-20 pt-6 space-y-6">
@@ -109,7 +109,7 @@ const TeamDetail = () => {
             </CardContent>
           </Card>
         ) : statistics ? (
-          <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+          <Card className="bg-card border border-border">
             <CardContent className="p-6">
               <div className="flex items-center gap-4">
                 <img 
@@ -143,7 +143,7 @@ const TeamDetail = () => {
           </div>
         ) : statistics ? (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+            <Card className="bg-card border border-border">
               <CardContent className="p-6">
                 <div className="flex items-center gap-3">
                   <TrendingUp className="w-8 h-8 text-green-600" />
@@ -157,7 +157,7 @@ const TeamDetail = () => {
               </CardContent>
             </Card>
 
-            <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+            <Card className="bg-card border border-border">
               <CardContent className="p-6">
                 <div className="flex items-center gap-3">
                   <Target className="w-8 h-8 text-az-red" />
@@ -171,7 +171,7 @@ const TeamDetail = () => {
               </CardContent>
             </Card>
 
-            <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+            <Card className="bg-card border border-border">
               <CardContent className="p-6">
                 <div className="flex items-center gap-3">
                   <Shield className="w-8 h-8 text-blue-600" />
@@ -188,7 +188,7 @@ const TeamDetail = () => {
         ) : null}
 
         {/* Recent Results */}
-        <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+        <Card className="bg-card border border-border">
           <CardHeader>
             <CardTitle className="text-az-black dark:text-white">Recente Resultaten</CardTitle>
           </CardHeader>
@@ -222,7 +222,7 @@ const TeamDetail = () => {
         </Card>
 
         {/* Upcoming Fixtures */}
-        <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+        <Card className="bg-card border border-border">
           <CardHeader>
             <CardTitle className="text-az-black dark:text-white">Komende Wedstrijden</CardTitle>
           </CardHeader>

@@ -164,7 +164,7 @@ const Wedstrijden = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-premium-gray-50 dark:bg-gray-900 transition-colors duration-200">
+    <div className="min-h-screen bg-background transition-colors duration-200">
       <Header />
       
       <main className="pb-20">
@@ -205,7 +205,7 @@ const Wedstrijden = () => {
           </div>
           
           <Tabs value={currentView} onValueChange={(v) => setCurrentView(v as "komend" | "gespeeld")} className="w-full">
-            <TabsList className="w-full grid grid-cols-2 mb-m bg-white dark:bg-gray-800 border border-premium-gray-200 dark:border-gray-700">
+            <TabsList className="w-full grid grid-cols-2 mb-m bg-card border border-border">
               <TabsTrigger 
                 value="komend" 
                 className="flex items-center gap-2 data-[state=active]:bg-az-red data-[state=active]:text-white"
@@ -233,7 +233,7 @@ const Wedstrijden = () => {
                   ))}
                 </div>
               ) : upcomingFixtures.length === 0 ? (
-                <div className="text-center py-12 bg-white dark:bg-gray-800 rounded-lg border border-premium-gray-200 dark:border-gray-700">
+                <div className="text-center py-12 bg-card rounded-lg border border-border">
                   <Calendar className="w-12 h-12 mx-auto mb-4 text-premium-gray-400" />
                   <p className="text-premium-gray-600 dark:text-gray-400">
                     Geen komende wedstrijden gepland
@@ -272,7 +272,7 @@ const Wedstrijden = () => {
                   ))}
                 </div>
               ) : playedFixtures.length === 0 ? (
-                <div className="text-center py-12 bg-white dark:bg-gray-800 rounded-lg border border-premium-gray-200 dark:border-gray-700">
+                <div className="text-center py-12 bg-card rounded-lg border border-border">
                   <Clock className="w-12 h-12 mx-auto mb-4 text-premium-gray-400" />
                   <p className="text-premium-gray-600 dark:text-gray-400">
                     Geen gespeelde wedstrijden gevonden

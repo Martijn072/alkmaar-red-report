@@ -12,7 +12,7 @@ const SpelerStatistieken = () => {
 
   if (teamIdError) {
     return (
-      <div className="min-h-screen bg-premium-gray-50 dark:bg-gray-900">
+      <div className="min-h-screen bg-background">
         <Header />
         <div className="px-4 pt-6 pb-20">
           <ErrorMessage onRetry={() => refetchTeamId()} />
@@ -23,7 +23,7 @@ const SpelerStatistieken = () => {
   }
 
   return (
-    <div className="min-h-screen bg-premium-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-background">
       <Header />
       
       <div className="px-4 pb-20 pt-6">

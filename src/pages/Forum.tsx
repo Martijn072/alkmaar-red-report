@@ -54,11 +54,11 @@ const Forum = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900 flex flex-col">
+    <div className="min-h-screen bg-background flex flex-col">
       <Header />
       
       {/* Forum Header */}
-      <div className="bg-white dark:bg-gray-800 border-b border-premium-gray-200 dark:border-gray-700 px-4 py-3 flex items-center justify-between shrink-0">
+      <div className="bg-card border-b border-border px-4 py-3 flex items-center justify-between shrink-0">
         <div className="flex items-center gap-3">
           <MessageSquare className="w-6 h-6 text-az-red" />
           <h1 className="text-lg font-bold text-az-black dark:text-white">
@@ -89,7 +89,7 @@ const Forum = () => {
       {/* Forum Content */}
       <div className="flex-1 relative min-h-0">
         {isLoading && (
-          <div className="absolute inset-0 flex items-center justify-center bg-white dark:bg-gray-900 z-10">
+          <div className="absolute inset-0 flex items-center justify-center bg-background z-10">
             <div className="text-center">
               <div className="w-8 h-8 border-4 border-az-red border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
               <p className="text-premium-gray-600 dark:text-gray-400">

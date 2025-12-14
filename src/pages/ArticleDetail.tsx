@@ -340,7 +340,7 @@ const ArticleDetail = () => {
   // Show loading state when we're loading and don't have cached content
   if (isLoading && !cachedArticle) {
     return (
-      <div className="min-h-screen bg-premium-gray-50 dark:bg-gray-900">
+      <div className="min-h-screen bg-background">
         <OfflineIndicator 
           onSyncNow={handleManualSync}
           issyncing={isSyncing}
@@ -357,7 +357,7 @@ const ArticleDetail = () => {
   // Show error state only when we have an error and no cached content available
   if (error && !cachedArticle) {
     return (
-      <div className="min-h-screen bg-premium-gray-50 dark:bg-gray-900">
+      <div className="min-h-screen bg-background">
         <OfflineIndicator 
           onSyncNow={handleManualSync}
           issyncing={isSyncing}
@@ -381,7 +381,7 @@ const ArticleDetail = () => {
   // Show "not found" only when we're NOT loading and have no data and no cached content
   if (!isLoading && !displayArticle) {
     return (
-      <div className="min-h-screen bg-premium-gray-50 dark:bg-gray-900">
+      <div className="min-h-screen bg-background">
         <OfflineIndicator 
           onSyncNow={handleManualSync}
           issyncing={isSyncing}
@@ -411,7 +411,7 @@ const ArticleDetail = () => {
   // Show loading skeleton while we're still loading (even if we have cached content)
   if (isLoading && cachedArticle) {
     return (
-      <div className="min-h-screen bg-premium-gray-50 dark:bg-gray-900">
+      <div className="min-h-screen bg-background">
         <OfflineIndicator 
           onSyncNow={handleManualSync}
           issyncing={isSyncing}
@@ -426,7 +426,7 @@ const ArticleDetail = () => {
   }
 
   return (
-    <div className="min-h-screen bg-premium-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-background">
       <OfflineIndicator 
         onSyncNow={handleManualSync}
         issyncing={isSyncing}

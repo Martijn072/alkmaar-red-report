@@ -48,7 +48,7 @@ export const Header = () => {
 
   return (
     <>      
-      <header className="sticky top-0 z-50 bg-white dark:bg-gray-900 border-b border-premium-gray-200 dark:border-gray-700 shadow-sm transition-colors duration-200">
+      <header className="sticky top-0 z-50 bg-background border-b border-border shadow-sm transition-colors duration-200">
         <div className="px-s py-s">
           <div className="flex items-center justify-between">
             {/* Logo */}
@@ -109,10 +109,10 @@ export const Header = () => {
                 {/* Notifications */}
                 <button 
                   onClick={handleNotificationClick}
-                  className="p-2 hover:bg-premium-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors relative focus:ring-2 focus:ring-az-red"
+                  className="p-2 hover:bg-muted rounded-lg transition-colors relative focus:ring-2 focus:ring-az-red"
                   aria-label="Notificaties"
                 >
-                  <Bell className="w-5 h-5 text-premium-gray-600 dark:text-gray-300" />
+                  <Bell className="w-5 h-5 text-muted-foreground" />
                   {unreadCount > 0 && (
                     <div className="absolute -top-1 -right-1 min-w-[20px] h-5 bg-az-red text-white text-xs rounded-full flex items-center justify-center font-semibold">
                       {unreadCount > 99 ? '99+' : unreadCount}
@@ -123,13 +123,13 @@ export const Header = () => {
                 {/* Dark Mode Toggle */}
                 <button 
                   onClick={toggleDarkMode}
-                  className="p-2 hover:bg-premium-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors focus:ring-2 focus:ring-az-red"
+                  className="p-2 hover:bg-muted rounded-lg transition-colors focus:ring-2 focus:ring-az-red"
                   aria-label={isDarkMode ? "Schakel naar lichte modus" : "Schakel naar donkere modus"}
                 >
                   {isDarkMode ? (
-                    <Sun className="w-5 h-5 text-premium-gray-600 dark:text-gray-300" />
+                    <Sun className="w-5 h-5 text-muted-foreground" />
                   ) : (
-                    <Moon className="w-5 h-5 text-premium-gray-600 dark:text-gray-300" />
+                    <Moon className="w-5 h-5 text-muted-foreground" />
                   )}
                 </button>
 
@@ -141,17 +141,17 @@ export const Header = () => {
               <div className="flex items-center gap-s">
                 <button 
                   onClick={handleSearchClick}
-                  className="p-2 hover:bg-premium-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors focus:ring-2 focus:ring-az-red"
+                  className="p-2 hover:bg-muted rounded-lg transition-colors focus:ring-2 focus:ring-az-red"
                   aria-label="Zoeken"
                 >
-                  <Search className="w-5 h-5 text-premium-gray-600 dark:text-gray-300" />
+                  <Search className="w-5 h-5 text-muted-foreground" />
                 </button>
                 <button 
                   onClick={handleNotificationClick}
-                  className="p-2 hover:bg-premium-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors relative focus:ring-2 focus:ring-az-red"
+                  className="p-2 hover:bg-muted rounded-lg transition-colors relative focus:ring-2 focus:ring-az-red"
                   aria-label="Notificaties"
                 >
-                  <Bell className="w-5 h-5 text-premium-gray-600 dark:text-gray-300" />
+                  <Bell className="w-5 h-5 text-muted-foreground" />
                   {unreadCount > 0 && (
                     <div className="absolute -top-1 -right-1 min-w-[20px] h-5 bg-az-red text-white text-xs rounded-full flex items-center justify-center font-semibold">
                       {unreadCount > 99 ? '99+' : unreadCount}
@@ -160,13 +160,13 @@ export const Header = () => {
                 </button>
                 <button 
                   onClick={toggleDarkMode}
-                  className="p-2 hover:bg-premium-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors focus:ring-2 focus:ring-az-red"
+                  className="p-2 hover:bg-muted rounded-lg transition-colors focus:ring-2 focus:ring-az-red"
                   aria-label={isDarkMode ? "Schakel naar lichte modus" : "Schakel naar donkere modus"}
                 >
                   {isDarkMode ? (
-                    <Sun className="w-5 h-5 text-premium-gray-600 dark:text-gray-300" />
+                    <Sun className="w-5 h-5 text-muted-foreground" />
                   ) : (
-                    <Moon className="w-5 h-5 text-premium-gray-600 dark:text-gray-300" />
+                    <Moon className="w-5 h-5 text-muted-foreground" />
                   )}
                 </button>
                 {/* User Profile / Login */}
@@ -206,7 +206,7 @@ export const Header = () => {
                     onClick={handleLogin}
                     variant="ghost"
                     size="sm"
-                    className="text-premium-gray-600 dark:text-gray-300 hover:text-az-red dark:hover:text-az-red"
+                    className="text-muted-foreground hover:text-az-red"
                   >
                     Inloggen
                   </Button>

@@ -245,10 +245,10 @@ const SpelerProfiel = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-white dark:bg-gray-900">
+      <div className="min-h-screen bg-background">
         <Header />
         <div className="px-4 pt-6 pb-20">
-          <Card className="bg-white dark:bg-gray-800 border border-premium-gray-200 dark:border-gray-700 shadow-sm">
+          <Card className="bg-card border border-border shadow-sm">
             <CardContent className="p-6">
               <div className="text-center py-8">
                 <p className="text-premium-gray-600 dark:text-gray-300 mb-4">
@@ -268,7 +268,7 @@ const SpelerProfiel = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-white dark:bg-gray-900">
+      <div className="min-h-screen bg-background">
         <Header />
         <div className="px-4 pt-6 pb-20">
           <div className="space-y-6">
@@ -284,10 +284,10 @@ const SpelerProfiel = () => {
 
   if (!playerInfo) {
     return (
-      <div className="min-h-screen bg-white dark:bg-gray-900">
+      <div className="min-h-screen bg-background">
         <Header />
         <div className="px-4 pt-6 pb-20">
-          <Card className="bg-white dark:bg-gray-800 border border-premium-gray-200 dark:border-gray-700 shadow-sm">
+          <Card className="bg-card border border-border shadow-sm">
             <CardContent className="p-6">
               <div className="text-center py-8">
                 <p className="text-premium-gray-600 dark:text-gray-300 mb-4">
@@ -306,7 +306,7 @@ const SpelerProfiel = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900">
+    <div className="min-h-screen bg-background">
       <Header />
       
       <div className="px-4 pt-6 pb-20 space-y-6">
@@ -321,7 +321,7 @@ const SpelerProfiel = () => {
         </Button>
 
         {/* Player Profile Header */}
-        <Card className="bg-white dark:bg-gray-800 border border-premium-gray-200 dark:border-gray-700 shadow-sm">
+        <Card className="bg-card border border-border shadow-sm">
           <CardContent className="p-6">
             <div className="flex flex-col sm:flex-row gap-6">
               <div className="flex-shrink-0">
@@ -388,7 +388,7 @@ const SpelerProfiel = () => {
 
         {/* AZ Career Totals */}
         {azCareerTotals && (
-          <Card className="bg-white dark:bg-gray-800 border border-premium-gray-200 dark:border-gray-700 shadow-sm">
+        <Card className="bg-card border border-border shadow-sm">
             <CardHeader>
               <CardTitle className="text-az-black dark:text-white">AZ-Carrière</CardTitle>
             </CardHeader>
@@ -424,7 +424,7 @@ const SpelerProfiel = () => {
         )}
 
         {/* Season by Season Statistics */}
-        <Card className="bg-white dark:bg-gray-800 border border-premium-gray-200 dark:border-gray-700 shadow-sm">
+        <Card className="bg-card border border-border shadow-sm">
           <CardHeader>
             <CardTitle className="text-az-black dark:text-white">Seizoen Statistieken</CardTitle>
           </CardHeader>

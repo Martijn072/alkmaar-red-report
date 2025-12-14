@@ -9,13 +9,13 @@ const Over = () => {
   const [activeTab, setActiveTab] = useState("meer");
 
   return (
-    <div className="min-h-screen bg-premium-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-background">
       <Header />
       
       <div className="px-4 pb-20 pt-6">
         <div className="max-w-2xl mx-auto space-y-6">
           {/* Main Info Card */}
-          <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm">
+          <Card className="bg-card border border-border shadow-sm">
             <CardHeader>
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 bg-az-red/10 dark:bg-az-red/20 rounded-lg flex items-center justify-center">
@@ -40,7 +40,7 @@ const Over = () => {
           </Card>
 
           {/* Features Card */}
-          <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm">
+          <Card className="bg-card border border-border shadow-sm">
             <CardHeader>
               <CardTitle className="text-lg font-semibold text-az-black dark:text-white flex items-center gap-2">
                 <Info className="w-5 h-5 text-az-red" />
@@ -89,7 +89,7 @@ const Over = () => {
           </Card>
 
           {/* Contact/Support Card */}
-          <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm">
+          <Card className="bg-card border border-border shadow-sm">
             <CardHeader>
               <CardTitle className="text-lg font-semibold text-az-black dark:text-white">
                 Contact & Support

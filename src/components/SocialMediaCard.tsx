@@ -51,7 +51,7 @@ export const SocialMediaCard = ({ post }: SocialMediaCardProps) => {
   const PlatformIcon = config.icon;
 
   return (
-    <article className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-premium-gray-200 dark:border-gray-700 overflow-hidden w-full max-w-full group transform transition-all duration-300 hover:scale-[1.01] hover:shadow-lg">
+    <article className="bg-card rounded-lg shadow-sm border border-border overflow-hidden w-full max-w-full group transform transition-all duration-300 hover:scale-[1.01] hover:shadow-lg">
       {/* Header met platform badge */}
       <div className="p-4 pb-0">
         <div className="flex items-center justify-between mb-3">
@@ -67,7 +67,7 @@ export const SocialMediaCard = ({ post }: SocialMediaCardProps) => {
                 }}
               />
             ) : (
-              <div className="w-8 h-8 rounded-full bg-premium-gray-200 dark:bg-gray-600 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
                 <User className="w-4 h-4 text-premium-gray-500 dark:text-gray-400" />
               </div>
             )}

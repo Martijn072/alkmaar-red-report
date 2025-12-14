@@ -83,16 +83,16 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({ isOpen, 
   const unreadCount = notifications.filter(n => !n.read).length;
 
   return (
-    <div className="fixed inset-0 z-50 bg-white dark:bg-gray-900">
+    <div className="fixed inset-0 z-50 bg-background">
       {/* Header */}
-      <div className="bg-white dark:bg-gray-900 border-b border-premium-gray-200 dark:border-gray-700 px-6 py-5 shadow-sm">
+      <div className="bg-background border-b border-border px-6 py-5 shadow-sm">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Button
               variant="ghost"
               size="icon"
               onClick={onClose}
-              className="hover:bg-premium-gray-100 dark:hover:bg-gray-800 transition-colors"
+              className="hover:bg-muted transition-colors"
             >
               <X className="w-5 h-5 text-premium-gray-600 dark:text-gray-300" />
             </Button>
@@ -110,7 +110,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({ isOpen, 
             <Button
               onClick={() => clearAll.mutate()}
               disabled={clearAll.isPending}
-              className="bg-white dark:bg-gray-800 border border-premium-gray-300 dark:border-gray-600 hover:bg-premium-gray-50 dark:hover:bg-gray-700 text-premium-gray-700 dark:text-gray-300 px-4 py-2 text-sm font-semibold transition-colors rounded-lg focus:ring-2 focus:ring-az-red"
+              className="bg-card border border-border hover:bg-muted text-muted-foreground px-4 py-2 text-sm font-semibold transition-colors rounded-lg focus:ring-2 focus:ring-az-red"
             >
               <CheckCheck className="w-4 h-4 mr-2" />
               <span className="hidden sm:inline">Alles gelezen</span>
@@ -145,7 +145,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({ isOpen, 
               <article
                 key={notification.id}
                 onClick={() => handleNotificationClick(notification)}
-                className="card-premium dark:bg-gray-800 dark:border-gray-700 cursor-pointer transition-all hover:shadow-md group animate-slide-up overflow-hidden focus:ring-2 focus:ring-az-red"
+                className="card-premium cursor-pointer transition-all hover:shadow-md group animate-slide-up overflow-hidden focus:ring-2 focus:ring-az-red"
               >
                 <div className="p-4 sm:p-6">
                   <div className="flex items-start gap-3 sm:gap-4">

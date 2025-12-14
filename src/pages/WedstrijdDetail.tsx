@@ -228,7 +228,7 @@ const WedstrijdDetail = () => {
 
   if (fixtureLoading) {
     return (
-      <div className="min-h-screen bg-white dark:bg-gray-900">
+      <div className="min-h-screen bg-background">
         <Header />
         <div className="px-4 pt-6 pb-20">
           <div className="space-y-4">
@@ -244,7 +244,7 @@ const WedstrijdDetail = () => {
 
   if (!fixtureData) {
     return (
-      <div className="min-h-screen bg-white dark:bg-gray-900">
+      <div className="min-h-screen bg-background">
         <Header />
         <div className="px-4 pt-6 pb-20">
           <div className="text-center py-8">
@@ -266,7 +266,7 @@ const WedstrijdDetail = () => {
   const isAZMatch = isAZHome || isAZAway;
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900">
+    <div className="min-h-screen bg-background">
       <Header />
       
       <div className="px-4 pt-6 pb-20">
@@ -281,7 +281,7 @@ const WedstrijdDetail = () => {
         </Button>
 
         {/* Match header */}
-        <Card className="mb-6 bg-white dark:bg-gray-800 border border-premium-gray-200 dark:border-gray-700">
+        <Card className="mb-6 bg-card border border-border">
           <CardHeader className="text-center">
             {/* Competition name at top */}
             <div className="mb-4">
@@ -354,7 +354,7 @@ const WedstrijdDetail = () => {
 
         {/* Match Details Tabs */}
         <Tabs value={selectedMatchTab} onValueChange={setSelectedMatchTab} className="space-y-6">
-          <TabsList className="flex w-full bg-premium-gray-100 dark:bg-gray-800">
+          <TabsList className="flex w-full bg-muted">
             <TabsTrigger value="overzicht" className="flex-1 text-xs sm:text-sm">Overzicht</TabsTrigger>
             <TabsTrigger value="live" className="flex-1 text-xs sm:text-sm">Live</TabsTrigger>
             <TabsTrigger value="opstellingen" className="flex-1 text-xs sm:text-sm">Opstellingen</TabsTrigger>
@@ -364,7 +364,7 @@ const WedstrijdDetail = () => {
           {/* Overzicht Tab */}
           <TabsContent value="overzicht" className="space-y-6">
             {/* Match info */}
-            <Card className="bg-white dark:bg-gray-800 border border-premium-gray-200 dark:border-gray-700">
+            <Card className="bg-card border border-border">
               <CardContent className="pt-6">
                 <div className="space-y-2 text-sm text-premium-gray-600 dark:text-gray-400">
                   <div className="flex items-center justify-center gap-2">
@@ -395,7 +395,7 @@ const WedstrijdDetail = () => {
                 ))}
               </div>
             ) : eventsData && eventsData.length > 0 ? (
-              <Card className="bg-white dark:bg-gray-800 border border-premium-gray-200 dark:border-gray-700">
+              <Card className="bg-card border border-border">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-az-black dark:text-white">
                     <Clock className="w-5 h-5 text-az-red" />
@@ -418,7 +418,7 @@ const WedstrijdDetail = () => {
                 </CardContent>
               </Card>
             ) : (
-              <Card className="bg-white dark:bg-gray-800 border border-premium-gray-200 dark:border-gray-700">
+              <Card className="bg-card border border-border">
                 <CardContent className="text-center py-8">
                   <p className="text-premium-gray-600 dark:text-gray-300">
                     Nog geen wedstrijdgebeurtenissen
@@ -448,7 +448,7 @@ const WedstrijdDetail = () => {
             {statsLoading ? (
               <Skeleton className="h-64 w-full" />
             ) : statsData && statsData.length > 0 ? (
-              <Card className="bg-white dark:bg-gray-800 border border-premium-gray-200 dark:border-gray-700">
+              <Card className="bg-card border border-border">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-az-black dark:text-white">
                     <Target className="w-5 h-5 text-az-red" />

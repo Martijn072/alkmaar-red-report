@@ -70,7 +70,7 @@ const JongAZ = () => {
 
   if (hasErrors) {
     return (
-      <div className="min-h-screen bg-white dark:bg-gray-900">
+      <div className="min-h-screen bg-background">
         <Header />
         <div className="px-4 pb-20 pt-6">
           <ErrorMessage onRetry={() => {
@@ -90,12 +90,12 @@ const JongAZ = () => {
   const jongAZPosition = standings?.find(team => team.team.id === teamId);
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900">
+    <div className="min-h-screen bg-background">
       <Header />
       
       <div className="px-4 pb-20 pt-6 space-y-6">
         {/* Jong AZ Header */}
-        <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+        <Card className="bg-card border border-border">
           <CardContent className="p-6">
             <div className="flex items-center gap-4">
               <div className="w-16 h-16 bg-az-red rounded-full flex items-center justify-center">
@@ -131,7 +131,7 @@ const JongAZ = () => {
           </div>
         ) : statistics ? (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+            <Card className="bg-card border border-border">
               <CardContent className="p-6">
                 <div className="flex items-center gap-3">
                   <TrendingUp className="w-8 h-8 text-green-600" />
@@ -145,7 +145,7 @@ const JongAZ = () => {
               </CardContent>
             </Card>
 
-            <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+            <Card className="bg-card border border-border">
               <CardContent className="p-6">
                 <div className="flex items-center gap-3">
                   <Target className="w-8 h-8 text-az-red" />
@@ -159,7 +159,7 @@ const JongAZ = () => {
               </CardContent>
             </Card>
 
-            <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+            <Card className="bg-card border border-border">
               <CardContent className="p-6">
                 <div className="flex items-center gap-3">
                   <Shield className="w-8 h-8 text-blue-600" />
@@ -175,7 +175,7 @@ const JongAZ = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+            <Card className="bg-card border border-border">
               <CardContent className="p-6 text-center">
                 <p className="text-premium-gray-600 dark:text-gray-300">
                   Statistieken nog niet beschikbaar
@@ -186,7 +186,7 @@ const JongAZ = () => {
         )}
 
         {/* Recent Results */}
-        <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+        <Card className="bg-card border border-border">
           <CardHeader>
             <CardTitle className="text-az-black dark:text-white">Recente Resultaten</CardTitle>
           </CardHeader>
@@ -220,7 +220,7 @@ const JongAZ = () => {
         </Card>
 
         {/* Upcoming Fixtures */}
-        <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+        <Card className="bg-card border border-border">
           <CardHeader>
             <CardTitle className="text-az-black dark:text-white">Komende Wedstrijden</CardTitle>
           </CardHeader>
@@ -254,7 +254,7 @@ const JongAZ = () => {
         </Card>
 
         {/* Eerste Divisie Standings */}
-        <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+        <Card className="bg-card border border-border">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-az-black dark:text-white">
               <Trophy className="w-5 h-5" />
@@ -276,14 +276,14 @@ const JongAZ = () => {
                     className={`flex items-center justify-between p-3 rounded-lg border ${
                       team.team.id === teamId
                         ? 'bg-az-red/10 border-az-red dark:bg-az-red/20'
-                        : 'bg-premium-gray-50 border-premium-gray-200 dark:bg-gray-700 dark:border-gray-600'
+                        : 'bg-muted border-border'
                     }`}
                   >
                     <div className="flex items-center gap-3">
                       <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
                         team.team.id === teamId
                           ? 'bg-az-red text-white'
-                          : 'bg-premium-gray-200 text-premium-gray-700 dark:bg-gray-600 dark:text-gray-300'
+                          : 'bg-muted text-muted-foreground'
                       }`}>
                         {team.rank}
                       </div>

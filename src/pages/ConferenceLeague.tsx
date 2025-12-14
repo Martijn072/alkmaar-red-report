@@ -19,9 +19,9 @@ const ConferenceLeague = () => {
 
   if (teamIdError) {
     return (
-      <div className="min-h-screen bg-white dark:bg-gray-900">
+      <div className="min-h-screen bg-background">
         <Header />
-        <div className="px-4 pt-6 pb-20 bg-white dark:bg-gray-900">
+        <div className="px-4 pt-6 pb-20 bg-background">
           <ErrorMessage onRetry={() => refetchTeamId()} />
         </div>
         <BottomNavigation activeTab={activeTab} onTabChange={setActiveTab} />
@@ -69,10 +69,10 @@ const ConferenceLeague = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900">
+    <div className="min-h-screen bg-background">
       <Header />
       
-      <main className="px-4 pb-20 pt-6 bg-white dark:bg-gray-900 min-h-screen">
+      <main className="px-4 pb-20 pt-6 bg-background min-h-screen">
         {/* Page Title */}
         <div className="mb-6">
           <h1 className="text-2xl font-bold text-az-black dark:text-white">AZ in Europa</h1>
@@ -80,7 +80,7 @@ const ConferenceLeague = () => {
 
         {/* AZ in Europa Status */}
         <div className="mb-8">
-          <Card className="bg-white dark:bg-gray-800 border border-premium-gray-200 dark:border-gray-700 shadow-sm">
+          <Card className="bg-card border border-border shadow-sm">
             <CardHeader>
               <CardTitle className="text-az-black dark:text-white flex items-center gap-2">
                 <Trophy className="w-5 h-5 text-az-red" />
@@ -129,7 +129,7 @@ const ConferenceLeague = () => {
 
         {/* Aankomende Europese Wedstrijden */}
         <div className="mb-8">
-          <Card className="bg-white dark:bg-gray-800 border border-premium-gray-200 dark:border-gray-700 shadow-sm">
+          <Card className="bg-card border border-border shadow-sm">
             <CardHeader>
               <CardTitle className="text-az-black dark:text-white flex items-center gap-2">
                 <Calendar className="w-5 h-5 text-az-red" />
@@ -145,7 +145,7 @@ const ConferenceLeague = () => {
         {/* Voortgang naar Conference League / Stand */}
         <div className="mb-8">
           {participation?.status === 'poulefase' ? (
-            <Card className="bg-white dark:bg-gray-800 border border-premium-gray-200 dark:border-gray-700 shadow-sm">
+            <Card className="bg-card border border-border shadow-sm">
               <CardHeader>
                 <CardTitle className="text-az-black dark:text-white">Conference League Stand</CardTitle>
               </CardHeader>
@@ -154,7 +154,7 @@ const ConferenceLeague = () => {
               </CardContent>
             </Card>
           ) : (
-            <Card className="bg-white dark:bg-gray-800 border border-premium-gray-200 dark:border-gray-700 shadow-sm">
+            <Card className="bg-card border border-border shadow-sm">
               <CardHeader>
                 <CardTitle className="text-az-black dark:text-white flex items-center gap-2">
                   <Target className="w-5 h-5 text-az-red" />

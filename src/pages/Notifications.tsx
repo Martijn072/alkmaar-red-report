@@ -80,12 +80,12 @@ const Notifications = () => {
   const unreadCount = notifications.filter(n => !n.read).length;
 
   return (
-    <div className="min-h-screen bg-premium-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-background">
       <Header />
       
       <main className="pb-20">
         {/* Page Header */}
-        <div className="bg-white dark:bg-gray-900 border-b border-premium-gray-200 dark:border-gray-700 px-6 py-5">
+        <div className="bg-card border-b border-border px-6 py-5">
           <h1 className="headline-premium text-headline-lg text-az-black dark:text-white font-bold">
             Notificaties
           </h1>
@@ -93,14 +93,14 @@ const Notifications = () => {
 
         {/* CTA for non-authenticated users */}
         {!isAuthenticated && (
-          <div className="bg-white dark:bg-gray-900 border-b border-premium-gray-200 dark:border-gray-700 px-6 py-4">
+          <div className="bg-card border-b border-border px-6 py-4">
             <NotificationSettingsCTA />
           </div>
         )}
 
         {/* Status Bar */}
         {notifications.length > 0 && (
-          <div className="bg-white dark:bg-gray-900 border-b border-premium-gray-200 dark:border-gray-700 px-6 py-4">
+          <div className="bg-card border-b border-border px-6 py-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 {unreadCount > 0 && (
@@ -113,7 +113,7 @@ const Notifications = () => {
               <Button
                 onClick={() => clearAll.mutate()}
                 disabled={clearAll.isPending}
-                className="bg-white dark:bg-gray-800 border border-premium-gray-300 dark:border-gray-600 hover:bg-premium-gray-50 dark:hover:bg-gray-700 text-premium-gray-700 dark:text-gray-300 px-4 py-2 text-sm font-semibold transition-colors rounded-lg"
+                className="bg-card border border-border hover:bg-muted text-muted-foreground px-4 py-2 text-sm font-semibold transition-colors rounded-lg"
               >
                 <CheckCheck className="w-4 h-4 mr-2" />
                 <span className="hidden sm:inline">Alle gelezen</span>
@@ -148,7 +148,7 @@ const Notifications = () => {
                 <article
                   key={notification.id}
                   onClick={() => handleNotificationClick(notification)}
-                  className="card-premium dark:bg-gray-800 dark:border-gray-700 cursor-pointer transition-all hover:shadow-md group animate-slide-up overflow-hidden"
+                  className="card-premium cursor-pointer transition-all hover:shadow-md group animate-slide-up overflow-hidden"
                 >
                   <div className="p-4 sm:p-6">
                     <div className="flex items-start gap-3 sm:gap-4">

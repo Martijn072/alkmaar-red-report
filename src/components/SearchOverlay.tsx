@@ -71,58 +71,58 @@ export const SearchOverlay = ({ isOpen, onClose }: SearchOverlayProps) => {
   return (
     <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm animate-fade-in">
       <div className="flex items-start justify-center min-h-screen p-4 pt-20 bg-transparent">
-        <div className="w-full max-w-2xl bg-white dark:bg-gray-900 rounded-xl shadow-2xl animate-scale-in">
+        <div className="w-full max-w-2xl bg-card rounded-xl shadow-2xl animate-scale-in">
           {/* Header */}
-          <div className="flex items-center gap-4 p-6 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
-            <Search className="w-6 h-6 text-gray-400" />
+          <div className="flex items-center gap-4 p-6 border-b border-border bg-card">
+            <Search className="w-6 h-6 text-muted-foreground" />
             <input
               id="search-input"
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Zoek in alle AZ nieuws..."
-              className="flex-1 text-lg bg-transparent border-none outline-none text-gray-900 dark:text-white placeholder-gray-500"
+              className="flex-1 text-lg bg-transparent border-none outline-none text-foreground placeholder-muted-foreground"
             />
             <button
               onClick={handleClose}
-              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+              className="p-2 hover:bg-muted rounded-lg transition-colors"
             >
-              <X className="w-5 h-5 text-gray-500" />
+              <X className="w-5 h-5 text-muted-foreground" />
             </button>
           </div>
 
           {/* Results */}
-          <div className="max-h-96 overflow-y-auto bg-white dark:bg-gray-900">
+          <div className="max-h-96 overflow-y-auto bg-card">
             {isLoading && debouncedQuery && (
-              <div className="flex items-center justify-center py-8 bg-white dark:bg-gray-900">
+              <div className="flex items-center justify-center py-8 bg-card">
                 <Loader2 className="w-6 h-6 animate-spin text-az-red" />
-                <span className="ml-2 text-gray-600 dark:text-gray-400">Zoeken...</span>
+                <span className="ml-2 text-muted-foreground">Zoeken...</span>
               </div>
             )}
 
             {!isLoading && debouncedQuery && searchResults?.length === 0 && (
-              <div className="py-8 text-center bg-white dark:bg-gray-900">
-                <p className="text-gray-600 dark:text-gray-400">
+              <div className="py-8 text-center bg-card">
+                <p className="text-muted-foreground">
                   Geen artikelen gevonden voor "{debouncedQuery}"
                 </p>
               </div>
             )}
 
             {!debouncedQuery && (
-              <div className="py-8 text-center bg-white dark:bg-gray-900">
-                <p className="text-gray-600 dark:text-gray-400">
+              <div className="py-8 text-center bg-card">
+                <p className="text-muted-foreground">
                   Begin met typen om te zoeken in alle AZ nieuws
                 </p>
               </div>
             )}
 
             {searchResults && searchResults.length > 0 && (
-              <div className="divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-900">
+              <div className="divide-y divide-border bg-card">
                 {searchResults.map((article) => (
                   <button
                     key={article.id}
                     onClick={() => handleArticleClick(article.id)}
-                    className="w-full p-4 text-left hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors bg-white dark:bg-gray-900"
+                    className="w-full p-4 text-left hover:bg-muted transition-colors bg-card"
                   >
                     <div className="flex gap-4">
                       {article.imageUrl && (
@@ -133,13 +133,13 @@ export const SearchOverlay = ({ isOpen, onClose }: SearchOverlayProps) => {
                         />
                       )}
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-semibold text-gray-900 dark:text-white line-clamp-2 mb-1">
+                        <h3 className="font-semibold text-foreground line-clamp-2 mb-1">
                           {article.title}
                         </h3>
-                        <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2 mb-2">
+                        <p className="text-sm text-muted-foreground line-clamp-2 mb-2">
                           {article.excerpt}
                         </p>
-                        <div className="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-500">
+                        <div className="flex items-center gap-3 text-xs text-muted-foreground">
                           <span>{article.category}</span>
                           <span>•</span>
                           <span>{article.publishedAt}</span>

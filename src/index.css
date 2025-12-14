@@ -306,7 +306,7 @@
 
   /* Premium card styles */
   .card-premium {
-    @apply bg-white rounded-xl shadow-sm border border-premium-gray-100 hover:shadow-md transition-all duration-200;
+    @apply bg-card text-card-foreground rounded-xl shadow-sm border border-border hover:shadow-md transition-all duration-200;
   }
 
   /* Breaking news indicator */
