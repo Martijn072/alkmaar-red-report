@@ -18,6 +18,15 @@ export default {
 			}
 		},
 		extend: {
+			spacing: {
+				'xs': '0.5rem',    // 8px
+				's': '1rem',       // 16px
+				'm': '1.5rem',     // 24px
+				'l': '2rem',       // 32px
+				'xl': '3rem',      // 48px
+				'2xl': '4rem',     // 64px
+				'3xl': '6rem',     // 96px
+			},
 			colors: {
 				// AZ Brand Colors
 				'az-red': '#DB0021',
@@ -137,13 +146,24 @@ export default {
 						opacity: '1',
 						transform: 'translateY(0)'
 					}
+				},
+				'slide-down': {
+					'0%': {
+						opacity: '0',
+						transform: 'translateY(-100%)'
+					},
+					'100%': {
+						opacity: '1',
+						transform: 'translateY(0)'
+					}
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
 				'fade-in': 'fade-in 0.3s ease-out',
-				'slide-up': 'slide-up 0.4s ease-out'
+				'slide-up': 'slide-up 0.4s ease-out',
+				'slide-down': 'slide-down 0.3s ease-out'
 			}
 		}
 	},

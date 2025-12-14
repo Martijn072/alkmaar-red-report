@@ -1,4 +1,3 @@
-
 import { NewsCard } from "@/components/NewsCard";
 import { NextMatchWidget } from "@/components/NextMatchWidget";
 import { SocialMediaPromo } from "@/components/SocialMediaPromo";
@@ -11,6 +10,7 @@ import { usePullToRefresh } from "@/hooks/usePullToRefresh";
 import { useOfflineSync } from "@/hooks/useOfflineSync";
 import { LoadMoreSkeleton } from "@/components/LoadMoreSkeleton";
 import { Button } from "@/components/ui/button";
+import { H2 } from "@/components/ui/typography";
 import { useState, useEffect } from "react";
 import { articleCache } from "@/services/articleCache";
 
@@ -52,23 +52,23 @@ const Index = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-premium-gray-50 dark:bg-gray-900">
+      <div className="min-h-screen bg-premium-gray-50 dark:bg-gray-900 transition-colors duration-200">
         <OfflineIndicator 
           onSyncNow={handleManualSync}
           issyncing={isSyncing}
         />
         <Header />
         <main className="pb-20">
-          <div className="container mx-auto px-4 py-8">
+          <div className="container mx-auto px-s py-m">
             <div className="text-center animate-fade-in">
-              <h2 className="text-2xl font-bold text-red-600 mb-4">
+              <h2 className="text-2xl font-bold text-red-600 mb-s">
                 Fout bij het laden van artikelen
               </h2>
               <p className="text-premium-gray-600 dark:text-gray-400">
                 {error.message}
               </p>
               {!isOnline && (
-                <p className="text-sm text-premium-gray-500 dark:text-gray-400 mt-2">
+                <p className="text-sm text-premium-gray-500 dark:text-gray-400 mt-xs">
                   Controleer je internetverbinding of bekijk offline opgeslagen artikelen
                 </p>
               )}
@@ -81,7 +81,7 @@ const Index = () => {
   }
 
   return (
-    <div className="min-h-screen bg-premium-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-premium-gray-50 dark:bg-gray-900 transition-colors duration-200">
       <OfflineIndicator 
         onSyncNow={handleManualSync}
         issyncing={isSyncing}
@@ -96,31 +96,31 @@ const Index = () => {
       <Header />
       
       <main className="pb-20">
-        <div className="container mx-auto px-4 py-8">
+        <div className="container mx-auto px-s py-m md:py-l">
           {/* Next Match Widget */}
           <div className="animate-fade-in">
             <NextMatchWidget />
           </div>
           
           {/* News Section */}
-          <section className="mb-12">
-            <h2 className="headline-premium text-headline-lg text-az-black dark:text-white font-bold mb-6 animate-fade-in" style={{ animationDelay: '0.1s' }}>
+          <section className="mb-xl">
+            <H2 className="text-az-black dark:text-white mb-m animate-fade-in" style={{ animationDelay: '0.1s' }}>
               Laatste Nieuws
-            </h2>
+            </H2>
             
             {isLoading ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-m">
                 {[...Array(6)].map((_, index) => (
                   <div key={index} className="animate-pulse">
-                    <div className="bg-premium-gray-200 dark:bg-gray-700 rounded-lg aspect-video mb-4"></div>
-                    <div className="h-4 bg-premium-gray-200 dark:bg-gray-700 rounded mb-2"></div>
+                    <div className="bg-premium-gray-200 dark:bg-gray-700 rounded-lg aspect-video mb-s"></div>
+                    <div className="h-4 bg-premium-gray-200 dark:bg-gray-700 rounded mb-xs"></div>
                     <div className="h-4 bg-premium-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
                   </div>
                 ))}
               </div>
             ) : (
               <>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-m mb-m">
                   {articles.map((article, index) => (
                     <div 
                       key={article.id}
@@ -137,12 +137,12 @@ const Index = () => {
                     <Button
                       onClick={() => fetchNextPage()}
                       disabled={isFetchingNextPage || (!isOnline && !articles.length)}
-                      className="bg-az-red hover:bg-red-700 text-white px-8 py-3 text-lg transform transition-all duration-200 hover:scale-105 hover:shadow-lg active:scale-95 disabled:opacity-50"
+                      className="bg-az-red hover:bg-red-700 text-white px-l py-3 text-lg transform transition-all duration-200 hover:scale-105 hover:shadow-lg active:scale-95 disabled:opacity-50"
                     >
                       {isFetchingNextPage ? 'Laden...' : 'Meer artikelen laden'}
                     </Button>
                     {!isOnline && (
-                      <p className="text-sm text-premium-gray-500 dark:text-gray-400 mt-2">
+                      <p className="text-sm text-premium-gray-500 dark:text-gray-400 mt-xs">
                         Internetverbinding vereist voor meer artikelen
                       </p>
                     )}
