@@ -102,15 +102,6 @@ const Index = () => {
           {/* Next Match Card */}
           <div className="animate-fade-in mb-m">
             <NextMatchCard />
-            <div className="text-center mt-2">
-              <Link 
-                to="/wedstrijden" 
-                className="inline-flex items-center text-sm text-az-red hover:text-az-red/80 transition-colors"
-              >
-                Bekijk alle wedstrijden
-                <ArrowRight className="w-4 h-4 ml-1" />
-              </Link>
-            </div>
           </div>
           
           {/* News Section */}
