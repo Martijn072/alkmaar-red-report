@@ -108,36 +108,36 @@ export const NextMatchWidget = () => {
   };
 
   const widgetContent = (
-    <section 
-      className="card-premium dark:bg-gray-800 dark:border-gray-700 p-3 lg:p-4 hover:shadow-lg transition-all duration-300 animate-fade-in transform hover:scale-[1.01] cursor-pointer relative h-full flex flex-col justify-between bg-gradient-to-b from-az-red/5 to-transparent"
-      role="region"
-      aria-labelledby="next-match-title"
-      aria-describedby="next-match-details"
-    >
-      {/* Live Badge */}
-      {isLive && (
-        <div className="absolute top-2 right-2 z-10">
-          <div className="bg-az-red text-white rounded-md px-2 py-0.5 text-xs font-medium animate-pulse flex items-center gap-1">
-            <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
-            LIVE
+    <div className="mb-4">
+      <section 
+        className="card-premium dark:bg-gray-800 dark:border-gray-700 p-3 hover:shadow-lg transition-all duration-300 animate-fade-in transform hover:scale-[1.01] cursor-pointer relative"
+        role="region"
+        aria-labelledby="next-match-title"
+        aria-describedby="next-match-details"
+      >
+        {/* Live Badge */}
+        {isLive && (
+          <div className="absolute top-2 right-2 z-10">
+            <div className="bg-az-red text-white rounded-md px-2 py-0.5 text-xs font-medium animate-pulse flex items-center gap-1">
+              <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
+              LIVE
+            </div>
           </div>
-        </div>
-      )}
-      <h2 id="next-match-title" className="sr-only">Volgende AZ wedstrijd</h2>
-      
-      <div>
+        )}
+        <h2 id="next-match-title" className="sr-only">Volgende AZ wedstrijd</h2>
+        
         {/* Competitie naam */}
-        <div className="text-center mb-2 lg:mb-3">
-          <p className="text-xs lg:text-sm text-premium-gray-600 dark:text-gray-400">
+        <div className="text-center mb-2">
+          <p className="text-xs text-premium-gray-600 dark:text-gray-400">
             {displayFixture.league.name}
           </p>
         </div>
 
         {/* Teams met Logo's */}
-        <div className="flex items-center justify-center space-x-6 lg:space-x-8 mb-2 lg:mb-4" id="next-match-details">
+        <div className="flex items-center justify-center space-x-6 mb-2" id="next-match-details">
           {/* AZ Logo */}
           <div className="flex flex-col items-center transform transition-transform duration-300 hover:scale-110">
-            <div className="relative w-10 h-10 lg:w-14 lg:h-14">
+            <div className="relative w-10 h-10">
               <img
                 src={azTeam.logo}
                 alt="AZ Alkmaar clublogo"
@@ -157,7 +157,7 @@ export const NextMatchWidget = () => {
           {/* VS */}
           <div className="flex flex-col items-center">
             <span 
-              className="text-lg lg:text-xl font-bold text-premium-gray-400 dark:text-gray-500 animate-pulse"
+              className="text-lg font-bold text-premium-gray-400 dark:text-gray-500 animate-pulse"
               aria-label="tegen"
             >
               VS
@@ -166,7 +166,7 @@ export const NextMatchWidget = () => {
 
           {/* Opponent Logo */}
           <div className="flex flex-col items-center transform transition-transform duration-300 hover:scale-110">
-            <div className="relative w-10 h-10 lg:w-14 lg:h-14">
+            <div className="relative w-10 h-10">
               <img
                 src={opponentTeam.logo}
                 alt={`${opponentTeam.name} clublogo`}
@@ -185,11 +185,11 @@ export const NextMatchWidget = () => {
         </div>
 
         {/* Live Score or Date/Time */}
-        <div className="text-center mb-2 lg:mb-4">
+        <div className="text-center mb-2">
           {isLive ? (
             <div className="space-y-1">
               {/* Live Score */}
-              <div className="text-xl lg:text-2xl font-bold text-az-black dark:text-white">
+              <div className="text-xl font-bold text-az-black dark:text-white">
                 <span className={isAZHome ? 'text-az-red' : ''}>{displayFixture.goals?.home || 0}</span>
                 <span className="mx-2">-</span>
                 <span className={!isAZHome ? 'text-az-red' : ''}>{displayFixture.goals?.away || 0}</span>
@@ -230,22 +230,22 @@ export const NextMatchWidget = () => {
             </div>
           )}
         </div>
-      </div>
 
-      {/* Powered by - nu klikbaar */}
-      <div className="text-center pt-2 border-t border-premium-gray-100 dark:border-gray-700">
-        <a 
-          href="https://072design.nl"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-xs text-premium-gray-400 dark:text-gray-500 hover:text-az-red dark:hover:text-az-red hover:underline cursor-pointer transition-all duration-200 focus:ring-2 focus:ring-az-red focus:ring-offset-2 rounded"
-          aria-label="Externe link naar 072DESIGN website"
-          onClick={(e) => e.stopPropagation()}
-        >
-          Powered by 072DESIGN
-        </a>
-      </div>
-    </section>
+        {/* Powered by - nu klikbaar */}
+        <div className="text-center pt-2 border-t border-premium-gray-100 dark:border-gray-700">
+          <a 
+            href="https://072design.nl"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs text-premium-gray-400 dark:text-gray-500 hover:text-az-red dark:hover:text-az-red hover:underline cursor-pointer transition-all duration-200 focus:ring-2 focus:ring-az-red focus:ring-offset-2 rounded"
+            aria-label="Externe link naar 072DESIGN website"
+            onClick={(e) => e.stopPropagation()}
+          >
+            Powered by 072DESIGN
+          </a>
+        </div>
+      </section>
+    </div>
   );
 
   // Wrap in Link if fixture exists
