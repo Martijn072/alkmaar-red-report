@@ -737,6 +737,19 @@ export type Database = {
         }
         Returns: boolean
       }
+      get_my_wordpress_profile: {
+        Args: never
+        Returns: {
+          avatar_url: string
+          created_at: string
+          display_name: string
+          email: string
+          id: string
+          last_login_at: string
+          username: string
+          wordpress_user_id: number
+        }[]
+      }
       get_public_profile: {
         Args: { p_user_id: string }
         Returns: {
