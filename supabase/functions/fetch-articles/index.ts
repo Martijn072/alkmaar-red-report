@@ -186,11 +186,10 @@ serve(async (req) => {
     );
 
   } catch (error) {
-    console.error('Error in fetch-articles function:', error);
+    console.error('Error in fetch-articles function:', error.message, error.stack);
     return new Response(
       JSON.stringify({ 
-        error: 'Failed to process request',
-        message: error.message 
+        error: 'Er is een fout opgetreden. Probeer het later opnieuw.'
       }),
       { 
         status: 500,

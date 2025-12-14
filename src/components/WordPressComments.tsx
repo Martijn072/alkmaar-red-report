@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
+import DOMPurify from 'dompurify';
 import { MessageCircle, Send, Loader2, Reply, ChevronDown, ChevronUp, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -82,7 +83,7 @@ const CommentItem = ({
             {/* Comment content */}
             <div 
               className="mt-2 text-foreground prose prose-sm dark:prose-invert max-w-none"
-              dangerouslySetInnerHTML={{ __html: comment.content.rendered }}
+              dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(comment.content.rendered) }}
             />
 
             {/* Reply button */}

@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
+import DOMPurify from 'dompurify';
 import { useParams, useNavigate } from "react-router-dom";
 import { Download, Wifi } from "lucide-react";
 import { useArticleDetail } from "@/hooks/useArticleDetail";
@@ -232,6 +233,9 @@ const ArticleDetail = () => {
   const processedContent = displayArticle?.content 
     ? convertInternalLinks(cleanImageAttributes(cleanImageUrls(cleanWordPressContainers(displayArticle.content))))
     : displayArticle?.excerpt || '';
+
+  // Sanitize content to prevent XSS attacks
+  const sanitizedContent = useMemo(() => DOMPurify.sanitize(processedContent), [processedContent]);
 
   // DOM cleanup for any remaining image attributes after rendering
   useEffect(() => {
@@ -519,9 +523,9 @@ const ArticleDetail = () => {
             });
           }}
         >
-          <div 
+        <div 
             onClick={handleContentClick}
-            dangerouslySetInnerHTML={{ __html: processedContent }}
+            dangerouslySetInnerHTML={{ __html: sanitizedContent }}
           />
         </div>
 

@@ -329,11 +329,10 @@ serve(async (req: Request) => {
     });
 
   } catch (error: any) {
-    console.error('💥 WordPress auth error:', error);
+    console.error('💥 WordPress auth error:', error.message, error.stack);
     return new Response(JSON.stringify({
       success: false,
-      message: 'Server fout',
-      debug: error.message
+      message: 'Er is een fout opgetreden. Probeer het later opnieuw.'
     }), {
       status: 500,
       headers: { 'Content-Type': 'application/json', ...corsHeaders }
