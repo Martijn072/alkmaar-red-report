@@ -1,6 +1,7 @@
 import { HeroNewsCard } from "@/components/HeroNewsCard";
 import { NewsCard } from "@/components/NewsCard";
 import { NextMatchWidget } from "@/components/NextMatchWidget";
+import { SidebarStandings } from "@/components/SidebarStandings";
 import { SidebarSocialLinks } from "@/components/SidebarSocialLinks";
 import { PopularArticles } from "@/components/PopularArticles";
 import { ForumPostsWidget } from "@/components/ForumPostsWidget";
@@ -241,6 +242,9 @@ const Index = () => {
               <div className="sticky top-20 space-y-4">
                 <div className="animate-fade-in" style={{ animationDelay: '0.1s' }}>
                   <NextMatchWidget />
+                </div>
+                <div className="animate-fade-in" style={{ animationDelay: '0.15s' }}>
+                  <SidebarStandings />
                 </div>
                 <div className="animate-fade-in" style={{ animationDelay: '0.2s' }}>
                   <SidebarSocialLinks />
