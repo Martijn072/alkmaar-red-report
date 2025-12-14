@@ -1,16 +1,14 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, Download, Wifi } from "lucide-react";
+import { Download, Wifi } from "lucide-react";
 import { useArticleDetail } from "@/hooks/useArticleDetail";
 import { ArticlesSkeleton } from "@/components/ArticlesSkeleton";
 import { ErrorMessage } from "@/components/ErrorMessage";
 import { Header } from "@/components/Header";
 import { BottomNavigation } from "@/components/BottomNavigation";
-import { DisqusComments } from "@/components/DisqusComments";
+import { WordPressComments } from "@/components/WordPressComments";
 import { ShareBar } from "@/components/ShareBar";
 import { OfflineIndicator } from "@/components/OfflineIndicator";
-import { TTSButton } from "@/components/TTSButton";
-import { AudioPlayer } from "@/components/AudioPlayer";
 import { useOfflineSync } from "@/hooks/useOfflineSync";
 import { useOfflineDetection } from "@/hooks/useOfflineDetection";
 import { articleCache } from "@/services/articleCache";
@@ -21,7 +19,6 @@ const ArticleDetail = () => {
   const { data: article, isLoading, error, refetch } = useArticleDetail(id!);
   const [activeTab, setActiveTab] = useState("news");
   const [cachedArticle, setCachedArticle] = useState(null);
-  const [showAudioPlayer, setShowAudioPlayer] = useState(false);
   
   const { isSyncing, handleManualSync, isOnline } = useOfflineSync();
   
@@ -463,9 +460,9 @@ const ArticleDetail = () => {
           </div>
         )}
 
-        {/* Featured image */}
+        {/* Featured image - z-0 ensures it slides under sticky header */}
         {displayArticle.imageUrl && (
-          <div className="relative aspect-[16/9] overflow-hidden rounded-lg mb-6">
+          <div className="relative z-0 aspect-[16/9] overflow-hidden rounded-lg mb-6">
             <img 
               src={displayArticle.imageUrl} 
               alt={displayArticle.title}
@@ -498,35 +495,10 @@ const ArticleDetail = () => {
           </h1>
 
           {/* Meta info - Compact layout with author and date only */}
-          <div className="text-premium-gray-600 dark:text-gray-300 text-sm border-b border-premium-gray-200 dark:border-gray-700 pb-4 mb-4">
+          <div className="text-premium-gray-600 dark:text-gray-300 text-sm border-b border-premium-gray-200 dark:border-gray-700 pb-4">
             <span>{displayArticle.author} • {displayArticle.publishedAt}</span>
           </div>
-
-          {/* Audio Controls - Below author info for better mobile layout */}
-          <div className="flex flex-col sm:flex-row gap-3 mb-4">
-            <TTSButton 
-              text={`${displayArticle.title}. ${displayArticle.content || displayArticle.excerpt}`}
-              title={displayArticle.title}
-              className="w-full sm:w-auto"
-            />
-            <button
-              onClick={() => setShowAudioPlayer(!showAudioPlayer)}
-              className="text-az-red hover:text-red-700 text-sm underline font-medium text-left sm:text-center"
-            >
-              {showAudioPlayer ? 'Verberg audio opties' : 'Meer audio opties'}
-            </button>
-          </div>
         </header>
-
-        {/* Audio Player */}
-        {showAudioPlayer && !isShowingCachedContent && (
-          <div className="mb-6">
-            <AudioPlayer 
-              text={`${displayArticle.title}. ${displayArticle.content || displayArticle.excerpt}`}
-              title={displayArticle.title}
-            />
-          </div>
-        )}
 
         {/* Article content with enhanced styling and debug info */}
         <div 
@@ -555,10 +527,9 @@ const ArticleDetail = () => {
 
         {/* Comments only show for online content */}
         {!isShowingCachedContent && (
-          <DisqusComments
-            slug={displayArticle.slug || id!}
-            title={displayArticle.title}
+          <WordPressComments
             articleId={id!}
+            articleTitle={displayArticle.title}
           />
         )}
 
