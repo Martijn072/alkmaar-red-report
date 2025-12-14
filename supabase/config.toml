@@ -1,1 +1,4 @@
 project_id = "vweraucnekeucrryqjlo"
+
+[functions.forum-rss]
+verify_jwt = false
