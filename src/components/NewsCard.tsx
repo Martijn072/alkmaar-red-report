@@ -35,8 +35,8 @@ export const NewsCard = ({ article, variant = "default" }: NewsCardProps) => {
         className="card-premium dark:bg-gray-800 dark:border-gray-700 overflow-hidden w-full group transform transition-all duration-300 hover:shadow-xl cursor-pointer flex flex-col sm:flex-row"
         onClick={handleClick}
       >
-        {/* Image - Left side */}
-        <div className="relative w-full sm:w-1/3 aspect-[16/9] sm:aspect-auto sm:min-h-[140px] overflow-hidden flex-shrink-0">
+        {/* Image - Left side (40% width) */}
+        <div className="relative w-full sm:w-2/5 aspect-[16/9] sm:aspect-[4/3] overflow-hidden flex-shrink-0">
           <OptimizedImage 
             src={article.imageUrl} 
             alt={article.title}
@@ -49,32 +49,27 @@ export const NewsCard = ({ article, variant = "default" }: NewsCardProps) => {
               </span>
             </div>
           )}
-          <div className="absolute top-2 right-2 bg-az-red/90 backdrop-blur-sm px-2 py-0.5 rounded text-xs font-semibold text-white shadow-lg">
-            {article.category}
-          </div>
-          
-          {/* Overlay gradient on hover */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         </div>
 
         {/* Content - Right side */}
-        <div className="p-4 flex flex-col justify-center flex-1">
-          <h2 className="font-headline text-base lg:text-lg font-semibold mb-2 line-clamp-2 text-foreground group-hover:text-az-red transition-colors duration-300">
+        <div className="p-5 flex flex-col justify-center flex-1">
+          {/* Category boven titel */}
+          <span className="inline-block bg-az-red text-white px-3 py-1 rounded text-xs font-semibold uppercase tracking-wide mb-3 w-fit">
+            {article.category}
+          </span>
+          
+          <h2 className="font-headline text-lg lg:text-xl font-bold mb-2 line-clamp-2 text-foreground group-hover:text-az-red transition-colors duration-300">
             {article.title}
           </h2>
           
-          <p className="text-sm text-muted-foreground mb-3 line-clamp-2 hidden sm:block">
+          <p className="text-sm text-muted-foreground mb-3 line-clamp-1 hidden sm:block">
             {article.excerpt}
           </p>
 
-          {/* Meta info */}
-          <div className="flex items-center gap-2 text-xs text-muted-foreground">
-            <span>{article.author}</span>
-            <span>•</span>
-            <div className="flex items-center gap-1">
-              <Clock className="w-3 h-3" />
-              <span>{article.readTime}</span>
-            </div>
+          {/* Vereenvoudigde meta */}
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <span>Door {article.author}</span>
             <span>•</span>
             <span>{article.publishedAt}</span>
           </div>
