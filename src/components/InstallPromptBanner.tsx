@@ -102,9 +102,9 @@ export const InstallPromptBanner = () => {
           {/* App icoon */}
           <div className="flex-shrink-0">
             <img
-              src="/images/az-fanpage-logo.png"
+              src="/icons/icon-192x192.png"
               alt="AZFanpage"
-              className="w-12 h-12 object-contain"
+              className="w-12 h-12 rounded-xl"
             />
           </div>
 
