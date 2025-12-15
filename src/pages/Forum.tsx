@@ -1,11 +1,12 @@
-import { MessageSquare, ExternalLink, Clock, User, Tag } from "lucide-react";
+import { MessageSquare, ExternalLink, Clock, User, Tag, Filter } from "lucide-react";
 import { Header } from "@/components/Header";
 import { BottomNavigation } from "@/components/BottomNavigation";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Badge } from "@/components/ui/badge";
 import { useForumRSS, ForumPost } from "@/hooks/useForumRSS";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 
 const formatRelativeTime = (dateString: string): string => {
   const date = new Date(dateString);
@@ -75,10 +76,63 @@ const ForumSkeleton = () => (
   </div>
 );
 
+const CategoryFilter = ({ 
+  categories, 
+  selectedCategory, 
+  onCategoryChange 
+}: { 
+  categories: string[];
+  selectedCategory: string | null;
+  onCategoryChange: (category: string | null) => void;
+}) => (
+  <div className="flex flex-wrap gap-2">
+    <Badge
+      variant={selectedCategory === null ? "default" : "outline"}
+      className={`cursor-pointer transition-colors ${
+        selectedCategory === null 
+          ? "bg-az-red hover:bg-az-red/90 text-white" 
+          : "hover:bg-muted"
+      }`}
+      onClick={() => onCategoryChange(null)}
+    >
+      Alles
+    </Badge>
+    {categories.map((category) => (
+      <Badge
+        key={category}
+        variant={selectedCategory === category ? "default" : "outline"}
+        className={`cursor-pointer transition-colors ${
+          selectedCategory === category 
+            ? "bg-az-red hover:bg-az-red/90 text-white" 
+            : "hover:bg-muted"
+        }`}
+        onClick={() => onCategoryChange(category)}
+      >
+        {category}
+      </Badge>
+    ))}
+  </div>
+);
+
 const Forum = () => {
   const [activeTab, setActiveTab] = useState("forum");
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const { data: posts, isLoading, error, refetch } = useForumRSS();
   const forumUrl = "https://www.azfanpage.nl/forum/";
+
+  // Extract unique categories from posts
+  const categories = useMemo(() => {
+    if (!posts) return [];
+    const uniqueCategories = [...new Set(posts.map(p => p.category).filter(Boolean))] as string[];
+    return uniqueCategories.sort();
+  }, [posts]);
+
+  // Filter posts by selected category
+  const filteredPosts = useMemo(() => {
+    if (!posts) return [];
+    if (!selectedCategory) return posts;
+    return posts.filter(post => post.category === selectedCategory);
+  }, [posts, selectedCategory]);
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -125,6 +179,21 @@ const Forum = () => {
               </Button>
             </div>
 
+            {/* Category Filter */}
+            {categories.length > 0 && (
+              <div className="mb-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <Filter className="w-4 h-4 text-muted-foreground" />
+                  <span className="text-sm text-muted-foreground">Filter op categorie:</span>
+                </div>
+                <CategoryFilter 
+                  categories={categories}
+                  selectedCategory={selectedCategory}
+                  onCategoryChange={setSelectedCategory}
+                />
+              </div>
+            )}
+
             {isLoading ? (
               <ForumSkeleton />
             ) : error ? (
@@ -137,9 +206,9 @@ const Forum = () => {
                   Opnieuw proberen
                 </Button>
               </Card>
-            ) : posts && posts.length > 0 ? (
+            ) : filteredPosts && filteredPosts.length > 0 ? (
               <div className="space-y-3">
-                {posts.map((post, index) => (
+                {filteredPosts.map((post, index) => (
                   <ForumPostCard key={index} post={post} />
                 ))}
               </div>
@@ -147,13 +216,25 @@ const Forum = () => {
               <Card className="p-8 text-center">
                 <MessageSquare className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
                 <p className="text-muted-foreground">
-                  Geen recente discussies gevonden
+                  {selectedCategory 
+                    ? `Geen discussies gevonden in "${selectedCategory}"`
+                    : "Geen recente discussies gevonden"
+                  }
                 </p>
+                {selectedCategory && (
+                  <Button 
+                    variant="outline" 
+                    className="mt-4"
+                    onClick={() => setSelectedCategory(null)}
+                  >
+                    Toon alle discussies
+                  </Button>
+                )}
               </Card>
             )}
 
             {/* Bottom CTA */}
-            {posts && posts.length > 0 && (
+            {filteredPosts && filteredPosts.length > 0 && (
               <div className="mt-6 text-center">
                 <Button
                   variant="outline"
