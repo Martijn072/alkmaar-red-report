@@ -41,6 +41,12 @@ const ForumPostCard = ({ post }: { post: ForumPost }) => (
           {post.title}
         </h3>
         
+        {post.content && (
+          <p className="text-sm text-muted-foreground line-clamp-2">
+            {post.content}
+          </p>
+        )}
+        
         <div className="flex items-center gap-4 text-xs text-muted-foreground">
           {post.author && (
             <div className="flex items-center gap-1">

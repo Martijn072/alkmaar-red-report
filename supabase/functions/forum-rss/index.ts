@@ -11,6 +11,7 @@ interface ForumPost {
   pubDate: string;
   author?: string;
   category?: string;
+  content?: string;
 }
 
 serve(async (req) => {
@@ -71,6 +72,22 @@ serve(async (req) => {
       // Extract category label attribute
       const categoryMatch = entryXml.match(/<category[^>]*label="([^"]+)"[^>]*\/?>/);
       const category = categoryMatch ? categoryMatch[1] : undefined;
+      
+      // Extract content (with CDATA support, can be in <content> or <summary>)
+      const contentMatch = entryXml.match(/<(?:content|summary)[^>]*>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/(?:content|summary)>/);
+      let content = contentMatch ? contentMatch[1].trim() : undefined;
+      
+      // Strip HTML tags from content and limit length
+      if (content) {
+        content = content
+          .replace(/<[^>]+>/g, ' ')  // Remove HTML tags
+          .replace(/\s+/g, ' ')       // Normalize whitespace
+          .trim();
+        // Limit to ~200 characters
+        if (content.length > 200) {
+          content = content.substring(0, 200).trim() + '...';
+        }
+      }
 
       if (title && link) {
         // Clean up title (often includes "Category • Re: Title" format)
@@ -82,6 +99,7 @@ serve(async (req) => {
           pubDate,
           author: author ? decodeHTMLEntities(author) : undefined,
           category: category ? decodeHTMLEntities(category) : undefined,
+          content: content ? decodeHTMLEntities(content) : undefined,
         });
       }
     }

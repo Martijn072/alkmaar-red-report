@@ -7,6 +7,7 @@ export interface ForumPost {
   pubDate: string;
   author?: string;
   category?: string;
+  content?: string;
 }
 
 export const useForumRSS = () => {
