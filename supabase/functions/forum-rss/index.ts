@@ -20,21 +20,21 @@ serve(async (req) => {
   }
 
   try {
-    console.log('Fetching forum RSS feed...');
+    console.log('Fetching forum Atom feed...');
     
-    const rssUrl = 'https://www.azfanpage.nl/forum/index.php?action=.xml;type=rss2';
+    const feedUrl = 'https://azfanpage.nl/forum/feed';
     
-    const response = await fetch(rssUrl, {
+    const response = await fetch(feedUrl, {
       headers: {
         'User-Agent': 'AZFanpage-App/1.0',
-        'Accept': 'application/rss+xml, application/xml, text/xml',
+        'Accept': 'application/atom+xml, application/xml, text/xml',
       },
     });
 
     if (!response.ok) {
-      console.error('Failed to fetch RSS:', response.status, response.statusText);
+      console.error('Failed to fetch feed:', response.status, response.statusText);
       return new Response(
-        JSON.stringify({ posts: [], error: 'Failed to fetch RSS feed' }),
+        JSON.stringify({ posts: [], error: 'Failed to fetch forum feed' }),
         { 
           status: 200, 
           headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
@@ -43,27 +43,39 @@ serve(async (req) => {
     }
 
     const xmlText = await response.text();
-    console.log('RSS feed fetched, parsing...');
+    console.log('Atom feed fetched, parsing...');
 
-    // Parse XML manually (Deno doesn't have DOMParser)
+    // Parse Atom feed format (phpBB uses Atom, not RSS 2.0)
     const posts: ForumPost[] = [];
     
-    // Simple regex-based XML parsing for RSS items
-    const itemMatches = xmlText.match(/<item>([\s\S]*?)<\/item>/g) || [];
+    // Extract <entry> elements from Atom feed
+    const entryMatches = xmlText.match(/<entry>([\s\S]*?)<\/entry>/g) || [];
     
-    for (const itemXml of itemMatches.slice(0, 10)) {
-      const getTagContent = (tag: string): string => {
-        const match = itemXml.match(new RegExp(`<${tag}[^>]*><!\\[CDATA\\[([\\s\\S]*?)\\]\\]><\\/${tag}>|<${tag}[^>]*>([\\s\\S]*?)<\\/${tag}>`));
-        return match ? (match[1] || match[2] || '').trim() : '';
-      };
-
-      const title = getTagContent('title');
-      const link = getTagContent('link');
-      const pubDate = getTagContent('pubDate');
-      const author = getTagContent('dc:creator') || getTagContent('author');
-      const category = getTagContent('category');
+    for (const entryXml of entryMatches.slice(0, 10)) {
+      // Extract title (with CDATA support)
+      const titleMatch = entryXml.match(/<title[^>]*>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/title>/);
+      let title = titleMatch ? titleMatch[1].trim() : '';
+      
+      // Extract link href attribute
+      const linkMatch = entryXml.match(/<link[^>]*href="([^"]+)"[^>]*\/?>/);
+      const link = linkMatch ? linkMatch[1] : '';
+      
+      // Extract published or updated date
+      const dateMatch = entryXml.match(/<(?:published|updated)>([^<]+)<\/(?:published|updated)>/);
+      const pubDate = dateMatch ? dateMatch[1] : '';
+      
+      // Extract author name (nested in <author><name>)
+      const authorMatch = entryXml.match(/<author>[\s\S]*?<name>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/name>[\s\S]*?<\/author>/);
+      const author = authorMatch ? authorMatch[1].trim() : undefined;
+      
+      // Extract category label attribute
+      const categoryMatch = entryXml.match(/<category[^>]*label="([^"]+)"[^>]*\/?>/);
+      const category = categoryMatch ? categoryMatch[1] : undefined;
 
       if (title && link) {
+        // Clean up title (often includes "Category • Re: Title" format)
+        title = title.replace(/^[^•]+•\s*/, ''); // Remove category prefix
+        
         posts.push({
           title: decodeHTMLEntities(title),
           link,
