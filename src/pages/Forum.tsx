@@ -1,135 +1,173 @@
-import { useState, useEffect, useRef } from "react";
-import { MessageSquare, RefreshCw, ExternalLink } from "lucide-react";
+import { MessageSquare, ExternalLink, Clock, User, Tag } from "lucide-react";
 import { Header } from "@/components/Header";
 import { BottomNavigation } from "@/components/BottomNavigation";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useForumRSS, ForumPost } from "@/hooks/useForumRSS";
+import { useState } from "react";
+
+const formatRelativeTime = (dateString: string): string => {
+  const date = new Date(dateString);
+  const now = new Date();
+  const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+
+  if (diffInSeconds < 60) return "Zojuist";
+  if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} min geleden`;
+  if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} uur geleden`;
+  if (diffInSeconds < 604800) return `${Math.floor(diffInSeconds / 86400)} dagen geleden`;
+  
+  return date.toLocaleDateString('nl-NL', { day: 'numeric', month: 'short' });
+};
+
+const ForumPostCard = ({ post }: { post: ForumPost }) => (
+  <a
+    href={post.link}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="block"
+  >
+    <Card className="p-4 hover:bg-muted/50 transition-colors border-border">
+      <div className="space-y-2">
+        {post.category && (
+          <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+            <Tag className="w-3 h-3" />
+            <span>{post.category}</span>
+          </div>
+        )}
+        
+        <h3 className="font-semibold text-foreground line-clamp-2 group-hover:text-az-red transition-colors">
+          {post.title}
+        </h3>
+        
+        <div className="flex items-center gap-4 text-xs text-muted-foreground">
+          {post.author && (
+            <div className="flex items-center gap-1">
+              <User className="w-3 h-3" />
+              <span>{post.author}</span>
+            </div>
+          )}
+          <div className="flex items-center gap-1">
+            <Clock className="w-3 h-3" />
+            <span>{formatRelativeTime(post.pubDate)}</span>
+          </div>
+        </div>
+      </div>
+    </Card>
+  </a>
+);
+
+const ForumSkeleton = () => (
+  <div className="space-y-3">
+    {[...Array(6)].map((_, i) => (
+      <Card key={i} className="p-4">
+        <div className="space-y-2">
+          <Skeleton className="h-3 w-20" />
+          <Skeleton className="h-5 w-full" />
+          <Skeleton className="h-4 w-3/4" />
+          <div className="flex gap-4">
+            <Skeleton className="h-3 w-24" />
+            <Skeleton className="h-3 w-20" />
+          </div>
+        </div>
+      </Card>
+    ))}
+  </div>
+);
 
 const Forum = () => {
   const [activeTab, setActiveTab] = useState("forum");
-  const [isLoading, setIsLoading] = useState(true);
-  const [webviewError, setWebviewError] = useState(false);
-  const iframeRef = useRef<HTMLIFrameElement>(null);
-
+  const { data: posts, isLoading, error, refetch } = useForumRSS();
   const forumUrl = "https://www.azfanpage.nl/forum/";
-
-  useEffect(() => {
-    const iframe = iframeRef.current;
-    if (iframe) {
-      const handleLoad = () => {
-        setIsLoading(false);
-        setWebviewError(false);
-      };
-
-      const handleError = () => {
-        setIsLoading(false);
-        setWebviewError(true);
-      };
-
-      iframe.addEventListener('load', handleLoad);
-      iframe.addEventListener('error', handleError);
-
-      // Set a timeout to stop loading state after reasonable time
-      const timeout = setTimeout(() => {
-        setIsLoading(false);
-      }, 8000);
-
-      return () => {
-        iframe.removeEventListener('load', handleLoad);
-        iframe.removeEventListener('error', handleError);
-        clearTimeout(timeout);
-      };
-    }
-  }, []);
-
-  const handleRefresh = () => {
-    if (iframeRef.current) {
-      setIsLoading(true);
-      setWebviewError(false);
-      iframeRef.current.src = iframeRef.current.src;
-    }
-  };
-
-  const openInBrowser = () => {
-    window.open(forumUrl, '_blank');
-  };
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Header />
       
-      {/* Forum Header */}
-      <div className="bg-card border-b border-border px-4 py-3 flex items-center justify-between shrink-0">
-        <div className="flex items-center gap-3">
-          <MessageSquare className="w-6 h-6 text-az-red" />
-          <h1 className="text-lg font-bold text-az-black dark:text-white">
-            AZ Forum
-          </h1>
-        </div>
-        
-        <div className="flex items-center gap-2">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleRefresh}
-            className="text-premium-gray-600 dark:text-gray-300 hover:text-az-red"
-          >
-            <RefreshCw className="w-4 h-4" />
-          </Button>
-          <Button
-            variant="ghost" 
-            size="sm"
-            onClick={openInBrowser}
-            className="text-premium-gray-600 dark:text-gray-300 hover:text-az-red"
-          >
-            <ExternalLink className="w-4 h-4" />
-          </Button>
-        </div>
-      </div>
-
-      {/* Forum Content */}
-      <div className="flex-1 relative min-h-0">
-        {isLoading && (
-          <div className="absolute inset-0 flex items-center justify-center bg-background z-10">
-            <div className="text-center">
-              <div className="w-8 h-8 border-4 border-az-red border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-              <p className="text-premium-gray-600 dark:text-gray-400">
-                Forum laden...
-              </p>
+      <main className="flex-1 px-4 py-6 pb-24">
+        <div className="max-w-2xl mx-auto">
+          {/* Header Section */}
+          <div className="text-center mb-6">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-az-red/10 rounded-full mb-4">
+              <MessageSquare className="w-8 h-8 text-az-red" />
             </div>
+            <h1 className="text-2xl font-bold text-foreground mb-2">
+              AZ Forum
+            </h1>
+            <p className="text-muted-foreground mb-6">
+              Praat mee met andere AZ supporters over alles wat met AZ te maken heeft.
+            </p>
+            
+            {/* Prominent CTA Button */}
+            <Button
+              size="lg"
+              className="bg-az-red hover:bg-az-red/90 text-white gap-2 shadow-lg"
+              onClick={() => window.open(forumUrl, '_blank')}
+            >
+              <ExternalLink className="w-5 h-5" />
+              Open Forum
+            </Button>
           </div>
-        )}
 
-        {webviewError ? (
-          <div className="flex items-center justify-center h-full p-8">
-            <div className="text-center">
-              <MessageSquare className="w-16 h-16 text-premium-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-premium-gray-600 dark:text-gray-300 mb-2">
-                Forum niet beschikbaar
-              </h3>
-              <p className="text-premium-gray-500 dark:text-gray-400 mb-6">
-                Het forum kan momenteel niet worden geladen.
-              </p>
-              <div className="space-y-3">
-                <Button onClick={handleRefresh} className="w-full bg-az-red hover:bg-red-700">
+          {/* Recent Posts Section */}
+          <div className="mt-8">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-semibold text-foreground">
+                Recente Discussies
+              </h2>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => refetch()}
+                className="text-muted-foreground hover:text-foreground"
+              >
+                Vernieuwen
+              </Button>
+            </div>
+
+            {isLoading ? (
+              <ForumSkeleton />
+            ) : error ? (
+              <Card className="p-8 text-center">
+                <MessageSquare className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+                <p className="text-muted-foreground mb-4">
+                  Kon forumposts niet laden
+                </p>
+                <Button variant="outline" onClick={() => refetch()}>
                   Opnieuw proberen
                 </Button>
-                <Button variant="outline" onClick={openInBrowser} className="w-full">
-                  Open in browser
+              </Card>
+            ) : posts && posts.length > 0 ? (
+              <div className="space-y-3">
+                {posts.map((post, index) => (
+                  <ForumPostCard key={index} post={post} />
+                ))}
+              </div>
+            ) : (
+              <Card className="p-8 text-center">
+                <MessageSquare className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+                <p className="text-muted-foreground">
+                  Geen recente discussies gevonden
+                </p>
+              </Card>
+            )}
+
+            {/* Bottom CTA */}
+            {posts && posts.length > 0 && (
+              <div className="mt-6 text-center">
+                <Button
+                  variant="outline"
+                  className="gap-2"
+                  onClick={() => window.open(forumUrl, '_blank')}
+                >
+                  <ExternalLink className="w-4 h-4" />
+                  Bekijk alle discussies
                 </Button>
               </div>
-            </div>
+            )}
           </div>
-        ) : (
-          <iframe
-            ref={iframeRef}
-            src={forumUrl}
-            className="w-full h-full border-0"
-            title="AZ Forum"
-            style={{ minHeight: 'calc(100vh - 140px)' }}
-            allowFullScreen
-          />
-        )}
-      </div>
+        </div>
+      </main>
 
       <BottomNavigation activeTab={activeTab} onTabChange={setActiveTab} />
     </div>
