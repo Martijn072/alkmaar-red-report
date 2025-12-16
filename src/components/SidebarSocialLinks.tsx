@@ -21,7 +21,7 @@ const socialLinks = [
   {
     name: "Instagram",
     icon: Instagram,
-    url: "https://instagram.com/azfanpage",
+    url: "https://instagram.com/azfanpagenl",
   },
   {
     name: "YouTube",

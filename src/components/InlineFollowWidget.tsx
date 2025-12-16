@@ -30,7 +30,7 @@ const socialLinks = [
   {
     name: "Instagram",
     icon: Instagram,
-    url: "https://www.instagram.com/azfanpage",
+    url: "https://www.instagram.com/azfanpagenl",
     bgColor: "bg-[#E4405F]/10 hover:bg-[#E4405F]/20",
     textColor: "text-[#E4405F]",
   },

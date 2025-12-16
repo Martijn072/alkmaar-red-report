@@ -1,4 +1,4 @@
-import { Link, MessageCircle } from "lucide-react";
+import { Link, MessageCircle, Facebook } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 // Custom X (Twitter) icon
@@ -60,12 +60,24 @@ export const InlineShareWidget = ({ article }: InlineShareWidgetProps) => {
     window.open(twitterUrl, '_blank');
   };
 
+  const handleFacebookShare = () => {
+    const url = getMainSiteUrl();
+    const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+    window.open(facebookUrl, '_blank');
+  };
+
   const shareButtons = [
     {
       name: "WhatsApp",
       icon: MessageCircle,
       onClick: handleWhatsAppShare,
       bgColor: "bg-[#25D366] hover:bg-[#20BD5A]",
+    },
+    {
+      name: "Facebook",
+      icon: Facebook,
+      onClick: handleFacebookShare,
+      bgColor: "bg-[#1877F2] hover:bg-[#1565C0]",
     },
     {
       name: "X",
