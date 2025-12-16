@@ -4,7 +4,7 @@ import { Facebook, Instagram } from "lucide-react";
 const XIcon = () => (
   <svg
     viewBox="0 0 24 24"
-    className="w-5 h-5"
+    className="w-6 h-6"
     fill="currentColor"
     aria-hidden="true"
   >
@@ -17,38 +17,46 @@ const socialLinks = [
     name: "X",
     icon: XIcon,
     url: "https://x.com/azfanpage",
-    hoverClass: "hover:text-foreground hover:bg-muted",
+    bgColor: "bg-foreground/10 hover:bg-foreground/20",
+    textColor: "text-foreground",
   },
   {
     name: "Facebook",
     icon: Facebook,
     url: "https://www.facebook.com/azfanpage",
-    hoverClass: "hover:text-[#1877F2] hover:bg-blue-50 dark:hover:bg-blue-950/30",
+    bgColor: "bg-[#1877F2]/10 hover:bg-[#1877F2]/20",
+    textColor: "text-[#1877F2]",
   },
   {
     name: "Instagram",
     icon: Instagram,
     url: "https://www.instagram.com/azfanpage",
-    hoverClass: "hover:text-[#E4405F] hover:bg-pink-50 dark:hover:bg-pink-950/30",
+    bgColor: "bg-[#E4405F]/10 hover:bg-[#E4405F]/20",
+    textColor: "text-[#E4405F]",
   },
 ];
 
 export const InlineFollowWidget = () => {
   return (
-    <div className="mt-8 p-4 bg-muted/50 border border-border rounded-lg">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-        <p className="text-sm font-medium text-foreground">
-          Volg AZFanpage
-        </p>
+    <div className="mt-8 p-5 bg-gradient-to-r from-primary/5 via-primary/10 to-primary/5 border border-primary/20 rounded-xl">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="text-center sm:text-left">
+          <p className="text-base font-semibold text-foreground">
+            Mis geen AZ nieuws
+          </p>
+          <p className="text-sm text-muted-foreground mt-0.5">
+            Volg AZFanpage op social media
+          </p>
+        </div>
         
-        <div className="flex items-center gap-2">
+        <div className="flex items-center justify-center sm:justify-end gap-3">
           {socialLinks.map((social) => (
             <a
               key={social.name}
               href={social.url}
               target="_blank"
               rel="noopener noreferrer"
-              className={`p-2 rounded-full text-muted-foreground transition-all duration-200 ${social.hoverClass}`}
+              className={`p-3 rounded-full transition-all duration-200 ${social.bgColor} ${social.textColor}`}
               aria-label={`Volg ons op ${social.name}`}
             >
               <social.icon />

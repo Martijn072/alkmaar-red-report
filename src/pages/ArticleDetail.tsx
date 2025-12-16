@@ -531,14 +531,6 @@ const ArticleDetail = () => {
           />
         </div>
 
-        {/* Related articles carousel - only show when online */}
-        {!isShowingCachedContent && displayArticle.category && (
-          <RelatedArticlesCarousel
-            currentArticleId={displayArticle.id}
-            category={displayArticle.category}
-          />
-        )}
-
         {/* Inline follow widget - only show when online */}
         {!isShowingCachedContent && <InlineFollowWidget />}
 
@@ -548,6 +540,14 @@ const ArticleDetail = () => {
             articleId={id!}
             articleTitle={displayArticle.title}
             articleSlug={displayArticle.slug}
+          />
+        )}
+
+        {/* Related articles carousel - below comments, only show when online */}
+        {!isShowingCachedContent && displayArticle.category && (
+          <RelatedArticlesCarousel
+            currentArticleId={displayArticle.id}
+            category={displayArticle.category}
           />
         )}
 
