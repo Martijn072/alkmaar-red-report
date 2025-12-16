@@ -25,27 +25,17 @@ const Over = () => {
         <div className="max-w-2xl mx-auto space-y-6">
           {/* Header Card */}
           <Card className="bg-card border border-border shadow-sm">
-            <CardHeader>
-              <div className="flex items-center gap-4">
+            <CardContent className="pt-6">
+              <div className="flex flex-col items-center text-center">
                 <img 
                   src="/images/az-fanpage-logo.png" 
                   alt="AZFanpage logo" 
-                  className="w-16 h-16 rounded-xl object-contain"
+                  className="w-32 h-32 object-contain mb-4"
                 />
-                <div>
-                  <CardTitle className="text-2xl font-bold text-foreground">
-                    AZFanpage
-                  </CardTitle>
-                  <p className="text-sm text-muted-foreground">
-                    Opgericht: februari 2000
-                  </p>
-                </div>
+                <p className="text-muted-foreground leading-relaxed italic">
+                  "Al meer dan 25 jaar het AZ nieuws vanuit supportersperspectief"
+                </p>
               </div>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground leading-relaxed italic">
-                "Al meer dan 25 jaar het AZ nieuws vanuit supportersperspectief"
-              </p>
             </CardContent>
           </Card>
 
