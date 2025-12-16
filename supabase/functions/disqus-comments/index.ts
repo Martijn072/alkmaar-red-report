@@ -191,14 +191,25 @@ async function fetchComments(apiKey: string, threadId: string, corsHeaders: Reco
   postsUrl.searchParams.set('api_key', apiKey);
   postsUrl.searchParams.set('thread', threadId);
   postsUrl.searchParams.set('limit', '100');
-  postsUrl.searchParams.set('order', 'popular'); // Most liked first
+  postsUrl.searchParams.set('order', 'desc'); // Newest first
   
   console.log(`Fetching posts for thread ${threadId}...`);
   const postsResponse = await fetch(postsUrl.toString());
-  const postsData: DisqusResponse = await postsResponse.json();
+  const postsData = await postsResponse.json();
   
-  if (!postsData.response) {
-    console.log('No posts found');
+  console.log(`Posts API response code: ${postsData.code}`);
+  console.log(`Posts response type: ${typeof postsData.response}, isArray: ${Array.isArray(postsData.response)}`);
+  
+  if (postsData.code !== 0) {
+    console.error(`Posts API error: ${JSON.stringify(postsData)}`);
+    return new Response(
+      JSON.stringify({ comments: [], totalComments: 0, error: postsData.response }),
+      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    );
+  }
+  
+  if (!postsData.response || !Array.isArray(postsData.response)) {
+    console.log('No posts found or invalid response format');
     return new Response(
       JSON.stringify({ comments: [], totalComments: 0 }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -220,7 +231,7 @@ async function fetchComments(apiKey: string, threadId: string, corsHeaders: Reco
     parentId: post.parent ? String(post.parent) : null,
   }));
 
-  console.log(`Returning ${comments.length} comments`);
+  console.log(`✅ Returning ${comments.length} comments`);
   
   return new Response(
     JSON.stringify({ 
