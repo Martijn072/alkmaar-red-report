@@ -3,7 +3,8 @@ import DOMPurify from 'dompurify';
 import { useParams, useNavigate } from "react-router-dom";
 import { Download, Wifi } from "lucide-react";
 import { RelatedArticlesCarousel } from "@/components/RelatedArticlesCarousel";
-import { ArticleEngagementWidget } from "@/components/ArticleEngagementWidget";
+import { InlineFollowWidget } from "@/components/InlineFollowWidget";
+import { InlineShareWidget } from "@/components/InlineShareWidget";
 import { useArticleDetail } from "@/hooks/useArticleDetail";
 import { ArticlesSkeleton } from "@/components/ArticlesSkeleton";
 import { ErrorMessage } from "@/components/ErrorMessage";
@@ -531,10 +532,13 @@ const ArticleDetail = () => {
           />
         </div>
 
-        {/* Combined share & follow widget - only show when online */}
+        {/* Inline share widget - only show when online */}
         {!isShowingCachedContent && (
-          <ArticleEngagementWidget article={{ title: displayArticle.title, slug: displayArticle.slug }} />
+          <InlineShareWidget article={{ title: displayArticle.title, slug: displayArticle.slug }} />
         )}
+
+        {/* Inline follow widget - only show when online */}
+        {!isShowingCachedContent && <InlineFollowWidget />}
 
         {/* Comments only show for online content */}
         {!isShowingCachedContent && (
