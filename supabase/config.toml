@@ -2,3 +2,6 @@ project_id = "vweraucnekeucrryqjlo"
 
 [functions.forum-rss]
 verify_jwt = false
+
+[functions.disqus-comments]
+verify_jwt = false
