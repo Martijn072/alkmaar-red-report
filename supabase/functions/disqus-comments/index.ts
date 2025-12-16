@@ -29,8 +29,97 @@ interface DisqusResponse {
   };
 }
 
+// Try to find thread using different identifier formats
+async function findThread(apiKey: string, forum: string, articleIdentifier: string, articleUrl?: string): Promise<string | null> {
+  const identifierFormats = [
+    articleIdentifier,                    // Plain ID: "38524"
+    `post-${articleIdentifier}`,          // WordPress format: "post-38524"
+    `${articleIdentifier} ${articleUrl}`, // Combined format
+  ];
+
+  // Method 1: Try URL-based lookup first (most reliable for WordPress)
+  if (articleUrl) {
+    console.log(`[Method 1] Trying URL lookup: ${articleUrl}`);
+    const urlLookup = new URL('https://disqus.com/api/3.0/threads/details.json');
+    urlLookup.searchParams.set('api_key', apiKey);
+    urlLookup.searchParams.set('forum', forum);
+    urlLookup.searchParams.set('thread:link', articleUrl);
+    
+    const urlResponse = await fetch(urlLookup.toString());
+    const urlData = await urlResponse.json();
+    console.log(`[Method 1] Response code: ${urlData.code}, message: ${urlData.response?.message || JSON.stringify(urlData.response)}`);
+    
+    if (urlData.code === 0 && urlData.response?.id) {
+      console.log(`✅ Found thread via URL: ${urlData.response.id}`);
+      return urlData.response.id;
+    }
+  }
+
+  // Method 2: Try different identifier formats
+  for (const ident of identifierFormats) {
+    console.log(`[Method 2] Trying identifier: "${ident}"`);
+    const identLookup = new URL('https://disqus.com/api/3.0/threads/details.json');
+    identLookup.searchParams.set('api_key', apiKey);
+    identLookup.searchParams.set('forum', forum);
+    identLookup.searchParams.set('thread:ident', ident);
+    
+    const identResponse = await fetch(identLookup.toString());
+    const identData = await identResponse.json();
+    console.log(`[Method 2] Response code: ${identData.code}, message: ${identData.response?.message || JSON.stringify(identData.response)}`);
+    
+    if (identData.code === 0 && identData.response?.id) {
+      console.log(`✅ Found thread via identifier "${ident}": ${identData.response.id}`);
+      return identData.response.id;
+    }
+  }
+
+  // Method 3: List recent threads and search
+  console.log(`[Method 3] Listing recent threads to search...`);
+  const listUrl = new URL('https://disqus.com/api/3.0/threads/list.json');
+  listUrl.searchParams.set('api_key', apiKey);
+  listUrl.searchParams.set('forum', forum);
+  listUrl.searchParams.set('limit', '100');
+  
+  const listResponse = await fetch(listUrl.toString());
+  const listData = await listResponse.json();
+  
+  console.log(`[Method 3] Response code: ${listData.code}`);
+  
+  if (listData.code !== 0) {
+    console.log(`[Method 3] Error: ${JSON.stringify(listData.response)}`);
+    return null;
+  }
+  
+  if (listData.response) {
+    console.log(`[Method 3] Found ${listData.response.length} threads in forum`);
+    
+    // Log first few threads for debugging
+    listData.response.slice(0, 5).forEach((t: any, i: number) => {
+      console.log(`  Thread ${i}: id=${t.id}, link=${t.link}, identifiers=${JSON.stringify(t.identifiers)}`);
+    });
+    
+    // Search for matching thread
+    const matchingThread = listData.response.find((t: any) => {
+      const identMatch = t.identifiers?.some((id: string) => 
+        id === articleIdentifier || 
+        id === `post-${articleIdentifier}` ||
+        id.includes(articleIdentifier)
+      );
+      const urlMatch = articleUrl && (t.link === articleUrl || t.link?.includes(articleUrl.split('/').pop()?.replace(/\/$/, '')));
+      return identMatch || urlMatch;
+    });
+    
+    if (matchingThread) {
+      console.log(`✅ Found thread via list search: ${matchingThread.id}`);
+      return matchingThread.id;
+    }
+  }
+
+  console.log('❌ No thread found with any method');
+  return null;
+}
+
 serve(async (req) => {
-  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
@@ -56,60 +145,35 @@ serve(async (req) => {
 
     const forum = 'azfanpage';
     
-    console.log(`Fetching Disqus comments for identifier: ${articleIdentifier}, url: ${articleUrl}`);
-
-    // First, get the thread by identifier
-    const threadUrl = new URL('https://disqus.com/api/3.0/threads/details.json');
-    threadUrl.searchParams.set('api_key', apiKey);
-    threadUrl.searchParams.set('forum', forum);
-    threadUrl.searchParams.set('thread:ident', articleIdentifier);
+    console.log(`🔍 Fetching Disqus comments for article:`);
+    console.log(`   Identifier: ${articleIdentifier}`);
+    console.log(`   URL: ${articleUrl}`);
+    console.log(`   API Key length: ${apiKey.length}, starts with: ${apiKey.substring(0, 4)}...`);
     
-    // Also try with URL if identifier doesn't work
-    if (articleUrl) {
-      threadUrl.searchParams.set('thread:link', articleUrl);
+    // Quick API validation test
+    const testUrl = new URL('https://disqus.com/api/3.0/forums/details.json');
+    testUrl.searchParams.set('api_key', apiKey);
+    testUrl.searchParams.set('forum', forum);
+    const testResponse = await fetch(testUrl.toString());
+    const testData = await testResponse.json();
+    console.log(`🔑 API Key validation: code=${testData.code}, forum exists: ${!!testData.response?.id}`);
+    if (testData.code !== 0) {
+      console.error(`API Error: ${JSON.stringify(testData)}`);
     }
-
-    console.log(`Fetching thread details...`);
-    const threadResponse = await fetch(threadUrl.toString());
-    const threadData = await threadResponse.json();
     
-    if (threadData.code !== 0 || !threadData.response) {
-      console.log('Thread not found, trying alternative lookup...');
-      
-      // Try listing threads to find the right one
-      const listUrl = new URL('https://disqus.com/api/3.0/threads/list.json');
-      listUrl.searchParams.set('api_key', apiKey);
-      listUrl.searchParams.set('forum', forum);
-      listUrl.searchParams.set('limit', '100');
-      
-      const listResponse = await fetch(listUrl.toString());
-      const listData = await listResponse.json();
-      
-      if (listData.code === 0 && listData.response) {
-        // Try to find thread by identifier or URL
-        const matchingThread = listData.response.find((t: any) => 
-          t.identifiers?.includes(articleIdentifier) || 
-          t.link === articleUrl ||
-          t.link?.includes(articleIdentifier)
-        );
-        
-        if (matchingThread) {
-          console.log(`Found thread via list: ${matchingThread.id}`);
-          return await fetchComments(apiKey, matchingThread.id, corsHeaders);
-        }
-      }
-      
-      // No thread found - return empty comments
-      console.log('No thread found for this article');
+    console.log(`🔍 Fetching Disqus comments for article:`);
+    console.log(`   Identifier: ${articleIdentifier}`);
+    console.log(`   URL: ${articleUrl}`);
+
+    const threadId = await findThread(apiKey, forum, articleIdentifier, articleUrl);
+    
+    if (!threadId) {
       return new Response(
         JSON.stringify({ comments: [], totalComments: 0 }),
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
-    const threadId = threadData.response.id;
-    console.log(`Found thread: ${threadId}`);
-    
     return await fetchComments(apiKey, threadId, corsHeaders);
 
   } catch (error) {
