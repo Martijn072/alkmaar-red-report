@@ -90,17 +90,29 @@ export const NextMatchCard = () => {
             {/* Team names or score */}
             {isLive ? (
               <div className="flex items-center gap-2 font-semibold">
-                <span className={isAZHome ? 'text-az-red' : 'text-foreground'}>{homeTeam.name}</span>
+                <span className={isAZHome ? 'text-az-red' : 'text-foreground'}>
+                  {homeTeam.name}
+                  {isAZHome && <span className="text-xs ml-1 text-muted-foreground">(T)</span>}
+                </span>
                 <span className="text-az-red font-bold">
                   {displayFixture.goals?.home || 0} - {displayFixture.goals?.away || 0}
                 </span>
-                <span className={!isAZHome ? 'text-az-red' : 'text-foreground'}>{awayTeam.name}</span>
+                <span className={!isAZHome ? 'text-az-red' : 'text-foreground'}>
+                  {awayTeam.name}
+                  {!isAZHome && <span className="text-xs ml-1 text-muted-foreground">(U)</span>}
+                </span>
               </div>
             ) : (
               <span className="text-sm font-medium text-foreground truncate">
-                <span className={isAZHome ? 'text-az-red font-semibold' : ''}>{homeTeam.name}</span>
+                <span className={isAZHome ? 'text-az-red font-semibold' : ''}>
+                  {homeTeam.name}
+                  {isAZHome && <span className="text-xs ml-1 text-muted-foreground font-normal">(T)</span>}
+                </span>
                 <span className="text-muted-foreground mx-1">-</span>
-                <span className={!isAZHome ? 'text-az-red font-semibold' : ''}>{awayTeam.name}</span>
+                <span className={!isAZHome ? 'text-az-red font-semibold' : ''}>
+                  {awayTeam.name}
+                  {!isAZHome && <span className="text-xs ml-1 text-muted-foreground font-normal">(U)</span>}
+                </span>
               </span>
             )}
             

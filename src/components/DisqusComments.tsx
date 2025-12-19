@@ -68,7 +68,8 @@ export const DisqusComments = ({ articleId, articleTitle, articleSlug }: DisqusC
               </div>
               
               <div 
-                className="mt-1.5 text-sm text-foreground/90 prose prose-sm max-w-none dark:prose-invert prose-p:my-1 prose-a:text-primary"
+                className="mt-1.5 text-sm text-foreground/90 prose prose-sm max-w-none dark:prose-invert prose-p:my-1 prose-a:text-primary break-words overflow-hidden"
+                style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}
                 dangerouslySetInnerHTML={{ __html: comment.content }}
               />
               

@@ -294,6 +294,20 @@
   }
 }
 
+/* Disqus comment content overflow prevention */
+.prose a,
+.prose img,
+.prose pre,
+.prose code {
+  max-width: 100%;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.prose img {
+  height: auto;
+}
+
 /* Premium button styles */
 @layer components {
   .btn-primary {

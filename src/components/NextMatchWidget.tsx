@@ -157,6 +157,9 @@ export const NextMatchWidget = ({ className }: NextMatchWidgetProps) => {
                 AZ
               </span>
             </div>
+            <span className="text-xs text-muted-foreground mt-1">
+              {isAZHome ? '(T)' : '(U)'}
+            </span>
           </div>
 
           {/* VS - no animate-pulse */}
